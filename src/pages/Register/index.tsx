@@ -7,9 +7,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import { toast } from 'react-toastify';
 import DeleteUser from '../DeleteUser';
+import { IRootState } from '../../store/modules/rootReducer';
 
 export default function Register(){
-    const isLoggedIn = useSelector(state => state.login.isLoggedIn);
+    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const id = undefined;
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -19,8 +20,8 @@ export default function Register(){
     const [repeatPassword, setRepeatPassword] = useState(''); 
     const [formErrors, setFormErrors] = useState(true);
     const dispatch = useDispatch();
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleSubmit = useCallback((event: React.FormEvent) => {
+        event.preventDefault();
         setFormErrors(false);
         if (name.length < 3 || name.length > 255) {
             setFormErrors(true);
@@ -50,7 +51,9 @@ export default function Register(){
             dispatch(actions.registerRequest({
                 id, name, surname, address, email, password
             }));
-            dispatch(actions.loginSuccess());
+            dispatch(actions.loginSuccess({
+                id, name, surname, address, email, password
+            }));
             history.push('/');
         }
     }, [password, repeatPassword, formErrors, dispatch, id, name, surname, address, email]);

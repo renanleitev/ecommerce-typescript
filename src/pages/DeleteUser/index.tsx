@@ -3,16 +3,17 @@ import { Form } from '../../styles/GlobalStyle';
 import * as actions from '../../store/modules/login/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { IRootState } from '../../store/modules/rootReducer';
 
 export default function DeleteUser(){
-    const user = useSelector(state => state.login.user);
+    const user = useSelector((state: IRootState) => state.login.user);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const dispatch = useDispatch();
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleSubmit = useCallback((event: React.FormEvent) => {
+        event.preventDefault();
         if (confirmDelete) {
             dispatch(actions.deleteRequest(user));
-            dispatch(actions.loginSuccess());
+            dispatch(actions.loginSuccess({ user }));
             setConfirmDelete(false);
         }
         else {

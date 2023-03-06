@@ -5,14 +5,15 @@ import * as actions from '../../store/modules/login/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import EditUser from '../EditUser';
+import { IRootState } from '../../store/modules/rootReducer';
 
 export default function Login(){
-    const isLoggedIn = useSelector(state => state.login.isLoggedIn);
+    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleSubmit = useCallback((event: React.FormEvent) => {
+        event.preventDefault();
         dispatch(actions.loginRequest({email, password}));
     }, [dispatch, email, password]);
     return (
@@ -22,9 +23,9 @@ export default function Login(){
                 <Form onSubmit={handleSubmit}>
                     <h2>Login</h2>
                     <label htmlFor='email'>Email</label>
-                    <Input field={email} setField={setEmail} placeholder='email'/>
+                    <Input field={email} setField={setEmail} placeholder='Email'/>
                     <label htmlFor='password'>Password</label>
-                    <Input field={password} setField={setPassword} placeholder='password'/>
+                    <Input field={password} setField={setPassword} placeholder='Password'/>
                     <Link className='link' to='/register'>
                         Don't have an account? Click here to make a new one!
                     </Link>

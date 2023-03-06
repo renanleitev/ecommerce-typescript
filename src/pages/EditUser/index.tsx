@@ -4,9 +4,10 @@ import * as actions from '../../store/modules/login/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import { toast } from 'react-toastify';
+import { IRootState } from '../../store/modules/rootReducer';
 
 export default function EditUser(){
-    const user = useSelector(state => state.login.user);
+    const user = useSelector((state: IRootState) => state.login.user);
     const id = user.id;
     const [name, setName] = useState(user.name);
     const [surname, setSurname] = useState(user.surname);
@@ -15,8 +16,8 @@ export default function EditUser(){
     const [password, setPassword] = useState(user.password);
     const [confirmEdit, setConfirmEdit] = useState(false);
     const dispatch = useDispatch();
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    const handleSubmit = useCallback((event: React.FormEvent) => {
+        event.preventDefault();
         if (confirmEdit) {
             dispatch(actions.editRequest({
                 id, name, surname, address, email, password
@@ -32,15 +33,15 @@ export default function EditUser(){
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>
                 <label htmlFor='name'>Name</label>
-                <Input field={name} setField={setName} placeholder='name'/>
+                <Input field={name} setField={setName} placeholder='Name'/>
                 <label htmlFor='surname'>Surname</label>
-                <Input field={surname} setField={setSurname} placeholder='surname'/>
+                <Input field={surname} setField={setSurname} placeholder='Surname'/>
                 <label htmlFor='address'>Address</label>
-                <Input field={address} setField={setAddress} placeholder='address'/>
+                <Input field={address} setField={setAddress} placeholder='Address'/>
                 <label htmlFor='email'>Email</label>
-                <Input field={email} setField={setEmail} placeholder='email'/>
+                <Input field={email} setField={setEmail} placeholder='Email'/>
                 <label htmlFor='password'>Password</label>
-                <Input field={password} setField={setPassword} placeholder='password'/>
+                <Input field={password} setField={setPassword} placeholder='Password'/>
                 <button type="submit">Edit</button>
             </Form>
     );

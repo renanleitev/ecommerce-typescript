@@ -4,12 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../../store/modules/products/actions';
 import { Container } from '../../styles/GlobalStyle';
 import { ProductContainer, ArrowLeft, ArrowRight } from './styled';
+import { IRootState } from '../../store/modules/rootReducer';
+import * as interfaces from '../../interfaces';
 
 export default function Home(){
     const dispatch = useDispatch();
     const [count, setCount] = useState(0);
     const [limit, setLimit] = useState(5);
-    const stock = useSelector(state => state.products.stock);
+    const stock = useSelector((state: IRootState) => state.products.stock);
     if (stock === undefined) dispatch(actions.findStock({numReq: limit}));
     useEffect(() => {
         dispatch(actions.findStock({numReq: limit}));
@@ -27,7 +29,7 @@ export default function Home(){
             <ProductContainer>
                 {stock.data
                 .slice(0+count,limit+count)
-                .map((product, index) => {
+                .map((product: interfaces.Product, index: number) => {
                     return (
                         <Container key={index}> 
                             <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>

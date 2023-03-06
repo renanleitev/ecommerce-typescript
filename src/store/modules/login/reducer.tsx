@@ -1,8 +1,25 @@
 import * as types from '../types';
 
-const initialState = {
+const initialState: {
+    isLoggedIn: boolean,
+    user: {
+        id: string,
+        name: string,
+        surname: string,
+        address: string,
+        email: string,
+        password: string,
+    },
+} = {
     isLoggedIn: false,
-    user: {},
+    user: {
+        id: '',
+        name: '',
+        surname: '',
+        address: '',
+        email: '',
+        password: '',
+    },
 };
 
 export default function loginReducer (state = initialState, action) {

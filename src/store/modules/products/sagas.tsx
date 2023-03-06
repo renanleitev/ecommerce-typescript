@@ -30,6 +30,6 @@ function* findProduct({payload}) {
 
 // takeLatest = Obtém apenas o último clique do botão
 export default all([
-    takeLatest(types.FIND_STOCK, findStock),
-    takeLatest(types.FIND_PRODUCT, findProduct),
+    takeLatest(types.FIND_STOCK, () => findStock),
+    takeLatest(types.FIND_PRODUCT, () => findProduct),
 ]);

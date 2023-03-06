@@ -10,10 +10,12 @@ import {
     CheckoutContainer } from './styled';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { IRootState } from '../../store/modules/rootReducer';
+import * as interfaces from '../../interfaces';
 
 export default function Shopping(){
-    const cart = useSelector(state => state.products.cart);
-    const isLoggedIn = useSelector(state => state.login.isLoggedIn);
+    const cart = useSelector((state: IRootState) => state.products.cart);
+    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const dispatch = useDispatch();
     const [shoppingCart, setShoppingCart] = useState([...cart]);
     useEffect(() => {
@@ -21,26 +23,26 @@ export default function Shopping(){
     }, [cart]);
     const handleCheckout = useCallback(() => {
         let total = 0;
-        cart.forEach(element => {
+        cart.forEach((element: any) => {
             total += element.totalPrice;
         });
-        toast.success(`Thank you! Your total is $${Number.parseFloat(Number.parseFloat(total).toFixed(2))}`);
+        toast.success(`Thank you! Your total is $${total}`);
     }, [cart]);
-    const handleIncrement = useCallback((item) => {
+    const handleIncrement = useCallback((item: interfaces.Product) => {
         item.quantity++;
-        item.totalPrice = Number.parseFloat(Number.parseFloat(item.price * item.quantity).toFixed(2));
+        item.totalPrice = item.price * item.quantity;
         dispatch(actions.changeQuantity({...item}));
         toast.success(`Added ${item.name} successfully!`);
         setShoppingCart([...cart]);
     }, [cart, dispatch]);
-    const handleDecrement = useCallback((item) => {
+    const handleDecrement = useCallback((item: interfaces.Product) => {
         item.quantity--;
-        item.totalPrice = Number.parseFloat(Number.parseFloat(item.price * item.quantity).toFixed(2));
+        item.totalPrice = item.price * item.quantity;
         dispatch(actions.changeQuantity({...item}));
         toast.success(`Removed ${item.name} successfully!`);
         setShoppingCart([...cart]);
     }, [cart, dispatch]);
-    const handleRemove = useCallback((item) => {
+    const handleRemove = useCallback((item: interfaces.Product) => {
         dispatch(actions.removeProduct(item.id));
         toast.success(`Product ${item.name} removed successfully!`);
     }, [dispatch]);
@@ -48,7 +50,7 @@ export default function Shopping(){
         <CartContainer>
             {isLoggedIn ? (<CheckoutContainer onClick={handleCheckout}><FaShoppingCart size={30}/></CheckoutContainer>) : (<></>)}
             {isLoggedIn ? (
-                shoppingCart.map(item => (
+                shoppingCart.map((item: any) => (
                     <ItemContainer key={item.id}>
                         <ShoppingContainer key={item.id+1}>
                             <Link to={`product/${item.id}`} key={item.id+2}>{item.name}</Link>

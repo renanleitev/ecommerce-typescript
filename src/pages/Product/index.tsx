@@ -5,35 +5,33 @@ import * as actions from '../../store/modules/products/actions';
 import { ItemContainer, CartButton } from './styled';
 import {ProductContainer} from '../Home/styled';
 import {toast} from 'react-toastify';
+import { IRootState } from '../../store/modules/rootReducer';
+import * as interfaces from '../../interfaces';
 
 export default function Product(){
     const url = useParams();
     const id = Number.parseInt(url.id);
     const dispatch = useDispatch();
-    const cart = useSelector(state => state.products.cart);
-    const isLoggedIn = useSelector(state => state.login.isLoggedIn);
+    const cart = useSelector((state: IRootState) => state.products.cart);
+    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [quantity, setQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [firstLoad, setFirstLoad] = useState(true);
-    const product = useSelector(state => state.products.product);
-    const [item, setItem] = useState({});
-    useMemo(() => {
-        if (cart !== undefined && firstLoad) {
-            cart.forEach(element => {
-                if (element.id === id) {
-                    setQuantity(element.quantity);
-                    setTotalPrice(element.price*quantity);
-                }
-            });
-        }
-    }, [cart, firstLoad, id, quantity]);
+    const product = useSelector((state: IRootState) => state.products.product);
+    const [item, setItem] = useState<interfaces.Product>({
+        id: id,
+        name: product.data.name,
+        images: product.data.images,
+        price: product.data.price,
+        totalPrice: totalPrice,
+        quantity: quantity,
+    });
     useMemo(() => {
         setItem(
                 {
                     id: id,
                     name: product.data.name,
                     images: product.data.images,
-                    price: Number.parseFloat(product.data.price),
+                    price: product.data.price,
                     totalPrice: totalPrice,
                     quantity: quantity,
                 }
@@ -44,29 +42,27 @@ export default function Product(){
     }, [dispatch, id]);
     const addProduct = useCallback(() => {
         if (isLoggedIn){
-            setFirstLoad(false);
-            const findItem = cart.find((product) => product.id === item.id);
+            const findItem = cart.find((product: any) => product.id === item.id);
             if (findItem) {
-                findItem.quantity++;
-                setQuantity(findItem.quantity);
-                findItem.totalPrice = Number.parseFloat(Number.parseFloat(totalPrice + item.price).toFixed(2));
-                setTotalPrice(findItem.totalPrice);
+                item.quantity++;
+                setQuantity(item.quantity);
+                item.totalPrice = totalPrice + product.data.price;
+                setTotalPrice(item.totalPrice);
             } else {
                 item.quantity++;
                 setQuantity(item.quantity);
-                item.totalPrice = Number.parseFloat(Number.parseFloat(totalPrice + item.price).toFixed(2));
+                item.totalPrice = totalPrice + product.data.price;
                 setTotalPrice(item.totalPrice);
                 dispatch(actions.addProduct({...item}));
             } 
             toast.success(`Added ${item.name} successfully!`);
             setQuantity(quantity+1);
-            setTotalPrice(Number.parseFloat(Number.parseFloat(totalPrice + item.price).toFixed(2)));
+            setTotalPrice(totalPrice + product.data.price);
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [cart, dispatch, isLoggedIn, item, quantity, totalPrice]);
+    }, [cart, dispatch, isLoggedIn, item, product.data.price, quantity, totalPrice]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
-            setFirstLoad(false);
             dispatch(actions.removeProduct(id));
             toast.success(`Removed ${item.name} successfully!`);
             setQuantity(0);
@@ -76,10 +72,9 @@ export default function Product(){
     }, [dispatch, id, isLoggedIn, item.name]);
     const incrementQuantity = useCallback(() => {
         if (isLoggedIn && quantity > 0){
-            setFirstLoad(false);
             item.quantity++;
             setQuantity(item.quantity);
-            item.totalPrice = Number.parseFloat(Number.parseFloat(totalPrice + item.price).toFixed(2));
+            item.totalPrice = totalPrice + item.price;
             setTotalPrice(item.totalPrice);
             dispatch(actions.changeQuantity({...item}));
             toast.success(`Added ${item.name} successfully!`);
@@ -88,10 +83,9 @@ export default function Product(){
     }, [dispatch, isLoggedIn, item, quantity, totalPrice]);
     const decrementQuantity = useCallback(() => {
         if (isLoggedIn && quantity > 1){
-            setFirstLoad(false);
             item.quantity--;
             setQuantity(item.quantity);
-            item.totalPrice = Number.parseFloat(Number.parseFloat(totalPrice - item.price).toFixed(2));
+            item.totalPrice = totalPrice - item.price;
             setTotalPrice(item.totalPrice);
             dispatch(actions.changeQuantity({...item}));
             toast.success(`Removed ${item.name} successfully!`);
@@ -122,7 +116,7 @@ export default function Product(){
                 <img src={item.images} alt=''/>
                 <p>Price: ${item.price}</p>
                 <p>Quantity: {item.quantity}</p>
-                <p>Total: ${Number.parseFloat(item.totalPrice).toFixed(2)}</p>
+                <p>Total: ${(item.totalPrice).toFixed(2)}</p>
             </ItemContainer> 
         </ProductContainer>       
     )

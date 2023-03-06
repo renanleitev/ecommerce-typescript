@@ -1,12 +1,23 @@
 import * as types from '../types';
 
-const initialState = {
-    stock: {},
+const initialState: ({
+    stock: {
+        data: [],
+    },
+    product: any,
+    cart: [{}],
+}) = {
+    stock: {
+        data: [],
+    },
     product: {},
-    cart: [],
+    cart: [{
+        quantity: 0,
+        totalPrice: 0,
+    }],
 };
 
-export default function productsReducer (state = initialState, action) {
+export default function productsReducer (state = initialState, action: any) {
     switch(action.type) {
         case types.FIND_STOCK:
             return state;
@@ -29,15 +40,18 @@ export default function productsReducer (state = initialState, action) {
         }
         case types.CHANGE_QUANTITY: {
             const newState = { ...state };
-            const item = newState.cart.find((item) => item.id === action.payload.id);
-            item.quantity = action.payload.quantity;
-            item.totalPrice = action.payload.totalPrice;
+            newState.cart.forEach((item: any) =>{
+                if (item.id === action.payload.id) {
+                    item.quantity = action.payload.quantity;
+                    item.totalPrice = action.payload.totalPrice;
+                }
+            });
             return newState;
         }
         case types.REMOVE_PRODUCT: {
             const newState = { ...state };
-            const removeItem = newState.cart.filter((item) => item.id !== action.payload);
-            newState.cart = removeItem;
+            const removeItem = newState.cart.filter((item: any) => item.id !== action.payload);
+            newState.cart = [{...removeItem}];
             return newState;
         }
         default:

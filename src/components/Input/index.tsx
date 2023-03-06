@@ -1,20 +1,18 @@
 import React from 'react';
+import * as interfaces from '../../interfaces';
 
-export default function Input(props){
+export default function Input(props: interfaces.Input){
     const id = props.placeholder;
     const field = props.field;
     const setField = props.setField;
-    const placeholder = props.placeholder.charAt(0).toUpperCase(0) + props.placeholder.slice(1);
-    let type;
+    const placeholder = props.placeholder;
+    let type: string;
     switch(placeholder){
-        case 'Password':
+        case 'Password' || 'password':
             type = 'password';
             break;
-        case 'Email':
+        case 'Email' || 'email':
             type = 'email';
-            break;
-        case 'Age':
-            type = 'number';
             break;
         default:
             type = 'text';

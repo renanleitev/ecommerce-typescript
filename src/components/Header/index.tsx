@@ -15,15 +15,17 @@ import * as productsActions from '../../store/modules/products/actions';
 import { Nav } from './styled';
 import history from '../../services/history';
 import {toast} from 'react-toastify';
+import * as interfaces from '../../interfaces';
+import { IRootState } from '../../store/modules/rootReducer';
 
 export default function Header(){
-    const isLoggedIn = useSelector(state => state.login.isLoggedIn);
-    const cart = useSelector(state => state.products.cart);
+    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
+    const cart = useSelector((state: IRootState) => state.products.cart);
     const dispatch = useDispatch();
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
             dispatch(loginActions.loginFailure({isLoggedIn}));
-            cart.forEach(element => {
+            cart.forEach((element: interfaces.Product) => {
                 dispatch(productsActions.removeProduct(element.id));
             });
             toast.success('Logout sucessufully.');
