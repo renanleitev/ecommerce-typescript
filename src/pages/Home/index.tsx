@@ -5,7 +5,6 @@ import * as actions from '../../store/modules/products/actions';
 import { Container } from '../../styles/GlobalStyle';
 import { ProductContainer, ArrowLeft, ArrowRight } from './styled';
 import { IRootState } from '../../store/modules/rootReducer';
-import * as interfaces from '../../interfaces';
 
 export default function Home(){
     const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export default function Home(){
             <ProductContainer>
                 {stock.data
                 .slice(0+count,limit+count)
-                .map((product: interfaces.Product, index: number) => {
+                .map((product: any, index: number) => {
                     return (
                         <Container key={index}> 
                             <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>

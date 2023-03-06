@@ -1,5 +1,8 @@
-export interface Product {
+interface Base{
     id: number,
+}
+
+export interface Product extends Base {
     name: string,
     images: string,
     price: number,
@@ -7,7 +10,6 @@ export interface Product {
     quantity: number,
 }
 export interface Input {
-    id?: string,
     field: string,
     setField: Function,
     placeholder: string,

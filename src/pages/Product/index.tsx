@@ -9,7 +9,7 @@ import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
 
 export default function Product(){
-    const url = useParams();
+    const url: any = useParams();
     const id = Number.parseInt(url.id);
     const dispatch = useDispatch();
     const cart = useSelector((state: IRootState) => state.products.cart);

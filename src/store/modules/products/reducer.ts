@@ -1,12 +1,14 @@
 import * as types from '../types';
 
-const initialState: ({
+interface InitialState {
     stock: {
-        data: [],
+        data: Array<string>,
     },
     product: any,
     cart: [{}],
-}) = {
+}
+
+const initialState: (InitialState) = {
     stock: {
         data: [],
     },
@@ -17,6 +19,8 @@ const initialState: ({
     }],
 };
 
+// type ActionProduct
+// ! Trocar o tipo any por outro tipo
 export default function productsReducer (state = initialState, action: any) {
     switch(action.type) {
         case types.FIND_STOCK:
@@ -40,6 +44,8 @@ export default function productsReducer (state = initialState, action: any) {
         }
         case types.CHANGE_QUANTITY: {
             const newState = { ...state };
+            // TODO Pesquisar: forEach é assíncrono/síncrono?
+            // TODO Pesquisar: map é assíncrono/síncrono?
             newState.cart.forEach((item: any) =>{
                 if (item.id === action.payload.id) {
                     item.quantity = action.payload.quantity;

@@ -3,7 +3,7 @@ import * as types from '../types';
 const initialState: {
     isLoggedIn: boolean,
     user: {
-        id: string,
+        id: number,
         name: string,
         surname: string,
         address: string,
@@ -13,7 +13,7 @@ const initialState: {
 } = {
     isLoggedIn: false,
     user: {
-        id: '',
+        id: 0,
         name: '',
         surname: '',
         address: '',
@@ -22,7 +22,7 @@ const initialState: {
     },
 };
 
-export default function loginReducer (state = initialState, action) {
+export default function loginReducer (state = initialState, action: any) {
     switch(action.type) {
         case types.LOGIN_SUCCESS: {
             const newState = { ...state };
