@@ -116,7 +116,7 @@ export default function Product(){
                 <img src={item.images} alt=''/>
                 <p>Price: ${item.price}</p>
                 <p>Quantity: {item.quantity}</p>
-                <p>Total: ${(item.totalPrice).toFixed(2)}</p>
+                <p>Total: ${item.totalPrice}</p>
             </ItemContainer> 
         </ProductContainer>       
     )

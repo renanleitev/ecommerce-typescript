@@ -50,16 +50,16 @@ export default function Shopping(){
         <CartContainer>
             {isLoggedIn ? (<CheckoutContainer onClick={handleCheckout}><FaShoppingCart size={30}/></CheckoutContainer>) : (<></>)}
             {isLoggedIn ? (
-                shoppingCart.map((item: any) => (
-                    <ItemContainer key={item.id}>
-                        <ShoppingContainer key={item.id+1}>
-                            <Link to={`product/${item.id}`} key={item.id+2}>{item.name}</Link>
-                            <img key={item.id+3} src={item.images} alt=''/>
-                            <p key={item.id+4}>Price: ${item.price}</p>
-                            <p key={item.id+5}>Quantity: {item.quantity}</p>
-                            <p key={item.id+6}>Total: ${item.totalPrice}</p>
+                shoppingCart.map((item: any, index: number) => (
+                    <ItemContainer key={index}>
+                        <ShoppingContainer key={index+1}>
+                            <Link to={`product/${item.id}`} key={index+2}>{item.name}</Link>
+                            <img key={index+3} src={item.images} alt=''/>
+                            <p key={index+4}>Price: ${item.price}</p>
+                            <p key={index+5}>Quantity: {item.quantity}</p>
+                            <p key={index+6}>Total: ${item.totalPrice}</p>
                         </ShoppingContainer>
-                        <ButtonContainer key={item.id+7}>
+                        <ButtonContainer key={index+7}>
                                 <button onClick={() => handleIncrement(item)}>+</button>
                                 <button onClick={() => handleDecrement(item)}>-</button>
                                 <button onClick={() => handleRemove(item)}>Remove item</button>

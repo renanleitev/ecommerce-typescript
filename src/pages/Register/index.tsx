@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { isEmail } from 'validator';
+import isEmail from 'validator/lib/isEmail';
 import { Container, Form } from '../../styles/GlobalStyle';
 import history from '../../services/history'
 import * as actions from '../../store/modules/login/actions';
@@ -11,7 +11,6 @@ import { IRootState } from '../../store/modules/rootReducer';
 
 export default function Register(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
-    const id = undefined;
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [address, setAddress] = useState('');
@@ -49,14 +48,14 @@ export default function Register(){
         }
         if (!formErrors){
             dispatch(actions.registerRequest({
-                id, name, surname, address, email, password
+                name, surname, address, email, password
             }));
             dispatch(actions.loginSuccess({
-                id, name, surname, address, email, password
+                name, surname, address, email, password
             }));
             history.push('/');
         }
-    }, [password, repeatPassword, formErrors, dispatch, id, name, surname, address, email]);
+    }, [password, repeatPassword, formErrors, dispatch, name, surname, address, email]);
     return (
         <Container>
             {(!isLoggedIn && 

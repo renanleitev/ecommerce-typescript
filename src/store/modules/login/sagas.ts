@@ -4,13 +4,14 @@ import * as actions from './actions';
 import * as types from '../types';
 import axios from '../../../services/axios';
 import history from '../../../services/history';
+import * as interfaces from '../../../interfaces';
 
-function* loginRequest({ payload }) {
+function* loginRequest(payload: any) {
     let dataUser;
     let credentialsAreValid = false;
     try {
-        const users = yield call(axios.get, '/users');
-        users.data.forEach((user) => {
+        const users: interfaces.ResponseGenerator = yield call(axios.get, '/users');
+        users.data.forEach((user: any) => {
             if (
                 (!credentialsAreValid) &&
                 (payload.email === user.email) && 
@@ -22,7 +23,7 @@ function* loginRequest({ payload }) {
         })
         if (credentialsAreValid) {
             toast.success('Login successful! Redirecting...');
-            yield put(actions.loginSuccess());
+            yield put(actions.loginSuccess(payload));
             yield put(actions.editSuccess(dataUser));
             history.push('/');
         }
@@ -30,21 +31,21 @@ function* loginRequest({ payload }) {
     } 
     catch (e) {
         toast.error('Error:', e);
-        yield put(actions.loginFailure());
+        yield put(actions.loginFailure(payload));
     }
 }
-function* loginFailure({payload}) {
+function* loginFailure(payload: any) {
     try {
         if (payload.isLoggedIn){
-            yield put(actions.loginSuccess());
+            yield put(actions.loginSuccess(payload));
         }
     } 
     catch (e) {
         toast.error('Erro', e);
-        yield put(actions.loginFailure());
+        yield put(actions.loginFailure(payload));
     }
 }
-function* editRequest({payload}){
+function* editRequest(payload: any){
     try {
         yield call(axios.put, `/users/${payload.id}`, {payload});
         toast.success('Update successful!');
@@ -53,16 +54,16 @@ function* editRequest({payload}){
     }
     catch (e) {
         toast.error('Error:', e);
-        yield put(actions.loginFailure());
+        yield put(actions.loginFailure(payload));
     }
 }
-function* registerRequest({payload}){
+function* registerRequest(payload: any){
     yield call(axios.post, '/users', {payload});
     toast.success('Register successful!');
     yield put(actions.editSuccess(payload));
     history.push('/');
 }
-function* deleteRequest({payload}){
+function* deleteRequest(payload: any){
     yield call(axios.delete, `/users/${payload.id}`);
     toast.success('Delete successful!');
     history.push('/');

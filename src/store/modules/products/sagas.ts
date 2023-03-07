@@ -3,10 +3,11 @@ import { toast } from 'react-toastify';
 import * as actions from './actions';
 import * as types from '../types';
 import axios from '../../../services/axios';
+import * as interfaces from '../../../interfaces';
 
-function* findStock({payload}) {
+function* findStock(payload: any) {
     try {
-        const stock = yield call(axios.get, '/products', {
+        const stock: interfaces.ResponseGenerator = yield call(axios.get, '/products', {
             params: {
                 _limit: payload.numReq,
             }
@@ -18,9 +19,9 @@ function* findStock({payload}) {
     }
 }
 
-function* findProduct({payload}) {
+function* findProduct(payload: any) {
     try {
-        const product = yield call(axios.get, `/products/${payload.id}`);
+        const product: interfaces.ResponseGenerator = yield call(axios.get, `/products/${payload.id}`);
         yield put(actions.showProduct(product));  
     } 
     catch (e) {

@@ -27,7 +27,7 @@ export default function productsReducer (state = initialState, action: any) {
             return state;
         case types.SHOW_STOCK: {
             const newState = { ...state };
-            newState.stock = action.payload;
+            newState.stock.data = action.payload;
             return newState;
         }
         case types.FIND_PRODUCT:
