@@ -9,13 +9,19 @@ import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
 
 export default function Product(){
-    const url: any = useParams();
+    interface Url{
+        id: string,
+    }
+    const url: Url = useParams();
     const id = Number.parseInt(url.id);
     const dispatch = useDispatch();
     const cart = useSelector((state: IRootState) => state.products.cart);
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [quantity, setQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
+    useEffect(() => {
+        dispatch(actions.findProduct(id));
+    }, [dispatch, id]);
     const product = useSelector((state: IRootState) => state.products.product);
     const [item, setItem] = useState<interfaces.Product>({
         id: id,
@@ -37,9 +43,7 @@ export default function Product(){
                 }
         )
     }, [id, product.data.images, product.data.name, product.data.price, quantity, totalPrice]);
-    useEffect(() => {
-        dispatch(actions.findProduct({id}));
-    }, [dispatch, id]);
+    console.log(item);
     const addProduct = useCallback(() => {
         if (isLoggedIn){
             const findItem = cart.find((product: any) => product.id === item.id);
@@ -96,14 +100,14 @@ export default function Product(){
         <ProductContainer>
             <ItemContainer>
                 <h1>Info</h1> 
-                <p>Operational System: {product.data.os}</p>
+                {/* <p>Operational System: {product.data.os}</p>
                 <p>Resolution: {product.data.display.screenResolution}</p>
                 <p>Screen Size: {product.data.display.screenSize}</p>
                 <p>Storage: {product.data.storage.hdd}</p>
                 <p>Memory: {product.data.storage.ram}</p>
                 <p>CPU: {product.data.hardware.cpu}</p>
                 <p>Wifi: {product.data.connectivity.wifi}</p>
-                <p>Description: {product.data.description}</p>
+                <p>Description: {product.data.description}</p> */}
                 <ProductContainer>
                     <CartButton onClick={addProduct}>Add to cart</CartButton>
                     <CartButton onClick={incrementQuantity}>+</CartButton>

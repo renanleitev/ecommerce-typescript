@@ -4,7 +4,16 @@ interface InitialState {
     stock: {
         data: Array<string>,
     },
-    product: any,
+    product: {
+        data: {
+            id: string,
+            name: string,
+            images: string,
+            price: number,
+            quantity: number,
+            totalPrice: number,
+        }
+    },
     cart: [{}],
 }
 
@@ -12,7 +21,16 @@ const initialState: (InitialState) = {
     stock: {
         data: [],
     },
-    product: {},
+    product: {
+        data: {
+            id: '',
+            name: '',
+            images: '',
+            price: 0,
+            quantity: 0,
+            totalPrice: 0,
+        }
+    },
     cart: [{
         quantity: 0,
         totalPrice: 0,
