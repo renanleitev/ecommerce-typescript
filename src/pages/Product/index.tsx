@@ -1,86 +1,100 @@
-import React, { useEffect, useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import * as actions from '../../store/modules/products/actions';
 import { ItemContainer, CartButton } from './styled';
 import {ProductContainer} from '../Home/styled';
 import {toast} from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
+import {
+    findProduct, 
+    addItem,
+    changeQuantity,
+    removeItem
+} from '../../store/modules/products/reducer';
+import axios from '../../services/axios';
 
 export default function Product(){
     interface Url{
         id: string,
     }
     const url: Url = useParams();
-    const id = Number.parseInt(url.id);
+    const id = url.id;
     const dispatch = useDispatch();
     const cart = useSelector((state: IRootState) => state.products.cart);
+    const product = useSelector((state: IRootState) => state.products.product);
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [quantity, setQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
-    useEffect(() => {
-        dispatch(actions.findProduct(id));
-    }, [dispatch, id]);
-    const product = useSelector((state: IRootState) => state.products.product);
+    const [firsLoad, setFirstLoad] = useState(true);
+    const [indexProduct, setIndexProduct] = useState(0);
+    async function getData(){
+        try{
+            if (firsLoad){   
+                const response = await axios.get(`/products/${id}`);
+                dispatch(findProduct(response.data));
+            }
+            setFirstLoad(false);
+        }
+        catch(e){console.log(e);}
+    }
+    if (firsLoad){getData();}
     const [item, setItem] = useState<interfaces.Product>({
-        id: id,
-        name: product.data.name,
-        images: product.data.images,
-        price: product.data.price,
+        ...product,
         totalPrice: totalPrice,
         quantity: quantity,
     });
     useMemo(() => {
         setItem(
                 {
-                    id: id,
-                    name: product.data.name,
-                    images: product.data.images,
-                    price: product.data.price,
+                    ...product,
                     totalPrice: totalPrice,
                     quantity: quantity,
                 }
         )
-    }, [id, product.data.images, product.data.name, product.data.price, quantity, totalPrice]);
-    console.log(item);
+    }, [product, quantity, totalPrice]);
     const addProduct = useCallback(() => {
         if (isLoggedIn){
-            const findItem = cart.find((product: any) => product.id === item.id);
+            const findItem = cart.find((product: interfaces.Product) => product.id === item.id);
             if (findItem) {
                 item.quantity++;
                 setQuantity(item.quantity);
-                item.totalPrice = totalPrice + product.data.price;
+                item.totalPrice = totalPrice + product.price;
                 setTotalPrice(item.totalPrice);
             } else {
                 item.quantity++;
                 setQuantity(item.quantity);
-                item.totalPrice = totalPrice + product.data.price;
+                item.totalPrice = totalPrice + product.price;
                 setTotalPrice(item.totalPrice);
-                dispatch(actions.addProduct({...item}));
+                dispatch(addItem({...item}));
             } 
             toast.success(`Added ${item.name} successfully!`);
             setQuantity(quantity+1);
-            setTotalPrice(totalPrice + product.data.price);
+            setTotalPrice(totalPrice + product.price);
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [cart, dispatch, isLoggedIn, item, product.data.price, quantity, totalPrice]);
+    }, [cart, dispatch, isLoggedIn, item, product.price, quantity, totalPrice]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
-            dispatch(actions.removeProduct(id));
+            cart.forEach((product, index) => {
+                if (product === item){
+                    setIndexProduct(index);
+                }
+            })
+            dispatch(removeItem(indexProduct));
             toast.success(`Removed ${item.name} successfully!`);
             setQuantity(0);
             setTotalPrice(0);
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [dispatch, id, isLoggedIn, item.name]);
+    }, [cart, dispatch, indexProduct, isLoggedIn, item]);
     const incrementQuantity = useCallback(() => {
         if (isLoggedIn && quantity > 0){
             item.quantity++;
             setQuantity(item.quantity);
             item.totalPrice = totalPrice + item.price;
             setTotalPrice(item.totalPrice);
-            dispatch(actions.changeQuantity({...item}));
+            dispatch(changeQuantity({...item}));
             toast.success(`Added ${item.name} successfully!`);
         }
         if (!isLoggedIn || quantity === 0) toast.error('Can not add the item.');
@@ -91,7 +105,7 @@ export default function Product(){
             setQuantity(item.quantity);
             item.totalPrice = totalPrice - item.price;
             setTotalPrice(item.totalPrice);
-            dispatch(actions.changeQuantity({...item}));
+            dispatch(changeQuantity({...item}));
             toast.success(`Removed ${item.name} successfully!`);
         }
         if (!isLoggedIn || quantity === 0) toast.error('Can not remove the item.');
@@ -100,14 +114,14 @@ export default function Product(){
         <ProductContainer>
             <ItemContainer>
                 <h1>Info</h1> 
-                {/* <p>Operational System: {product.data.os}</p>
-                <p>Resolution: {product.data.display.screenResolution}</p>
-                <p>Screen Size: {product.data.display.screenSize}</p>
-                <p>Storage: {product.data.storage.hdd}</p>
-                <p>Memory: {product.data.storage.ram}</p>
-                <p>CPU: {product.data.hardware.cpu}</p>
-                <p>Wifi: {product.data.connectivity.wifi}</p>
-                <p>Description: {product.data.description}</p> */}
+                <p>Operational System: {item.os}</p>
+                <p>Resolution: {item.display.screenResolution}</p>
+                <p>Screen Size: {item.display.screenSize}</p>
+                <p>Storage: {item.storage.hdd}</p>
+                <p>Memory: {item.storage.ram}</p>
+                <p>CPU: {item.hardware.cpu}</p>
+                <p>Wifi: {item.connectivity.wifi}</p>
+                <p>Description: {item.description}</p>
                 <ProductContainer>
                     <CartButton onClick={addProduct}>Add to cart</CartButton>
                     <CartButton onClick={incrementQuantity}>+</CartButton>

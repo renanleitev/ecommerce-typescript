@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {FaShoppingCart} from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
-import * as actions from '../../store/modules/products/actions';
 import { 
     CartContainer, 
     ShoppingContainer, 
@@ -12,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
+import {changeQuantity, removeItem} from '../../store/modules/products/reducer';
 
 export default function Shopping(){
     const cart = useSelector((state: IRootState) => state.products.cart);
@@ -31,26 +31,28 @@ export default function Shopping(){
     const handleIncrement = useCallback((item: interfaces.Product) => {
         item.quantity++;
         item.totalPrice = item.price * item.quantity;
-        dispatch(actions.changeQuantity({...item}));
+        dispatch(changeQuantity({...item}));
         toast.success(`Added ${item.name} successfully!`);
         setShoppingCart([...cart]);
     }, [cart, dispatch]);
     const handleDecrement = useCallback((item: interfaces.Product) => {
         item.quantity--;
         item.totalPrice = item.price * item.quantity;
-        dispatch(actions.changeQuantity({...item}));
+        dispatch(changeQuantity({...item}));
         toast.success(`Removed ${item.name} successfully!`);
         setShoppingCart([...cart]);
     }, [cart, dispatch]);
-    const handleRemove = useCallback((item: interfaces.Product) => {
-        dispatch(actions.removeProduct(item.id));
-        toast.success(`Product ${item.name} removed successfully!`);
+    const handleRemove = useCallback((index: number) => {
+        dispatch(removeItem(index));
+        // toast.success(`Product ${item.name} removed successfully!`);
     }, [dispatch]);
     return (
         <CartContainer>
             {isLoggedIn ? (<CheckoutContainer onClick={handleCheckout}><FaShoppingCart size={30}/></CheckoutContainer>) : (<></>)}
-            {isLoggedIn ? (
-                shoppingCart.map((item: any, index: number) => (
+            {isLoggedIn && shoppingCart.length > 1 ? (
+                shoppingCart
+                .slice(1)
+                .map((item: any, index: number) => (
                     <ItemContainer key={index}>
                         <ShoppingContainer key={index+1}>
                             <Link to={`product/${item.id}`} key={index+2}>{item.name}</Link>
@@ -62,7 +64,7 @@ export default function Shopping(){
                         <ButtonContainer key={index+7}>
                                 <button onClick={() => handleIncrement(item)}>+</button>
                                 <button onClick={() => handleDecrement(item)}>-</button>
-                                <button onClick={() => handleRemove(item)}>Remove item</button>
+                                <button onClick={() => handleRemove(index)}>Remove item</button>
                         </ButtonContainer>
                     </ItemContainer>
                 ))

@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import loginReducer from './login/reducer';
-import productsReducer from "./products/reducer";
+import {inventoryReducer} from "./products/reducer";
 
 const rootReducer = combineReducers({
     login: loginReducer,
-    products: productsReducer,
+    products: inventoryReducer,
 });
 
 export type IRootState = ReturnType<typeof rootReducer>;

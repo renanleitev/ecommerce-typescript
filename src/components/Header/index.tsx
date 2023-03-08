@@ -11,12 +11,18 @@ import {
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as loginActions from '../../store/modules/login/actions';
-import * as productsActions from '../../store/modules/products/actions';
 import { Nav } from './styled';
 import history from '../../services/history';
 import {toast} from 'react-toastify';
 import * as interfaces from '../../interfaces';
 import { IRootState } from '../../store/modules/rootReducer';
+import {
+    findStock, 
+    findProduct, 
+    addItem,
+    changeQuantity,
+    removeItem
+} from '../../store/modules/products/reducer';
 
 export default function Header(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -25,8 +31,8 @@ export default function Header(){
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
             dispatch(loginActions.loginFailure({isLoggedIn}));
-            cart.forEach((element: interfaces.Product) => {
-                dispatch(productsActions.removeProduct(element.id));
+            cart.forEach((element: any) => {
+                dispatch(removeItem(element.id));
             });
             toast.success('Logout sucessufully.');
             history.push('/');

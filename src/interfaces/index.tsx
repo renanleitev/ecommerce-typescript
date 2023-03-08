@@ -1,12 +1,32 @@
 interface Base{
-    id: number,
+    id: string,
 }
 export interface Product extends Base {
     name: string,
     images: string,
     price: number,
-    totalPrice: number,
     quantity: number,
+    totalPrice: number,
+    os: string,
+    display: {
+        screenResolution: string,
+        screenSize: string,
+    },
+    storage: {
+        hdd: string,
+        ram: string,
+    },
+    hardware: {
+        cpu: string,
+    },
+    connectivity: {
+        wifi: string,
+    },
+    description: string,
+}
+
+export interface Stock {
+    data: Array<object>,
 }
 export interface Input {
     field: string,
