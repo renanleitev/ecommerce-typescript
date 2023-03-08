@@ -4,7 +4,7 @@ interface Base{
 export interface Product extends Base {
     name: string,
     images: string,
-    price: number,
+    price: string,
     quantity: number,
     totalPrice: number,
     os: string,

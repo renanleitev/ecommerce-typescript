@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ItemContainer, CartButton } from './styled';
@@ -28,22 +28,32 @@ export default function Product(){
     const [totalPrice, setTotalPrice] = useState(0);
     const [firsLoad, setFirstLoad] = useState(true);
     const [indexProduct, setIndexProduct] = useState(0);
-    async function getData(){
-        try{
-            if (firsLoad){   
-                const response = await axios.get(`/products/${id}`);
-                dispatch(findProduct(response.data));
-            }
-            setFirstLoad(false);
-        }
-        catch(e){console.log(e);}
-    }
-    if (firsLoad){getData();}
     const [item, setItem] = useState<interfaces.Product>({
         ...product,
         totalPrice: totalPrice,
         quantity: quantity,
     });
+    useEffect(() => {
+        cart.forEach((element: interfaces.Product) => {
+            if (element.name === product.name){
+                setQuantity(element.quantity);
+                setTotalPrice(element.totalPrice);   
+            }
+        });
+    }, [cart, product.name]);
+    useEffect(() => {
+        async function getData(){
+            try{
+                if (firsLoad){   
+                    const response = await axios.get(`/products/${id}`);
+                    dispatch(findProduct(response.data));
+                }
+                setFirstLoad(false);
+            }
+            catch(e){console.log(e);}
+        }
+        if (firsLoad) getData();
+    }, [dispatch, firsLoad, id, product.quantity]);
     useMemo(() => {
         setItem(
                 {
@@ -59,21 +69,22 @@ export default function Product(){
             if (findItem) {
                 item.quantity++;
                 setQuantity(item.quantity);
-                item.totalPrice = totalPrice + product.price;
+                item.totalPrice = totalPrice + Number.parseFloat(item.price);
                 setTotalPrice(item.totalPrice);
+                dispatch(changeQuantity({...item}));
             } else {
                 item.quantity++;
                 setQuantity(item.quantity);
-                item.totalPrice = totalPrice + product.price;
+                item.totalPrice = totalPrice + Number.parseFloat(item.price);
                 setTotalPrice(item.totalPrice);
                 dispatch(addItem({...item}));
             } 
             toast.success(`Added ${item.name} successfully!`);
             setQuantity(quantity+1);
-            setTotalPrice(totalPrice + product.price);
+            setTotalPrice(totalPrice + Number.parseFloat(item.price));
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [cart, dispatch, isLoggedIn, item, product.price, quantity, totalPrice]);
+    }, [cart, dispatch, isLoggedIn, item, quantity, totalPrice]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
             cart.forEach((product, index) => {
@@ -92,7 +103,7 @@ export default function Product(){
         if (isLoggedIn && quantity > 0){
             item.quantity++;
             setQuantity(item.quantity);
-            item.totalPrice = totalPrice + item.price;
+            item.totalPrice = totalPrice + Number.parseFloat(item.price);
             setTotalPrice(item.totalPrice);
             dispatch(changeQuantity({...item}));
             toast.success(`Added ${item.name} successfully!`);
@@ -103,7 +114,7 @@ export default function Product(){
         if (isLoggedIn && quantity > 1){
             item.quantity--;
             setQuantity(item.quantity);
-            item.totalPrice = totalPrice - item.price;
+            item.totalPrice = totalPrice - Number.parseFloat(item.price);
             setTotalPrice(item.totalPrice);
             dispatch(changeQuantity({...item}));
             toast.success(`Removed ${item.name} successfully!`);
@@ -134,7 +145,7 @@ export default function Product(){
                 <img src={item.images} alt=''/>
                 <p>Price: ${item.price}</p>
                 <p>Quantity: {item.quantity}</p>
-                <p>Total: ${item.totalPrice}</p>
+                <p>Total: ${item.totalPrice.toFixed(2)}</p>
             </ItemContainer> 
         </ProductContainer>       
     )

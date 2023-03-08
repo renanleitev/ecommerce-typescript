@@ -23,43 +23,56 @@ export default function Shopping(){
     }, [cart]);
     const handleCheckout = useCallback(() => {
         let total = 0;
-        cart.forEach((element: any) => {
-            total += element.totalPrice;
+        cart.forEach((item: interfaces.Product) => {
+            total += item.totalPrice;
         });
         toast.success(`Thank you! Your total is $${total}`);
     }, [cart]);
     const handleIncrement = useCallback((item: interfaces.Product) => {
-        item.quantity++;
-        item.totalPrice = item.price * item.quantity;
-        dispatch(changeQuantity({...item}));
+        const newItem = {
+            ...item,
+            quantity: item.quantity + 1,
+            totalPrice: item.totalPrice + Number.parseFloat(item.price),
+        }
+        dispatch(changeQuantity({...newItem}));
         toast.success(`Added ${item.name} successfully!`);
         setShoppingCart([...cart]);
     }, [cart, dispatch]);
     const handleDecrement = useCallback((item: interfaces.Product) => {
-        item.quantity--;
-        item.totalPrice = item.price * item.quantity;
-        dispatch(changeQuantity({...item}));
-        toast.success(`Removed ${item.name} successfully!`);
-        setShoppingCart([...cart]);
+        const newItem: interfaces.Product = {
+            ...item,
+            quantity: item.quantity - 1,
+            totalPrice: item.totalPrice - Number.parseFloat(item.price),
+        }
+        if (newItem.quantity === 0) {
+            newItem.quantity++;
+            newItem.totalPrice += Number.parseFloat(item.price);
+        } else {
+            toast.success(`Removed ${item.name} successfully!`);
+            dispatch(changeQuantity({...newItem}));
+            setShoppingCart([...cart]);
+        }
     }, [cart, dispatch]);
     const handleRemove = useCallback((index: number) => {
         dispatch(removeItem(index));
-        // toast.success(`Product ${item.name} removed successfully!`);
     }, [dispatch]);
     return (
         <CartContainer>
-            {isLoggedIn ? (<CheckoutContainer onClick={handleCheckout}><FaShoppingCart size={30}/></CheckoutContainer>) : (<></>)}
-            {isLoggedIn && shoppingCart.length > 1 ? (
+            {isLoggedIn ? (
+                <CheckoutContainer onClick={handleCheckout}>
+                    <FaShoppingCart size={30}/>
+                </CheckoutContainer>
+                ) : (<></>)}
+            {isLoggedIn && shoppingCart.length >= 1 ? (
                 shoppingCart
-                .slice(1)
-                .map((item: any, index: number) => (
+                .map((item: interfaces.Product, index: number) => (
                     <ItemContainer key={index}>
                         <ShoppingContainer key={index+1}>
                             <Link to={`product/${item.id}`} key={index+2}>{item.name}</Link>
                             <img key={index+3} src={item.images} alt=''/>
                             <p key={index+4}>Price: ${item.price}</p>
                             <p key={index+5}>Quantity: {item.quantity}</p>
-                            <p key={index+6}>Total: ${item.totalPrice}</p>
+                            <p key={index+6}>Total: ${item.totalPrice.toFixed(2)}</p>
                         </ShoppingContainer>
                         <ButtonContainer key={index+7}>
                                 <button onClick={() => handleIncrement(item)}>+</button>
