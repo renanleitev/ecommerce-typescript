@@ -1,13 +1,15 @@
 import React, {useState, useCallback} from 'react';
 import isEmail from 'validator/lib/isEmail';
 import { Container, Form } from '../../styles/GlobalStyle';
-import history from '../../services/history'
-import * as actions from '../../store/modules/login/actions';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useMemo } from 'react-redux';
 import Input from '../../components/Input';
 import { toast } from 'react-toastify';
 import DeleteUser from '../DeleteUser';
 import { IRootState } from '../../store/modules/rootReducer';
+import {loginSuccess, registerSuccess} from '../../store/modules/login/reducer';
+import axios from '../../services/axios';
+import history from '../../services/history';
+import * as interfaces from '../../interfaces';
 
 export default function Register(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -18,6 +20,17 @@ export default function Register(){
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState(''); 
     const [formErrors, setFormErrors] = useState(true);
+    const [user, setUser] = useState({});
+    useMemo(() => {
+        setUser({
+            id: 0,
+            name: name,
+            surname: surname,
+            address: address,
+            email: email,
+            password: password,
+        })
+    }, [address, email, name, password, surname]);
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
@@ -47,15 +60,11 @@ export default function Register(){
             toast.error('Password needs to have 6 characters or more.');
         }
         if (!formErrors){
-            dispatch(actions.registerRequest({
-                name, surname, address, email, password
-            }));
-            dispatch(actions.loginSuccess({
-                name, surname, address, email, password
-            }));
+            dispatch(registerSuccess(user));
+            dispatch(loginSuccess(user));
             history.push('/');
         }
-    }, [password, repeatPassword, formErrors, dispatch, name, surname, address, email]);
+    }, [name.length, surname.length, address.length, email, password, repeatPassword, formErrors, dispatch, user]);
     return (
         <Container>
             {(!isLoggedIn && 

@@ -1,6 +1,6 @@
-import * as types from '../types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: {
+interface InitialState {
     isLoggedIn: boolean,
     user: {
         id: number,
@@ -10,7 +10,18 @@ const initialState: {
         email: string,
         password: string,
     },
-} = {
+}
+
+interface User {
+    id: 0,
+    name: '',
+    surname: '',
+    address: '',
+    email: '',
+    password: '',
+}
+
+const initialState: (InitialState) = {
     isLoggedIn: false,
     user: {
         id: 0,
@@ -22,37 +33,32 @@ const initialState: {
     },
 };
 
-export default function loginReducer (state = initialState, action: any) {
-    switch(action.type) {
-        case types.LOGIN_SUCCESS: {
-            const newState = { ...state };
-            newState.isLoggedIn = !newState.isLoggedIn;
-            return newState;
-        }
-        case types.LOGIN_FAILURE:
-            return state;
-        case types.LOGIN_REQUEST:
-            return state;
-        case types.EDIT_SUCCESS: {
-            const newState = { ...state };
-            newState.user = action.payload;
-            return newState;
-        }
-        case types.EDIT_FAILURE:
-            return state;
-        case types.EDIT_REQUEST:
-            return state;
-        case types.REGISTER_REQUEST: {
-            const newState = { ...state };
-            newState.user = action.payload;
-            return newState;
-        }
-        case types.DELETE_REQUEST: {
-            const newState = { ...state };
-            newState.user = action.payload;
-            return newState;
-        }
-        default:
-            return state;
+export const userSlice = createSlice({
+    name: 'user',
+    initialState: initialState,
+    reducers: {
+        loginSuccess: (state, action: PayloadAction<User>) => {
+            state.isLoggedIn = !state.isLoggedIn;
+            state.user = action.payload;
+        },
+        editSuccess: (state, action: PayloadAction<User>) => {
+            state.user = action.payload;
+        },
+        registerSuccess: (state, action: PayloadAction<User>) => {
+            state.user = action.payload;
+        },
+        deleteSuccess: (state, action: PayloadAction<User>) => {
+            state.isLoggedIn = !state.isLoggedIn;
+            state.user = action.payload;
+        },
     }
-};
+})
+
+export const { 
+    loginSuccess, 
+    editSuccess, 
+    registerSuccess,
+    deleteSuccess,
+} = userSlice.actions;
+
+export const userReducer = userSlice.reducer;

@@ -1,21 +1,45 @@
 import React, {useState, useCallback} from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { Link } from 'react-router-dom';
-import * as actions from '../../store/modules/login/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import EditUser from '../EditUser';
 import { IRootState } from '../../store/modules/rootReducer';
+import {loginSuccess} from '../../store/modules/login/reducer';
+import axios from '../../services/axios';
+import history from '../../services/history';
+import * as interfaces from '../../interfaces';
+import {toast} from 'react-toastify';
 
 export default function Login(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [credentials, setCredentials] = useState(false);
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        dispatch(actions.loginRequest({email, password}));
-    }, [dispatch, email, password]);
+        async function getData(){
+            try{
+                const users: interfaces.ResponseGenerator = await axios.get('/users');
+                users.data.forEach((user: any) => {
+                    if (
+                        (!credentials) &&
+                        (email === user.email) && 
+                        (password === user.password)
+                    ) {
+                        setCredentials(true);
+                        dispatch(loginSuccess(user));
+                        toast.success('Login successful! Redirecting...');
+                        history.push('/');
+                    }  
+                })
+                if (!credentials) toast.error('User/password invalid.');
+            }
+            catch(e){console.log(e);}
+        }
+        getData();
+    }, [credentials, dispatch, email, password]);
     return (
         <Container>
             {(!isLoggedIn && 
