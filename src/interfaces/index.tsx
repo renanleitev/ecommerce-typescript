@@ -24,9 +24,15 @@ export interface Product extends Base {
     },
     description: string,
 }
-
 export interface Stock {
     data: Array<object>,
+}
+export interface User extends Base {
+    name: string,
+    surname: string,
+    address: string,
+    email: string,
+    password: string,
 }
 export interface Input {
     field: string,

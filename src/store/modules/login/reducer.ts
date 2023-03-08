@@ -1,30 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import * as interfaces from '../../../interfaces';
 
 interface InitialState {
     isLoggedIn: boolean,
-    user: {
-        id: number,
-        name: string,
-        surname: string,
-        address: string,
-        email: string,
-        password: string,
-    },
-}
-
-interface User {
-    id: 0,
-    name: '',
-    surname: '',
-    address: '',
-    email: '',
-    password: '',
+    user: (interfaces.User),
 }
 
 const initialState: (InitialState) = {
     isLoggedIn: false,
     user: {
-        id: 0,
+        id: '',
         name: '',
         surname: '',
         address: '',
@@ -37,17 +22,17 @@ export const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
     reducers: {
-        loginSuccess: (state, action: PayloadAction<User>) => {
+        loginSuccess: (state, action: PayloadAction<interfaces.User>) => {
             state.isLoggedIn = !state.isLoggedIn;
             state.user = action.payload;
         },
-        editSuccess: (state, action: PayloadAction<User>) => {
+        editSuccess: (state, action: PayloadAction<interfaces.User>) => {
             state.user = action.payload;
         },
-        registerSuccess: (state, action: PayloadAction<User>) => {
+        registerSuccess: (state, action: PayloadAction<interfaces.User>) => {
             state.user = action.payload;
         },
-        deleteSuccess: (state, action: PayloadAction<User>) => {
+        deleteSuccess: (state, action: PayloadAction<interfaces.User>) => {
             state.isLoggedIn = !state.isLoggedIn;
             state.user = action.payload;
         },

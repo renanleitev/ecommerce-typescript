@@ -1,7 +1,7 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo } from 'react';
 import isEmail from 'validator/lib/isEmail';
 import { Container, Form } from '../../styles/GlobalStyle';
-import { useSelector, useDispatch, useMemo } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import { toast } from 'react-toastify';
 import DeleteUser from '../DeleteUser';
@@ -20,10 +20,17 @@ export default function Register(){
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState(''); 
     const [formErrors, setFormErrors] = useState(true);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState<interfaces.User>({
+        id: '',
+        name: name,
+        surname: surname,
+        address: address,
+        email: email,
+        password: password,
+    });
     useMemo(() => {
         setUser({
-            id: 0,
+            id: '',
             name: name,
             surname: surname,
             address: address,
@@ -59,12 +66,19 @@ export default function Register(){
             setFormErrors(true);
             toast.error('Password needs to have 6 characters or more.');
         }
-        if (!formErrors){
-            dispatch(registerSuccess(user));
-            dispatch(loginSuccess(user));
-            history.push('/');
+        async function getData(){
+            try{
+                if (!formErrors){
+                    await axios.post('/users', user);
+                    dispatch(registerSuccess(user));
+                    dispatch(loginSuccess(user));
+                    history.push('/');
+                }
+            }
+            catch(e){console.log(e);}
         }
-    }, [name.length, surname.length, address.length, email, password, repeatPassword, formErrors, dispatch, user]);
+        getData();
+    }, [address.length, dispatch, email, formErrors, name.length, password, repeatPassword, surname.length, user]);
     return (
         <Container>
             {(!isLoggedIn && 
