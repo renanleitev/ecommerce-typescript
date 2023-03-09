@@ -27,7 +27,6 @@ export default function Product(){
     const [quantity, setQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [firsLoad, setFirstLoad] = useState(true);
-    const [indexProduct, setIndexProduct] = useState(0);
     const [item, setItem] = useState<interfaces.Product>({
         ...product,
         totalPrice: totalPrice,
@@ -35,12 +34,12 @@ export default function Product(){
     });
     useEffect(() => {
         cart.forEach((element: interfaces.Product) => {
-            if (element.name === product.name){
-                setQuantity(element.quantity);
-                setTotalPrice(element.totalPrice);   
-            }
+            if (element.id === item.id){
+                item.quantity = element.quantity;
+                item.totalPrice = element.totalPrice; 
+            } 
         });
-    }, [cart, product.name]);
+    }, [cart, item]);
     useEffect(() => {
         async function getData(){
             try{
@@ -87,18 +86,13 @@ export default function Product(){
     }, [cart, dispatch, isLoggedIn, item, quantity, totalPrice]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
-            cart.forEach((product, index) => {
-                if (product === item){
-                    setIndexProduct(index);
-                }
-            })
-            dispatch(removeItem(indexProduct));
+            dispatch(removeItem(item));
             toast.success(`Removed ${item.name} successfully!`);
             setQuantity(0);
             setTotalPrice(0);
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [cart, dispatch, indexProduct, isLoggedIn, item]);
+    }, [dispatch, isLoggedIn, item]);
     const incrementQuantity = useCallback(() => {
         if (isLoggedIn && quantity > 0){
             item.quantity++;

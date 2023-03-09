@@ -24,11 +24,11 @@ export default function Shopping(){
     const handleCheckout = useCallback(() => {
         let total = 0;
         cart.forEach((item: interfaces.Product) => {
-            total += item.totalPrice;
+            if (item !== undefined) total += item.totalPrice;
         });
         toast.success(`Thank you! Your total is $${total}`);
     }, [cart]);
-    const handleIncrement = useCallback((item: interfaces.Product) => {
+    const handleIncrement = useCallback((item: interfaces.Product) => { 
         const newItem = {
             ...item,
             quantity: item.quantity + 1,
@@ -48,13 +48,13 @@ export default function Shopping(){
             newItem.quantity++;
             newItem.totalPrice += Number.parseFloat(item.price);
         } else {
-            toast.success(`Removed ${item.name} successfully!`);
-            dispatch(changeQuantity({...newItem}));
-            setShoppingCart([...cart]);
-        }
+        toast.success(`Removed ${item.name} successfully!`);
+        dispatch(changeQuantity({...newItem}));
+        setShoppingCart([...cart]);
+    }
     }, [cart, dispatch]);
-    const handleRemove = useCallback((index: number) => {
-        dispatch(removeItem(index));
+    const handleRemove = useCallback((item: interfaces.Product) => {
+        if (item !== undefined) dispatch(removeItem(item));
     }, [dispatch]);
     return (
         <CartContainer>
@@ -77,13 +77,13 @@ export default function Shopping(){
                         <ButtonContainer key={index+7}>
                                 <button onClick={() => handleIncrement(item)}>+</button>
                                 <button onClick={() => handleDecrement(item)}>-</button>
-                                <button onClick={() => handleRemove(index)}>Remove item</button>
+                                <button onClick={() => handleRemove(item)}>Remove item</button>
                         </ButtonContainer>
                     </ItemContainer>
                 ))
             ) : (
                 <ItemContainer>
-                    <h1>You must be logged in to visualize your cart.</h1>
+                    <h2>No products in your cart.</h2>
                 </ItemContainer>
             )}
         </CartContainer> 

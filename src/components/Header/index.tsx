@@ -10,34 +10,25 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import * as loginActions from '../../store/modules/login/actions';
 import { Nav } from './styled';
 import history from '../../services/history';
 import {toast} from 'react-toastify';
-import * as interfaces from '../../interfaces';
 import { IRootState } from '../../store/modules/rootReducer';
-import {
-    findStock, 
-    findProduct, 
-    addItem,
-    changeQuantity,
-    removeItem
-} from '../../store/modules/products/reducer';
+import {loginSuccess} from '../../store/modules/login/reducer';
+import {removeCart} from '../../store/modules/products/reducer';
 
 export default function Header(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
-    const cart = useSelector((state: IRootState) => state.products.cart);
+    const user = useSelector((state: IRootState) => state.login.user);
     const dispatch = useDispatch();
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
-            dispatch(loginActions.loginFailure({isLoggedIn}));
-            cart.forEach((element: any) => {
-                dispatch(removeItem(element.id));
-            });
+            dispatch(loginSuccess(user));
+            dispatch(removeCart());
             toast.success('Logout sucessufully.');
             history.push('/');
         }
-    }, [isLoggedIn, dispatch, cart]);
+    }, [isLoggedIn, dispatch, user]);
     return (
         <Nav>
             <Link to="/">
@@ -50,7 +41,7 @@ export default function Header(){
                 {(isLoggedIn && (<FaUserMinus size={30}/>)) || (<FaUserPlus size={30}/>)}
             </Link>
             <Link to="/shopping">
-                <FaShoppingCart size={24}/>
+                {isLoggedIn && <FaShoppingCart size={24}/>}
             </Link>
             <Link to="/">
                 {isLoggedIn && <FaSignInAlt onClick={handleLogin} size={24}/>}

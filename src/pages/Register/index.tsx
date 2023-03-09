@@ -1,15 +1,14 @@
 import React, {useState, useCallback, useMemo } from 'react';
-import isEmail from 'validator/lib/isEmail';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
-import { toast } from 'react-toastify';
 import DeleteUser from '../DeleteUser';
 import { IRootState } from '../../store/modules/rootReducer';
-import {loginSuccess, registerSuccess} from '../../store/modules/login/reducer';
+import {registerSuccess} from '../../store/modules/login/reducer';
 import axios from '../../services/axios';
 import history from '../../services/history';
 import * as interfaces from '../../interfaces';
+import validation from '../../services/validation';
 
 export default function Register(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -19,7 +18,6 @@ export default function Register(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState(''); 
-    const [formErrors, setFormErrors] = useState(true);
     const [user, setUser] = useState<interfaces.User>({
         id: '',
         name: name,
@@ -41,44 +39,26 @@ export default function Register(){
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        setFormErrors(false);
-        if (name.length < 3 || name.length > 255) {
-            setFormErrors(true);
-            toast.error('Name invalid and/or need to have between 3 and 255 characters.');
-        }
-        if (surname.length < 3 || surname.length > 255) {
-            setFormErrors(true);
-            toast.error('Surname invalid and/or need to have between 3 and 255 characters.');
-        }
-        if (address.length < 3 || address.length > 255) {
-            setFormErrors(true);
-            toast.error('Address invalid and/or need to have between 3 and 255 characters.');
-        }
-        if (!isEmail(email)){
-            setFormErrors(true);
-            toast.error('Email invalid.');
-        }
-        if (password !== repeatPassword) {
-            setFormErrors(true);
-            toast.error('Password needs to be the same.');
-        }
-        if (password.length < 6 || repeatPassword.length < 6) {
-            setFormErrors(true);
-            toast.error('Password needs to have 6 characters or more.');
-        }
-        async function getData(){
+        const formErrors = validation(
+            name,
+            surname,
+            address,
+            email,
+            password,
+            repeatPassword
+        );
+        async function registerUser(){
             try{
                 if (!formErrors){
                     await axios.post('/users', user);
                     dispatch(registerSuccess(user));
-                    dispatch(loginSuccess(user));
                     history.push('/');
                 }
             }
             catch(e){console.log(e);}
         }
-        getData();
-    }, [address.length, dispatch, email, formErrors, name.length, password, repeatPassword, surname.length, user]);
+        registerUser();
+    }, [address, dispatch, email, name, password, repeatPassword, surname, user]);
     return (
         <Container>
             {(!isLoggedIn && 

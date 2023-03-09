@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import { Form } from '../../styles/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
@@ -8,6 +8,7 @@ import {editSuccess} from '../../store/modules/login/reducer';
 import axios from '../../services/axios';
 import history from '../../services/history';
 import * as interfaces from '../../interfaces';
+import Validation from '../../services/validation';
 
 export default function EditUser(){
     const user = useSelector((state: IRootState) => state.login.user);
@@ -19,30 +20,38 @@ export default function EditUser(){
     const [confirmEdit, setConfirmEdit] = useState(false);
     const dispatch = useDispatch();
     const [editUser, setEditUser] = useState<interfaces.User>({
-        id: '',
+        id: user.id,
         name: name,
         surname: surname,
         address: address,
         email: email,
         password: password,
     });
-    useMemo(() => {
+    useEffect(() => {
         setEditUser({
-            id: '',
+            id: user.id,
             name: name,
             surname: surname,
             address: address,
             email: email,
             password: password,
         })
-    }, [address, email, name, password, surname]);
+    }, [address, email, name, password, surname, user.id]);
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
         async function getData(){
             try{
-                if(confirmEdit){
+                const formErrors = Validation(
+                    name,
+                    surname,
+                    address,
+                    email,
+                    password,
+                );
+                if(confirmEdit && !formErrors){
                     await axios.put(`/users/${user.id}`, editUser);
                     dispatch(editSuccess(editUser));
+                    toast.success('Edit user successfully.');
                     setConfirmEdit(false);
                     history.push('/');
                 }
@@ -54,7 +63,7 @@ export default function EditUser(){
             catch(e){console.log(e);}
         }
         getData();
-    }, [confirmEdit, user.id, editUser, dispatch]);
+    }, [name, surname, address, email, password, confirmEdit, user.id, editUser, dispatch]);
     return (
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>

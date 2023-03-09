@@ -1,8 +1,8 @@
 interface Base{
     id: string,
+    name: string,
 }
 export interface Product extends Base {
-    name: string,
     images: string,
     price: string,
     quantity: number,
@@ -28,7 +28,6 @@ export interface Stock {
     data: Array<object>,
 }
 export interface User extends Base {
-    name: string,
     surname: string,
     address: string,
     email: string,

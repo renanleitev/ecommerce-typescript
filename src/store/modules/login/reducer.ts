@@ -30,11 +30,12 @@ export const userSlice = createSlice({
             state.user = action.payload;
         },
         registerSuccess: (state, action: PayloadAction<interfaces.User>) => {
-            state.user = action.payload;
-        },
-        deleteSuccess: (state, action: PayloadAction<interfaces.User>) => {
             state.isLoggedIn = !state.isLoggedIn;
             state.user = action.payload;
+        },
+        deleteSuccess: (state) => {
+            state.isLoggedIn = !state.isLoggedIn;
+            state.user = initialState.user;
         },
     }
 })

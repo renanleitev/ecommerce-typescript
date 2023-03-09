@@ -8,10 +8,10 @@ export default function Input(props: interfaces.Input){
     const placeholder = props.placeholder;
     let type: string;
     switch(placeholder){
-        case 'Password' || 'password':
+        case 'password':
             type = 'password';
             break;
-        case 'Email' || 'email':
+        case 'email':
             type = 'email';
             break;
         default:
@@ -24,7 +24,7 @@ export default function Input(props: interfaces.Input){
         type={type}
         value={field}
         onChange={e => setField(e.target.value)}
-        placeholder={placeholder}
+        placeholder={placeholder.charAt(0).toUpperCase() + placeholder.slice(1)}
         />
     );
 }

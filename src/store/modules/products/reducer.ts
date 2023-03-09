@@ -29,7 +29,7 @@ interface InitialState {
         },
         description: string,
     },
-    cart: [{}],
+    cart: Array<object>,
 }
 
 const initialState: (InitialState) = {
@@ -60,34 +60,37 @@ const initialState: (InitialState) = {
             },
             description: '',
     },
-    cart: [{}],
+    cart: [],
 };
 export const inventorySlice = createSlice({
     name: 'inventory',
     initialState: initialState,
     reducers: {
         findStock: (state, action: PayloadAction<interfaces.Stock>) => {
-            // Para zerar o estado no first load
-            // state.cart = initialState.cart;
             state.stock.data = action.payload.data;
         },
         findProduct: (state, action: PayloadAction<interfaces.Product>) => {
             state.product = {...action.payload};
         },
-        addItem: (state, action: PayloadAction<interfaces.Product>) => {
+        addItem: (state, action: PayloadAction<interfaces.Product>) => {            
             state.cart.push({...action.payload});
         },
         changeQuantity: (state, action: PayloadAction<interfaces.Product>) => {
-            state.cart.forEach((item: any) =>{
+            state.cart.forEach((item: interfaces.Product) =>{
                 if (item.id === action.payload.id) {
                     item.quantity = action.payload.quantity;
                     item.totalPrice = action.payload.totalPrice;
                 }
             });
         },
-        removeItem: (state, action: PayloadAction<number>) => {
-            state.cart.splice(action.payload, 1); 
+        removeItem: (state, action: PayloadAction<interfaces.Product>) => {
+            state.cart.forEach((item: interfaces.Product, index: number) => {
+                if (item.id === action.payload.id) state.cart.splice(index, 1);
+            })
         },
+        removeCart: (state) => {
+            state.cart = initialState.cart;
+        }
     }
 })
 
@@ -97,6 +100,7 @@ export const {
     addItem,
     changeQuantity,
     removeItem,
+    removeCart,
 } = inventorySlice.actions;
 
 export const inventoryReducer = inventorySlice.reducer;

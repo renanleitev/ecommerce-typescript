@@ -22,7 +22,7 @@ export default function Login(){
         async function getData(){
             try{
                 const users: interfaces.ResponseGenerator = await axios.get('/users');
-                users.data.forEach((user: any) => {
+                users.data.forEach((user: interfaces.User) => {
                     if (
                         (!credentials) &&
                         (email === user.email) && 
@@ -34,7 +34,6 @@ export default function Login(){
                         history.push('/');
                     }  
                 })
-                if (!credentials) toast.error('User/password invalid.');
             }
             catch(e){console.log(e);}
         }
@@ -47,9 +46,9 @@ export default function Login(){
                 <Form onSubmit={handleSubmit}>
                     <h2>Login</h2>
                     <label htmlFor='email'>Email</label>
-                    <Input field={email} setField={setEmail} placeholder='Email'/>
+                    <Input field={email} setField={setEmail} placeholder='email'/>
                     <label htmlFor='password'>Password</label>
-                    <Input field={password} setField={setPassword} placeholder='Password'/>
+                    <Input field={password} setField={setPassword} placeholder='password'/>
                     <Link className='link' to='/register'>
                         Don't have an account? Click here to make a new one!
                     </Link>

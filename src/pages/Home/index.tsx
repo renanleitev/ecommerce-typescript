@@ -6,6 +6,7 @@ import { ProductContainer, ArrowLeft, ArrowRight } from './styled';
 import { IRootState } from '../../store/modules/rootReducer';
 import {findStock} from '../../store/modules/products/reducer';
 import axios from '../../services/axios';
+import * as interfaces from '../../interfaces';
 
 export default function Home(){
     const dispatch = useDispatch();
@@ -37,7 +38,7 @@ export default function Home(){
             <ProductContainer>
                 {stock.data
                 .slice(0+count,limit+count)
-                .map((product: any, index: number) => {
+                .map((product: interfaces.Product, index: number) => {
                     return (
                         <Container key={index}> 
                             <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>

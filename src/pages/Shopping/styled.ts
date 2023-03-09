@@ -28,8 +28,9 @@ export const ItemContainer = styled.div`
     border-radius: 20px;
     margin-top: 1%;
     margin-bottom: 6%;
-    h1{
+    h2{
         padding: 20px;
+        text-align: center;
     }
 `;
 
