@@ -46,6 +46,7 @@ export default function Header(){
             <Link to="/">
                 {isLoggedIn && <FaSignInAlt onClick={handleLogin} size={24}/>}
             </Link>
+            {isLoggedIn && <p><Link to='/login'>Welcome, {user.name}!</Link></p>}
         </Nav>
     );
 }

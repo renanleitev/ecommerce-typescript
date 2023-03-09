@@ -8,7 +8,7 @@ import {registerSuccess} from '../../store/modules/login/reducer';
 import axios from '../../services/axios';
 import history from '../../services/history';
 import * as interfaces from '../../interfaces';
-import validation from '../../services/validation';
+import Validation from '../../services/validation';
 
 export default function Register(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -39,7 +39,7 @@ export default function Register(){
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = validation(
+        const formErrors = Validation(
             name,
             surname,
             address,

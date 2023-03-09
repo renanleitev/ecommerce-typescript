@@ -17,16 +17,10 @@ export default function EditUser(){
     const [address, setAddress] = useState(user.address);
     const [email, setEmail] = useState(user.email);
     const [password, setPassword] = useState(user.password);
+    const [repeatPassword, setRepeatPassword] = useState(user.password);
     const [confirmEdit, setConfirmEdit] = useState(false);
     const dispatch = useDispatch();
-    const [editUser, setEditUser] = useState<interfaces.User>({
-        id: user.id,
-        name: name,
-        surname: surname,
-        address: address,
-        email: email,
-        password: password,
-    });
+    const [editUser, setEditUser] = useState<interfaces.User>({...user});
     useEffect(() => {
         setEditUser({
             id: user.id,
@@ -47,6 +41,7 @@ export default function EditUser(){
                     address,
                     email,
                     password,
+                    repeatPassword,
                 );
                 if(confirmEdit && !formErrors){
                     await axios.put(`/users/${user.id}`, editUser);
@@ -63,20 +58,22 @@ export default function EditUser(){
             catch(e){console.log(e);}
         }
         getData();
-    }, [name, surname, address, email, password, confirmEdit, user.id, editUser, dispatch]);
+    }, [name, surname, address, email, password, repeatPassword, confirmEdit, user.id, editUser, dispatch]);
     return (
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>
                 <label htmlFor='name'>Name</label>
-                <Input field={name} setField={setName} placeholder='Name'/>
+                <Input field={name} setField={setName} placeholder='name'/>
                 <label htmlFor='surname'>Surname</label>
-                <Input field={surname} setField={setSurname} placeholder='Surname'/>
+                <Input field={surname} setField={setSurname} placeholder='surname'/>
                 <label htmlFor='address'>Address</label>
-                <Input field={address} setField={setAddress} placeholder='Address'/>
+                <Input field={address} setField={setAddress} placeholder='address'/>
                 <label htmlFor='email'>Email</label>
-                <Input field={email} setField={setEmail} placeholder='Email'/>
+                <Input field={email} setField={setEmail} placeholder='email'/>
                 <label htmlFor='password'>Password</label>
-                <Input field={password} setField={setPassword} placeholder='Password'/>
+                <Input field={password} setField={setPassword} placeholder='password'/>
+                <label htmlFor='password'>Repeat Password</label>
+                <Input field={repeatPassword} setField={setRepeatPassword} placeholder='password'/>
                 <button type="submit">Edit</button>
             </Form>
     );

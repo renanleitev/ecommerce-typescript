@@ -22,7 +22,7 @@ export default function DeleteUser(){
                     setConfirmDelete(false);
                     history.push('/');
                 } else {
-                    toast.error('You need to log in first to be able to delete your account');
+                    toast.error('You can not delete your account on the first login.');
                 }
             }
             catch(e){console.log(e);}

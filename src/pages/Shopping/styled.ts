@@ -27,7 +27,7 @@ export const ItemContainer = styled.div`
     width: 420px;
     border-radius: 20px;
     margin-top: 1%;
-    margin-bottom: 6%;
+    margin-bottom: 3%;
     h2{
         padding: 20px;
         text-align: center;

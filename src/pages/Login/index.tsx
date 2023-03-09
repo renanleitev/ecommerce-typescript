@@ -15,30 +15,25 @@ export default function Login(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [credentials, setCredentials] = useState(false);
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        async function getData(){
+        async function getUser(){
             try{
                 const users: interfaces.ResponseGenerator = await axios.get('/users');
-                users.data.forEach((user: interfaces.User) => {
-                    if (
-                        (!credentials) &&
-                        (email === user.email) && 
-                        (password === user.password)
-                    ) {
-                        setCredentials(true);
+                for (let user of users.data){
+                    if ((email === user.email) && (password === user.password)) {
                         dispatch(loginSuccess(user));
                         toast.success('Login successful! Redirecting...');
                         history.push('/');
-                    }  
-                })
+                        break;
+                    }
+                }
             }
             catch(e){console.log(e);}
         }
-        getData();
-    }, [credentials, dispatch, email, password]);
+        getUser();
+    }, [dispatch, email, password]);
     return (
         <Container>
             {(!isLoggedIn && 
