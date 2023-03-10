@@ -1,21 +1,24 @@
 import styled from "styled-components";
-import { primaryColor, primaryWhiteColor } from '../../config/colors'
+import * as colors from '../../config/colors'
 
 export const Nav = styled.nav`
-    background-color: ${primaryColor};
+    background-color: ${colors.primaryColor};
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     a {
-        color: ${primaryWhiteColor};
+        color: ${colors.primaryWhiteColor};
         margin: 0 20px 0;
         font-weight: bold;
+    }
+    a:hover{
+        color: ${colors.infoColor};
     }
     p{
         position: absolute;
         margin-left: 80%;
-        color: ${primaryWhiteColor};
+        color: ${colors.primaryWhiteColor};
         font-size: 14px;
         font-weight: bolder;
     }

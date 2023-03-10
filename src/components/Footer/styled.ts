@@ -19,6 +19,6 @@ export const BarFooter = styled.div`
         color: ${colors.primaryWhiteColor};
     }
     a:hover{
-        color: ${colors.sucessColor};
+        color: ${colors.infoColor};
     }
 `;
