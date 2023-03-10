@@ -63,6 +63,10 @@ export const Container = styled.section`
     img:hover{
         transform: scale(1.2);
     }
+    p{
+        position: absolute;
+        margin-top: 400px;
+    }
 `;
 
 export const Form = styled.form`

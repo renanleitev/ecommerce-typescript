@@ -42,6 +42,7 @@ export default function Home(){
                         <Container key={index}> 
                             <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>
                             <img key={index+2} src={product.images} alt=''/>
+                            <p key={index+3}>${product.price}</p>
                         </Container> 
                     )
                 })}
