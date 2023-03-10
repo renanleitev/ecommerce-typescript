@@ -1,29 +1,28 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
 import { ProductContainer, ArrowLeft, ArrowRight } from './styled';
 import { IRootState } from '../../store/modules/rootReducer';
 import {findStock} from '../../store/modules/products/reducer';
-import axios from '../../services/axios';
 import * as interfaces from '../../interfaces';
+import { showStock } from '../../api/products';
 
 export default function Home(){
     const dispatch = useDispatch();
     const [count, setCount] = useState(0);
     const [limit, setLimit] = useState(5);
     const [firsLoad, setFirstLoad] = useState(true);
-    async function getData(){
-        try{
+    useEffect(() => {
+        async function getStock(){
             if (firsLoad){   
-                const product = await axios.get('/products/');
-                dispatch(findStock(product));
+                const stock = await showStock();
+                dispatch(findStock(stock));
             }
             setFirstLoad(false);
         }
-        catch(e){console.log(e);}
-    }
-    if (firsLoad){getData();}
+        getStock();
+    }, [dispatch, firsLoad]);
     const stock = useSelector((state: IRootState) => state.products.stock);
     const handlePrevious = useCallback(() => {
         if (limit >= 5) setLimit(5);

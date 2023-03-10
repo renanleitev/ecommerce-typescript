@@ -5,10 +5,9 @@ import Input from '../../components/Input';
 import DeleteUser from '../DeleteUser';
 import { IRootState } from '../../store/modules/rootReducer';
 import {registerSuccess} from '../../store/modules/login/reducer';
-import axios from '../../services/axios';
-import history from '../../services/history';
 import * as interfaces from '../../interfaces';
 import Validation from '../../services/validation';
+import {registerUser} from '../../api/users';
 
 export default function Register(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -39,26 +38,12 @@ export default function Register(){
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = Validation(
-            name,
-            surname,
-            address,
-            email,
-            password,
-            repeatPassword
-        );
-        async function registerUser(){
-            try{
-                if (!formErrors){
-                    await axios.post('/users', user);
-                    dispatch(registerSuccess(user));
-                    history.push('/');
-                }
-            }
-            catch(e){console.log(e);}
+        const formErrors = Validation(user);
+        if (!formErrors){
+            registerUser(user);
+            dispatch(registerSuccess(user));
         }
-        registerUser();
-    }, [address, dispatch, email, name, password, repeatPassword, surname, user]);
+    }, [dispatch, user]);
     return (
         <Container>
             {(!isLoggedIn && 

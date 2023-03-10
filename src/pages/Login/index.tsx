@@ -6,33 +6,25 @@ import Input from '../../components/Input';
 import EditUser from '../EditUser';
 import { IRootState } from '../../store/modules/rootReducer';
 import {loginSuccess} from '../../store/modules/login/reducer';
-import axios from '../../services/axios';
+import { loginUser } from '../../api/users';
+import { toast } from 'react-toastify';
 import history from '../../services/history';
-import * as interfaces from '../../interfaces';
-import {toast} from 'react-toastify';
 
 export default function Login(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
-    const handleSubmit = useCallback((event: React.FormEvent) => {
+    const handleSubmit = useCallback(async (event: React.FormEvent) => {
         event.preventDefault();
-        async function getUser(){
-            try{
-                const users: interfaces.ResponseGenerator = await axios.get('/users');
-                for (let user of users.data){
-                    if ((email === user.email) && (password === user.password)) {
-                        dispatch(loginSuccess(user));
-                        toast.success('Login successful! Redirecting...');
-                        history.push('/');
-                        break;
-                    }
-                }
-            }
-            catch(e){console.log(e);}
+        const user = await loginUser(email, password);
+        if (user.name !== '') {
+            dispatch(loginSuccess(user));
+            toast.success('Login successfully.');
+            history.push('/');
+        } else {
+            toast.error('Email/password invalid.');
         }
-        getUser();
     }, [dispatch, email, password]);
     return (
         <Container>

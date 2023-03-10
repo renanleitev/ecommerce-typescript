@@ -12,7 +12,7 @@ import {
     changeQuantity,
     removeItem
 } from '../../store/modules/products/reducer';
-import axios from '../../services/axios';
+import { showProduct } from '../../api/products';
 
 export default function Product(){
     interface Url{
@@ -41,26 +41,21 @@ export default function Product(){
         });
     }, [cart, item]);
     useEffect(() => {
-        async function getData(){
-            try{
-                if (firsLoad){   
-                    const response = await axios.get(`/products/${id}`);
-                    dispatch(findProduct(response.data));
-                }
-                setFirstLoad(false);
-            }
-            catch(e){console.log(e);}
+        async function getProduct(){
+            if (firsLoad){
+                const response = await showProduct(id);
+                dispatch(findProduct(response));
+            } 
+            setFirstLoad(false);
         }
-        if (firsLoad) getData();
-    }, [dispatch, firsLoad, id, product.quantity]);
+        getProduct();
+    }, [dispatch, firsLoad, id]);
     useMemo(() => {
-        setItem(
-                {
+        setItem({
                     ...product,
                     totalPrice: totalPrice,
                     quantity: quantity,
-                }
-        )
+                })
     }, [product, quantity, totalPrice]);
     const addProduct = useCallback(() => {
         if (isLoggedIn){

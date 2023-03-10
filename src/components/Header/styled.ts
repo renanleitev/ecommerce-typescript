@@ -16,7 +16,7 @@ export const Nav = styled.nav`
         position: absolute;
         margin-left: 50%;
         color: ${primaryWhiteColor};
-        font-size: 24px;
+        font-size: 14px;
         font-weight: bolder;
     }
 `;

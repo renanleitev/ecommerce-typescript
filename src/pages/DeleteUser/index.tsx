@@ -4,8 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
 import {deleteSuccess} from '../../store/modules/login/reducer';
-import axios from '../../services/axios';
-import history from '../../services/history';
+import {removeUser} from '../../api/users';
 
 export default function DeleteUser(){
     const user = useSelector((state: IRootState) => state.login.user);
@@ -13,21 +12,10 @@ export default function DeleteUser(){
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        async function removeUser(){
-            try{
-                if (user.id !== undefined){
-                    await axios.delete(`/users/${user.id}`);
-                    toast.success('Delete successful!');
-                    dispatch(deleteSuccess());
-                    setConfirmDelete(false);
-                    history.push('/');
-                } else {
-                    toast.error('You can not delete your account on the first login.');
-                }
-            }
-            catch(e){console.log(e);}
-        }
-        if (confirmDelete) removeUser();
+        if (confirmDelete){
+            dispatch(deleteSuccess());
+            removeUser(user);
+        } 
         else {
             toast.success('Do you want to delete your account?');
             setConfirmDelete(true);
