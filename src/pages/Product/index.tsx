@@ -35,8 +35,8 @@ export default function Product(){
     useEffect(() => {
         cart.forEach((element: interfaces.Product) => {
             if (element.id === item.id){
+                item.totalPrice = element.totalPrice;
                 item.quantity = element.quantity;
-                item.totalPrice = element.totalPrice; 
             } 
         });
     }, [cart, item]);

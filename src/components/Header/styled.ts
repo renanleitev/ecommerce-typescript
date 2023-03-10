@@ -9,14 +9,21 @@ export const Nav = styled.nav`
     justify-content: center;
     a {
         color: ${primaryWhiteColor};
-        margin: 0 10px 0;
+        margin: 0 20px 0;
         font-weight: bold;
     }
     p{
         position: absolute;
-        margin-left: 50%;
+        margin-left: 80%;
         color: ${primaryWhiteColor};
         font-size: 14px;
         font-weight: bolder;
     }
 `;
+
+export const Cart = styled.div`
+    p{
+        margin-left: 25px;
+        margin-top: 12px;
+    }
+`
