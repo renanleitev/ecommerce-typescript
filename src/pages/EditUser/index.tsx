@@ -32,7 +32,7 @@ export default function EditUser(){
     }, [address, email, name, password, surname, user.id]);
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = Validation(editedUser);
+        const formErrors = Validation(editedUser, repeatPassword);
         if(confirmEdit && !formErrors){
             editUser(editedUser);
             dispatch(editSuccess(editedUser));
@@ -40,22 +40,16 @@ export default function EditUser(){
             toast.success('Do you confirm the changes?');
             setConfirmEdit(true);
         }
-    }, [confirmEdit, editedUser, dispatch]);
+    }, [editedUser, repeatPassword, confirmEdit, dispatch]);
     return (
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>
-                <label htmlFor='name'>Name</label>
                 <Input field={name} setField={setName} placeholder='name'/>
-                <label htmlFor='surname'>Surname</label>
                 <Input field={surname} setField={setSurname} placeholder='surname'/>
-                <label htmlFor='address'>Address</label>
                 <Input field={address} setField={setAddress} placeholder='address'/>
-                <label htmlFor='email'>Email</label>
                 <Input field={email} setField={setEmail} placeholder='email'/>
-                <label htmlFor='password'>Password</label>
                 <Input field={password} setField={setPassword} placeholder='password'/>
-                <label htmlFor='password'>Repeat Password</label>
-                <Input field={repeatPassword} setField={setRepeatPassword} placeholder='password'/>
+                <Input field={repeatPassword} setField={setRepeatPassword} placeholder='repeat password'/>
                 <button type="submit">Edit</button>
             </Form>
     );

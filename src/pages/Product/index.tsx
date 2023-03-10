@@ -57,28 +57,33 @@ export default function Product(){
                     quantity: quantity,
                 })
     }, [product, quantity, totalPrice]);
+    const changeItemQuantity = useCallback((operation: string) => {
+        if (operation === 'add') {
+            item.totalPrice = totalPrice + Number.parseFloat(item.price);
+            item.quantity++;
+            toast.success(`Added ${item.name} successfully!`);
+        }
+        if (operation === 'remove'){
+            item.totalPrice = totalPrice - Number.parseFloat(item.price);
+            item.quantity--;
+            toast.success(`Removed ${item.name} successfully!`);
+        }
+        dispatch(changeQuantity({...item}));
+        setQuantity(item.quantity);
+        setTotalPrice(item.totalPrice);
+    }, [dispatch, item, totalPrice]);
     const addProduct = useCallback(() => {
         if (isLoggedIn){
             const findItem = cart.find((product: interfaces.Product) => product.id === item.id);
             if (findItem) {
-                item.quantity++;
-                setQuantity(item.quantity);
-                item.totalPrice = totalPrice + Number.parseFloat(item.price);
-                setTotalPrice(item.totalPrice);
-                dispatch(changeQuantity({...item}));
+                changeItemQuantity('add');
             } else {
-                item.quantity++;
-                setQuantity(item.quantity);
-                item.totalPrice = totalPrice + Number.parseFloat(item.price);
-                setTotalPrice(item.totalPrice);
+                changeItemQuantity('add');
                 dispatch(addItem({...item}));
             } 
-            toast.success(`Added ${item.name} successfully!`);
-            setQuantity(quantity+1);
-            setTotalPrice(totalPrice + Number.parseFloat(item.price));
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [cart, dispatch, isLoggedIn, item, quantity, totalPrice]);
+    }, [isLoggedIn, cart, item, changeItemQuantity, dispatch]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
             dispatch(removeItem(item));
@@ -89,27 +94,13 @@ export default function Product(){
         if (!isLoggedIn) toast.error('You must be logged in!');
     }, [dispatch, isLoggedIn, item]);
     const incrementQuantity = useCallback(() => {
-        if (isLoggedIn && quantity > 0){
-            item.quantity++;
-            setQuantity(item.quantity);
-            item.totalPrice = totalPrice + Number.parseFloat(item.price);
-            setTotalPrice(item.totalPrice);
-            dispatch(changeQuantity({...item}));
-            toast.success(`Added ${item.name} successfully!`);
-        }
-        if (!isLoggedIn || quantity === 0) toast.error('Can not add the item.');
-    }, [dispatch, isLoggedIn, item, quantity, totalPrice]);
+        if (isLoggedIn && item.quantity > 0) changeItemQuantity('add');
+        if (!isLoggedIn || item.quantity === 0) toast.error('Can not add the item.');
+    }, [changeItemQuantity, isLoggedIn, item]);
     const decrementQuantity = useCallback(() => {
-        if (isLoggedIn && quantity > 1){
-            item.quantity--;
-            setQuantity(item.quantity);
-            item.totalPrice = totalPrice - Number.parseFloat(item.price);
-            setTotalPrice(item.totalPrice);
-            dispatch(changeQuantity({...item}));
-            toast.success(`Removed ${item.name} successfully!`);
-        }
-        if (!isLoggedIn || quantity === 0) toast.error('Can not remove the item.');
-    }, [dispatch, isLoggedIn, item, quantity, totalPrice]);
+        if (isLoggedIn && item.quantity > 1) changeItemQuantity('remove');
+        if (!isLoggedIn || item.quantity === 0) toast.error('Can not remove the item.');
+    }, [changeItemQuantity, isLoggedIn, item]);
     return (
         <ProductContainer>
             <ItemContainer>

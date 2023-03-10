@@ -47,11 +47,12 @@ export default function Shopping(){
         if (newItem.quantity === 0) {
             newItem.quantity++;
             newItem.totalPrice += Number.parseFloat(item.price);
+            toast.error('Cannot remove item.');
         } else {
-        toast.success(`Removed ${item.name} successfully!`);
-        dispatch(changeQuantity({...newItem}));
-        setShoppingCart([...cart]);
-    }
+            toast.success(`Removed ${item.name} successfully!`);
+            dispatch(changeQuantity({...newItem}));
+            setShoppingCart([...cart]);
+        }
     }, [cart, dispatch]);
     const handleRemove = useCallback((item: interfaces.Product) => {
         if (item !== undefined) dispatch(removeItem(item));
@@ -64,8 +65,7 @@ export default function Shopping(){
                 </CheckoutContainer>
                 ) : (<></>)}
             {isLoggedIn && shoppingCart.length >= 1 ? (
-                shoppingCart
-                .map((item: interfaces.Product, index: number) => (
+                shoppingCart.map((item: interfaces.Product, index: number) => (
                     <ItemContainer key={index}>
                         <ShoppingContainer key={index+1}>
                             <Link to={`product/${item.id}`} key={index+2}>{item.name}</Link>

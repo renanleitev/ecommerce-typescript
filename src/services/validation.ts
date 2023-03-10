@@ -8,8 +8,8 @@ export default function Validation(
         address: string,
         email: string,
         password: string,
-        repeatPassword?: string
-    }
+    },
+    repeatPassword: string,
 ){
     const error: {
         isError: boolean
@@ -32,11 +32,11 @@ export default function Validation(
         error.isError = true;
         toast.error('Email invalid.');
     }
-    if (user.password !== user.repeatPassword) {
+    if (user.password !== repeatPassword) {
         error.isError = true;
         toast.error('Password needs to be the same.');
     }
-    if (user.password.length < 6 || user.repeatPassword.length < 6) {
+    if (user.password.length < 6 || repeatPassword.length < 6) {
         error.isError = true;
         toast.error('Password needs to have 6 characters or more.');
     }

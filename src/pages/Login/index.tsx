@@ -32,9 +32,7 @@ export default function Login(){
                 (
                 <Form onSubmit={handleSubmit}>
                     <h2>Login</h2>
-                    <label htmlFor='email'>Email</label>
                     <Input field={email} setField={setEmail} placeholder='email'/>
-                    <label htmlFor='password'>Password</label>
                     <Input field={password} setField={setPassword} placeholder='password'/>
                     <Link className='link' to='/register'>
                         Don't have an account? Click here to make a new one!

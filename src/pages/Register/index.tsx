@@ -38,30 +38,24 @@ export default function Register(){
     const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = Validation(user);
+        const formErrors = Validation(user, repeatPassword);
         if (!formErrors){
             registerUser(user);
             dispatch(registerSuccess(user));
         }
-    }, [dispatch, user]);
+    }, [dispatch, repeatPassword, user]);
     return (
         <Container>
             {(!isLoggedIn && 
                 (
                 <Form onSubmit={handleSubmit}>
                     <h2>Create an account</h2>
-                    <label htmlFor='name'>Name</label>
                     <Input field={name} setField={setName} placeholder='name'/>
-                    <label htmlFor='surname'>Surname</label>
                     <Input field={surname} setField={setSurname} placeholder='surname'/>
-                    <label htmlFor='address'>Address</label>
                     <Input field={address} setField={setAddress} placeholder='address'/>
-                    <label htmlFor='email'>Email</label>
                     <Input field={email} setField={setEmail} placeholder='email'/>
-                    <label htmlFor='password'>Password</label>
                     <Input field={password} setField={setPassword} placeholder='password'/>
-                    <label htmlFor='password'>Repeat password</label>
-                    <Input field={repeatPassword} setField={setRepeatPassword} placeholder='password'/>
+                    <Input field={repeatPassword} setField={setRepeatPassword} placeholder='repeat password'/>
                     <button type="submit">Create</button>
                 </Form>
                 ))

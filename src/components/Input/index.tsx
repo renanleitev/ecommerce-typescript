@@ -8,6 +8,9 @@ export default function Input(props: interfaces.Input){
     const placeholder = props.placeholder;
     let type: string;
     switch(placeholder){
+        case 'repeat password':
+            type = 'password';
+            break;
         case 'password':
             type = 'password';
             break;
@@ -19,12 +22,15 @@ export default function Input(props: interfaces.Input){
             break;
     }
     return (
-        <input
-        id={id}
-        type={type}
-        value={field}
-        onChange={e => setField(e.target.value)}
-        placeholder={placeholder.charAt(0).toUpperCase() + placeholder.slice(1)}
-        />
+        <>
+            <label htmlFor={placeholder}>{placeholder.charAt(0).toUpperCase() + placeholder.slice(1)}</label>
+            <input
+            id={id}
+            type={type}
+            value={field}
+            onChange={e => setField(e.target.value)}
+            placeholder={placeholder.charAt(0).toUpperCase() + placeholder.slice(1)}
+            />
+        </>
     );
 }
