@@ -28,6 +28,17 @@ export const ItemContainer = styled.div`
     }
     h1{
         margin-bottom: 10px;
+        text-align: center;
+    }
+    form{
+        width: 400px;
+        overflow-y: scroll;
+    }
+    form > button {
+        width: 360px;
+    }
+    input{
+        width: 360px;
     }
 `;
 

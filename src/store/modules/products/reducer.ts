@@ -88,6 +88,9 @@ export const inventorySlice = createSlice({
                 if (item.id === action.payload.id) state.cart.splice(index, 1);
             })
         },
+        editItem: (state, action: PayloadAction<interfaces.Product>) => {
+            state.product = {...action.payload};
+        },
         removeCart: (state) => {
             state.cart = initialState.cart;
         }
@@ -101,6 +104,7 @@ export const {
     changeQuantity,
     removeItem,
     removeCart,
+    editItem,
 } = inventorySlice.actions;
 
 export const inventoryReducer = inventorySlice.reducer;

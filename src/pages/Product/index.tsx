@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ItemContainer, CartButton } from './styled';
 import {ProductContainer} from '../Home/styled';
+import EditProduct from '../EditProduct';
 import {toast} from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
@@ -19,8 +20,8 @@ export default function Product(){
         id: string,
     }
     const url: Url = useParams();
-    const id = url.id;
     const dispatch = useDispatch();
+    const user = useSelector((state: IRootState) => state.login.user);
     const cart = useSelector((state: IRootState) => state.products.cart);
     const product = useSelector((state: IRootState) => state.products.product);
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -32,6 +33,10 @@ export default function Product(){
         totalPrice: totalPrice,
         quantity: quantity,
     });
+    const [isAdmin, setIsAdmin] = useState(false);
+    useEffect(() => {
+        if (user.name === 'admin') setIsAdmin(true);
+    }, [user.name]);
     useEffect(() => {
         cart.forEach((element: interfaces.Product) => {
             if (element.id === item.id){
@@ -43,13 +48,13 @@ export default function Product(){
     useEffect(() => {
         async function getProduct(){
             if (firsLoad){
-                const response = await showProduct(id);
+                const response = await showProduct(url.id);
                 dispatch(findProduct(response));
             } 
             setFirstLoad(false);
         }
         getProduct();
-    }, [dispatch, firsLoad, id]);
+    }, [dispatch, firsLoad, url.id]);
     useMemo(() => {
         setItem({
                     ...product,
@@ -103,6 +108,11 @@ export default function Product(){
     }, [changeItemQuantity, isLoggedIn, item]);
     return (
         <ProductContainer>
+            {isAdmin ? (
+                <ItemContainer>
+                    <EditProduct item={item}/>
+                </ItemContainer>
+            ):(
             <ItemContainer>
                 <h1>Info</h1> 
                 <p>Operational System: {item.os}</p>
@@ -120,6 +130,7 @@ export default function Product(){
                     <CartButton onClick={removeProduct}>Remove item</CartButton>
                 </ProductContainer>
             </ItemContainer> 
+            )}
             <ItemContainer> 
                 <p>{item.name}</p>
                 <img src={item.images} alt=''/>
