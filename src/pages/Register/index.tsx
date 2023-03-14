@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useMemo } from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
-import Input from '../../components/Input';
+import InputUser from '../../components/InputUser';
 import DeleteUser from '../DeleteUser';
 import { IRootState } from '../../store/modules/rootReducer';
 import {registerSuccess} from '../../store/modules/login/reducer';
@@ -50,12 +50,12 @@ export default function Register(){
                 (
                 <Form onSubmit={handleSubmit}>
                     <h2>Create an account</h2>
-                    <Input field={name} setField={setName} placeholder='name'/>
-                    <Input field={surname} setField={setSurname} placeholder='surname'/>
-                    <Input field={address} setField={setAddress} placeholder='address'/>
-                    <Input field={email} setField={setEmail} placeholder='email'/>
-                    <Input field={password} setField={setPassword} placeholder='password'/>
-                    <Input field={repeatPassword} setField={setRepeatPassword} placeholder='repeat password'/>
+                    <InputUser field={name} setField={setName} placeholder='name'/>
+                    <InputUser field={surname} setField={setSurname} placeholder='surname'/>
+                    <InputUser field={address} setField={setAddress} placeholder='address'/>
+                    <InputUser field={email} setField={setEmail} placeholder='email'/>
+                    <InputUser field={password} setField={setPassword} placeholder='password'/>
+                    <InputUser field={repeatPassword} setField={setRepeatPassword} placeholder='repeat password'/>
                     <button type="submit">Create</button>
                 </Form>
                 ))

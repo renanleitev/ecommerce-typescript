@@ -34,6 +34,7 @@ export default function Product(){
         quantity: quantity,
     });
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     useEffect(() => {
         if (user.name === 'admin') setIsAdmin(true);
     }, [user.name]);
@@ -106,9 +107,12 @@ export default function Product(){
         if (isLoggedIn && item.quantity > 1) changeItemQuantity('remove');
         if (!isLoggedIn || item.quantity === 0) toast.error('Can not remove the item.');
     }, [changeItemQuantity, isLoggedIn, item]);
+    const editProduct = useCallback(() => {
+        setIsEdit(true);
+    }, []);
     return (
         <ProductContainer>
-            {isAdmin ? (
+            {isEdit ? (
                 <ItemContainer>
                     <EditProduct item={item}/>
                 </ItemContainer>
@@ -128,6 +132,7 @@ export default function Product(){
                     <CartButton onClick={incrementQuantity}>+</CartButton>
                     <CartButton onClick={decrementQuantity}>-</CartButton>
                     <CartButton onClick={removeProduct}>Remove item</CartButton>
+                    {isAdmin ? (<CartButton onClick={editProduct}>Edit Product</CartButton>) : (<></>)}
                 </ProductContainer>
             </ItemContainer> 
             )}

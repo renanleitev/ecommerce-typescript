@@ -1,77 +1,42 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Form } from '../../styles/GlobalStyle';
-import Input from '../../components/Input';
+import InputProduct from '../../components/InputProduct';
 import * as interfaces from '../../interfaces';
 import {editProduct} from '../../api/products';
 import {editItem} from '../../store/modules/products/reducer';
 import { useDispatch } from 'react-redux';
 
-export default function EditProduct(props: any){
-    const item: interfaces.Product = props.item;
+const EditProduct: React.FC<interfaces.Item> = (props: interfaces.Item) => {
     const dispatch = useDispatch();
-    const [name, setName] = useState(item.name);
-    const [price, setPrice] = useState(item.price);
-    const [images, setImages] = useState(item.images);
-    const [opSystem, setOpSystem] = useState(item.os);
-    const [resolution, setResolution] = useState(item.display.screenResolution);
-    const [screenSize, setScreenSize] = useState(item.display.screenSize);
-    const [storage, setStorage] = useState(item.storage.ram);
-    const [memory, setMemory] = useState(item.storage.ram);
-    const [cpu, setCpu] = useState(item.hardware.cpu);
-    const [wifi, setWifi] = useState(item.connectivity.wifi);
-    const [description, setDescription] = useState(item.description);
-    const [editedProduct, setEditedProduct] = useState<interfaces.Product>({...item});
+    const [item, setItem] = useState<interfaces.Product>(props.item);
     const [confirmEdit, setConfirmEdit] = useState(false);
-    useMemo(() => {
-        setEditedProduct({
-            ...item,
-            name: name,
-            price: price,
-            images: images,
-            os: opSystem,
-            display: {
-                screenResolution: resolution,
-                screenSize: screenSize,
-            },
-            storage: {
-                hdd: storage,
-                ram: memory,
-            },
-            hardware: {
-                cpu: cpu,
-            },
-            connectivity: {
-                wifi: wifi,
-            },
-            description: description,
-        })
-    }, [cpu, description, images, item, memory, name, opSystem, price, resolution, screenSize, storage, wifi]);
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
         if(confirmEdit){
-            editProduct(editedProduct);
-            dispatch(editItem(editedProduct));
+            editProduct(item);
+            dispatch(editItem(item));
         } else {
             toast.success('Do you confirm the changes?');
             setConfirmEdit(true);
         }
-    }, [confirmEdit, dispatch, editedProduct]);
+    }, [confirmEdit, dispatch, item]);
     return (
         <Form onSubmit={handleSubmit}>
             <h1>Edit Product</h1> 
-            <Input field={name} setField={setName} placeholder='name'/>
-            <Input field={price} setField={setPrice} placeholder='price'/>
-            <Input field={images} setField={setImages} placeholder='images'/>
-            <Input field={opSystem} setField={setOpSystem} placeholder='operational system'/>
-            <Input field={resolution} setField={setResolution} placeholder='resolution'/>
-            <Input field={screenSize} setField={setScreenSize} placeholder='screen size'/>
-            <Input field={storage} setField={setStorage} placeholder='storage'/>
-            <Input field={memory} setField={setMemory} placeholder='memory'/>
-            <Input field={cpu} setField={setCpu} placeholder='cpu'/>
-            <Input field={wifi} setField={setWifi} placeholder='wifi'/>
-            <Input field={description} setField={setDescription} placeholder='description'/>
+            <InputProduct data={item} setData={setItem} keyName='name' keyValue={props.item.name}/>
+            <InputProduct data={item} setData={setItem} keyName='price' keyValue={props.item.price}/>
+            <InputProduct data={item} setData={setItem} keyName='images' keyValue={props.item.images}/>
+            <InputProduct data={item} setData={setItem} keyName='os' keyValue={props.item.os}/>
+            <InputProduct data={item} setData={setItem} keyName='screenResolution' keyValue={props.item.display.screenResolution}/>
+            <InputProduct data={item} setData={setItem} keyName='screenSize' keyValue={props.item.display.screenSize}/>
+            <InputProduct data={item} setData={setItem} keyName='hdd' keyValue={props.item.storage.hdd}/>
+            <InputProduct data={item} setData={setItem} keyName='ram' keyValue={props.item.storage.ram}/>
+            <InputProduct data={item} setData={setItem} keyName='cpu' keyValue={props.item.hardware.cpu}/>
+            <InputProduct data={item} setData={setItem} keyName='wifi' keyValue={props.item.connectivity.wifi}/>
+            <InputProduct data={item} setData={setItem} keyName='description' keyValue={props.item.description}/>
             <button type="submit">Edit Product</button>
         </Form>
     )
 }
+export default EditProduct;

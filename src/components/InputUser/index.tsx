@@ -1,7 +1,7 @@
 import React from 'react';
 import * as interfaces from '../../interfaces';
 
-export default function Input(props: interfaces.Input){
+export default function Input(props: interfaces.InputUser){
     const id = props.placeholder;
     const field = props.field;
     const setField = props.setField;

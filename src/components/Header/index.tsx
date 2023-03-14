@@ -14,7 +14,7 @@ import { Nav, Cart } from './styled';
 import history from '../../services/history';
 import {toast} from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
-import {loginSuccess} from '../../store/modules/login/reducer';
+import {deleteSuccess} from '../../store/modules/login/reducer';
 import {removeCart} from '../../store/modules/products/reducer';
 
 export default function Header(){
@@ -24,12 +24,12 @@ export default function Header(){
     const dispatch = useDispatch();
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
-            dispatch(loginSuccess(user));
+            dispatch(deleteSuccess());
             dispatch(removeCart());
             toast.success('Logout sucessufully.');
             history.push('/');
         }
-    }, [isLoggedIn, dispatch, user]);
+    }, [isLoggedIn, dispatch]);
     return (
         <Nav>
             <Link to="/">
@@ -66,7 +66,7 @@ export default function Header(){
             </Link>
             {isLoggedIn ? 
             (<p><Link to='/edit'>Welcome, {user.name}!</Link></p>) : 
-            (<p><Link to='/login'>Welcome, {user.name}!</Link></p>)}
+            (<p><Link to='/login'>Login</Link></p>)}
         </Nav>
     );
 }

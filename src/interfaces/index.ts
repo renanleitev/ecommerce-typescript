@@ -27,6 +27,9 @@ export interface Product extends Base {
 export interface Stock {
     data: Array<object>,
 }
+export interface Item {
+    item: Product,
+}
 export interface User extends Base {
     surname: string,
     address: string,
@@ -34,6 +37,14 @@ export interface User extends Base {
     password: string,
 }
 export interface Input {
+    setData: Function,
+    keyName: string,
+    keyValue: string,
+}
+export interface InputProduct extends Input {
+    data: Product,
+}
+export interface InputUser {
     field: string,
     setField: Function,
     placeholder: string,

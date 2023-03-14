@@ -2,7 +2,7 @@ import React, {useState, useCallback} from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Input from '../../components/Input';
+import InputUser from '../../components/InputUser';
 import EditUser from '../EditUser';
 import { IRootState } from '../../store/modules/rootReducer';
 import {loginSuccess} from '../../store/modules/login/reducer';
@@ -32,8 +32,8 @@ export default function Login(){
                 (
                 <Form onSubmit={handleSubmit}>
                     <h2>Login</h2>
-                    <Input field={email} setField={setEmail} placeholder='email'/>
-                    <Input field={password} setField={setPassword} placeholder='password'/>
+                    <InputUser field={email} setField={setEmail} placeholder='email'/>
+                    <InputUser field={password} setField={setPassword} placeholder='password'/>
                     <Link className='link' to='/register'>
                         Don't have an account? Click here to make a new one!
                     </Link>
