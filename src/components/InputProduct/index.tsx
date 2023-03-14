@@ -1,22 +1,18 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import * as interfaces from '../../interfaces';
 
 const InputProduct: React.FC<interfaces.InputProduct> = (props: interfaces.InputProduct) => {
-    const [keyValue, setKeyValue] = useState(props.keyValue);
     const keyName = props.keyName;
     const data = props.data;
     const setData = props.setData;
     const handleInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        setKeyValue(e.currentTarget.value);
-    }, []);
-    useEffect(() => {
         switch(keyName){
             case 'screenResolution':
                 setData({
                     ...data,
                     display: {
                         ...data.display,
-                        [keyName]: keyValue,
+                        [keyName]: e.currentTarget.value,
                     }
                 });
                 break;
@@ -25,7 +21,7 @@ const InputProduct: React.FC<interfaces.InputProduct> = (props: interfaces.Input
                     ...data,
                 display: {
                     ...data.display,
-                    [keyName]: keyValue,
+                    [keyName]: e.currentTarget.value,
                 }
                 });
                 break;
@@ -34,7 +30,7 @@ const InputProduct: React.FC<interfaces.InputProduct> = (props: interfaces.Input
                     ...data,
                     storage: {
                         ...data.storage,
-                        [keyName]: keyValue,
+                        [keyName]: e.currentTarget.value,
                     }
                 });
                 break;
@@ -43,7 +39,7 @@ const InputProduct: React.FC<interfaces.InputProduct> = (props: interfaces.Input
                     ...data,
                     storage: {
                         ...data.storage,
-                        [keyName]: keyValue,
+                        [keyName]: e.currentTarget.value,
                     }
                 });
                 break;
@@ -52,7 +48,7 @@ const InputProduct: React.FC<interfaces.InputProduct> = (props: interfaces.Input
                     ...data,
                     hardware: {
                         ...data.hardware,
-                        [keyName]: keyValue,
+                        [keyName]: e.currentTarget.value,
                     }
                 });
                 break;
@@ -61,25 +57,25 @@ const InputProduct: React.FC<interfaces.InputProduct> = (props: interfaces.Input
                     ...data,
                     connectivity: {
                         ...data.connectivity,
-                        [keyName]: keyValue,
+                        [keyName]: e.currentTarget.value,
                     }
                 });
                 break;
             default:
                 setData({
                     ...data,
-                    [keyName]: keyValue,
+                    [keyName]: e.currentTarget.value,
                 });
                 break;
             }
-    }, [data, keyName, keyValue, setData]);
+    }, [data, keyName, setData]);
     return (
         <>
             <label htmlFor={keyName}>{keyName.charAt(0).toUpperCase() + keyName.slice(1)}</label>
             <input
             id={keyName}
             type='text'
-            defaultValue={keyValue}
+            defaultValue={props.keyValue}
             onChange={handleInput}
             placeholder={keyName.charAt(0).toUpperCase() + keyName.slice(1)}
             />
