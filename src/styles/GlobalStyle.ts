@@ -72,6 +72,9 @@ export const Container = styled.section`
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
+    h1{
+        text-align: center;
+    }
     label{
         margin: 10px 0px;
     }

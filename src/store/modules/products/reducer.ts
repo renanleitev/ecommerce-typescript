@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
+import * as apiProducts from '../../../api/products';
 
 interface InitialState {
     stock: {
@@ -89,6 +90,7 @@ export const inventorySlice = createSlice({
             })
         },
         editItem: (state, action: PayloadAction<interfaces.Product>) => {
+            apiProducts.editProduct(action.payload);
             state.product = {...action.payload};
         },
         removeCart: (state) => {

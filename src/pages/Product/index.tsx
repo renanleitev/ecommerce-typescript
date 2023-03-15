@@ -14,6 +14,8 @@ import {
     removeItem
 } from '../../store/modules/products/reducer';
 import { showProduct } from '../../api/products';
+import Modal from '../../components/Modal';
+import useModal from "../../hooks/useModal";
 
 export default function Product(){
     interface Url{
@@ -28,13 +30,13 @@ export default function Product(){
     const [quantity, setQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [firsLoad, setFirstLoad] = useState(true);
+    const { isOpen, toggle } = useModal();
     const [item, setItem] = useState<interfaces.Product>({
         ...product,
         totalPrice: totalPrice,
         quantity: quantity,
     });
     const [isAdmin, setIsAdmin] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
     useEffect(() => {
         if (user.name === 'admin') setIsAdmin(true);
     }, [user.name]);
@@ -107,16 +109,11 @@ export default function Product(){
         if (isLoggedIn && item.quantity > 1) changeItemQuantity('remove');
         if (!isLoggedIn || item.quantity === 0) toast.error('Can not remove the item.');
     }, [changeItemQuantity, isLoggedIn, item]);
-    const editProduct = useCallback(() => {
-        setIsEdit(true);
-    }, []);
     return (
         <ProductContainer>
-            {isEdit ? (
-                <ItemContainer>
-                    <EditProduct item={item}/>
-                </ItemContainer>
-            ):(
+            <Modal isOpen={isOpen} toggle={toggle}>
+                <EditProduct item={item}/>
+            </Modal>
             <ItemContainer>
                 <h1>Info</h1> 
                 <p>Operational System: {item.os}</p>
@@ -132,10 +129,9 @@ export default function Product(){
                     <CartButton onClick={incrementQuantity}>+</CartButton>
                     <CartButton onClick={decrementQuantity}>-</CartButton>
                     <CartButton onClick={removeProduct}>Remove item</CartButton>
-                    {isAdmin ? (<CartButton onClick={editProduct}>Edit Product</CartButton>) : (<></>)}
+                    {isAdmin ? (<CartButton onClick={toggle}>Edit Product</CartButton>) : (<></>)}
                 </ProductContainer>
             </ItemContainer> 
-            )}
             <ItemContainer> 
                 <p>{item.name}</p>
                 <img src={item.images} alt=''/>

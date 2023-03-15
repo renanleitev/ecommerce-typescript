@@ -44,12 +44,12 @@ export default function EditUser(){
     return (
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>
-                <InputUser field={name} setField={setName} placeholder='name'/>
-                <InputUser field={surname} setField={setSurname} placeholder='surname'/>
-                <InputUser field={address} setField={setAddress} placeholder='address'/>
-                <InputUser field={email} setField={setEmail} placeholder='email'/>
-                <InputUser field={password} setField={setPassword} placeholder='password'/>
-                <InputUser field={repeatPassword} setField={setRepeatPassword} placeholder='repeat password'/>
+                <InputUser data={name} setData={setName} placeholder='name'/>
+                <InputUser data={surname} setData={setSurname} placeholder='surname'/>
+                <InputUser data={address} setData={setAddress} placeholder='address'/>
+                <InputUser data={email} setData={setEmail} placeholder='email'/>
+                <InputUser data={password} setData={setPassword} placeholder='password'/>
+                <InputUser data={repeatPassword} setData={setRepeatPassword} placeholder='repeat password'/>
                 <button type="submit">Edit</button>
             </Form>
     );

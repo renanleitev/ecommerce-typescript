@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import { Form } from '../../styles/GlobalStyle';
 import InputProduct from '../../components/InputProduct';
 import * as interfaces from '../../interfaces';
-import {editProduct} from '../../api/products';
 import {editItem} from '../../store/modules/products/reducer';
 import { useDispatch } from 'react-redux';
 
@@ -14,7 +13,6 @@ const EditProduct: React.FC<interfaces.Item> = (props: interfaces.Item) => {
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
         if(confirmEdit){
-            editProduct(item);
             dispatch(editItem(item));
         } else {
             toast.success('Do you confirm the changes?');

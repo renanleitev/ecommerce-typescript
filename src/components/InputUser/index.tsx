@@ -1,10 +1,10 @@
 import React from 'react';
 import * as interfaces from '../../interfaces';
 
-export default function Input(props: interfaces.InputUser){
+const InputUser: React.FC<interfaces.InputUser> = (props: interfaces.InputUser) => {
     const id = props.placeholder;
-    const field = props.field;
-    const setField = props.setField;
+    const field = props.data;
+    const setField = props.setData;
     const placeholder = props.placeholder;
     let type: string;
     switch(placeholder){
@@ -32,5 +32,7 @@ export default function Input(props: interfaces.InputUser){
             placeholder={placeholder.charAt(0).toUpperCase() + placeholder.slice(1)}
             />
         </>
-    );
+    )
 }
+
+export default InputUser;

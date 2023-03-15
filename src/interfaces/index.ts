@@ -38,15 +38,14 @@ export interface User extends Base {
 }
 export interface Input {
     setData: Function,
-    keyName: string,
-    keyValue: string,
 }
 export interface InputProduct extends Input {
     data: Product,
+    keyName: string,
+    keyValue: string,
 }
-export interface InputUser {
-    field: string,
-    setField: Function,
+export interface InputUser extends Input {
+    data: string,
     placeholder: string,
 }
 export interface ResponseGenerator{

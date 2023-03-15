@@ -32,8 +32,8 @@ export default function Login(){
                 (
                 <Form onSubmit={handleSubmit}>
                     <h2>Login</h2>
-                    <InputUser field={email} setField={setEmail} placeholder='email'/>
-                    <InputUser field={password} setField={setPassword} placeholder='password'/>
+                    <InputUser data={email} setData={setEmail} placeholder='email'/>
+                    <InputUser data={password} setData={setPassword} placeholder='password'/>
                     <Link className='link' to='/register'>
                         Don't have an account? Click here to make a new one!
                     </Link>
