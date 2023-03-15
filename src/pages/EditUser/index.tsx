@@ -8,6 +8,9 @@ import {editSuccess} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
 import Validation from '../../services/validation';
 import {editUser} from '../../api/users';
+import {deleteSuccess} from '../../store/modules/login/reducer';
+import {removeUser} from '../../api/users';
+import { ButtonContainer } from './styled';
 
 export default function EditUser(){
     const user = useSelector((state: IRootState) => state.login.user);
@@ -18,6 +21,7 @@ export default function EditUser(){
     const [password, setPassword] = useState(user.password);
     const [repeatPassword, setRepeatPassword] = useState(user.password);
     const [confirmEdit, setConfirmEdit] = useState(false);
+    const [confirmDelete, setConfirmDelete] = useState(false);
     const dispatch = useDispatch();
     const [editedUser, setEditedUser] = useState<interfaces.User>({...user});
     useMemo(() => {
@@ -41,6 +45,17 @@ export default function EditUser(){
             setConfirmEdit(true);
         }
     }, [editedUser, repeatPassword, confirmEdit, dispatch]);
+    const handleDelete = useCallback((event: React.FormEvent) => {
+        event.preventDefault();
+        if (confirmDelete){
+            dispatch(deleteSuccess());
+            removeUser(user);
+        } 
+        else {
+            toast.success('Do you want to delete your account?');
+            setConfirmDelete(true);
+        }
+    }, [confirmDelete, dispatch, user]);
     return (
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>
@@ -50,7 +65,10 @@ export default function EditUser(){
                 <InputUser data={email} setData={setEmail} placeholder='email'/>
                 <InputUser data={password} setData={setPassword} placeholder='password'/>
                 <InputUser data={repeatPassword} setData={setRepeatPassword} placeholder='repeat password'/>
-                <button type="submit">Edit</button>
+                <ButtonContainer>
+                    <button type="submit">Edit</button>
+                    <button onClick={handleDelete}>Delete</button>
+                </ButtonContainer>
             </Form>
     );
 }

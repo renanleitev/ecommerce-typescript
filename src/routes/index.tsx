@@ -14,9 +14,7 @@ export default function Routes(){
     return (
         <Switch>
             <Route exact path='/' component={Home}/>
-            {isLoggedIn ? 
-            (<Route exact path='/delete' component={Register}/>) : 
-            (<Route exact path='/register' component={Register}/>)}
+            <Route exact path='/register' component={Register}/>
             {isLoggedIn ? 
             (<Route exact path='/edit' component={Login}/>) : 
             (<Route exact path='/login' component={Login}/>)}

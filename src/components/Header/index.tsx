@@ -5,7 +5,6 @@ import {
     FaUserAlt, 
     FaUserEdit, 
     FaUserPlus,
-    FaUserMinus, 
     FaShoppingCart, 
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -44,15 +43,11 @@ export default function Header(){
                     <FaUserAlt size={24}/>
                 </Link>
             )}
-            {isLoggedIn ? (
-                <Link to="/delete">
-                    <FaUserMinus size={30}/>
-                </Link>
-                ) : (
-                <Link to="/register">
-                    <FaUserPlus size={30}/>
-                </Link>
-            )}
+            {!isLoggedIn &&
+            <Link to="/register">
+                <FaUserPlus size={30}/>
+            </Link>
+            }
             <Link to="/shopping">
                 {isLoggedIn && (
                     <Cart>

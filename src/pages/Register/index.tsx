@@ -1,16 +1,13 @@
 import React, {useState, useCallback, useMemo } from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import InputUser from '../../components/InputUser';
-import DeleteUser from '../DeleteUser';
-import { IRootState } from '../../store/modules/rootReducer';
 import {registerSuccess} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
 import Validation from '../../services/validation';
 import {registerUser} from '../../api/users';
 
 export default function Register(){
-    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [address, setAddress] = useState('');
@@ -45,9 +42,7 @@ export default function Register(){
         }
     }, [dispatch, repeatPassword, user]);
     return (
-        <Container>
-            {(!isLoggedIn && 
-                (
+            <Container>
                 <Form onSubmit={handleSubmit}>
                     <h2>Create an account</h2>
                     <InputUser data={name} setData={setName} placeholder='name'/>
@@ -58,10 +53,6 @@ export default function Register(){
                     <InputUser data={repeatPassword} setData={setRepeatPassword} placeholder='repeat password'/>
                     <button type="submit">Create</button>
                 </Form>
-                ))
-                ||
-                (<DeleteUser/>)
-            }
-        </Container>
-    );
+            </Container>
+    )
 }
