@@ -7,28 +7,28 @@ import { IRootState } from '../../store/modules/rootReducer';
 import { showStock } from '../../store/modules/products/reducer';
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
+import Loading from '../../components/Loading';
 
 export default function Home(){
     const dispatch = useDispatch<AppThunkDispatch>();
     const [count, setCount] = useState(0);
-    const [limit, setLimit] = useState(5);
     useEffect(() => {
         dispatch(showStock());
     }, [dispatch]);
     const stock = useSelector((state: IRootState) => state.products.stock);
     const handlePrevious = useCallback(() => {
-        if (limit >= 5) setLimit(5);
         if (count >= 5) setCount(0);
-    }, [count, limit]);
+    }, [count]);
     const handleNext = useCallback(() => {
-        if (limit === 5) setLimit(limit+5);
         if (count === 0) setCount(count+5);
-    }, [count, limit]);
+    }, [count]);
     return (    
         <>
+            {count === 0 ? (<Loading/>): (<></>)}
+            {count === 5 ? (<Loading/>): (<></>)}
             <ProductContainer>
                 {stock.data
-                .slice(0+count,limit+count)
+                .slice(0+count,5+count)
                 .map((product: interfaces.Product, index: number) => {
                     return (
                         <Container key={index}> 

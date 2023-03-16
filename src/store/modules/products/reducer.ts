@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import axios from '../../../services/axios';
 
 interface InitialState {
+    status: string,
+    error: string,
     stock: {
         data: Array<object>,
     },
@@ -12,6 +14,8 @@ interface InitialState {
 }
 
 const initialState: (InitialState) = {
+    status: 'idle',
+    error: '',
     stock: {
         data: [{}],
     },
@@ -32,23 +36,32 @@ const initialState: (InitialState) = {
 export const showStock = createAsyncThunk(
     'inventory/showStock',
     async () => {
-        const stock = await axios.get('/products/');
-        return stock;
+        try{
+            const stock = await axios.get('/products/');
+            return stock;
+        }
+        catch(error){ return error.message; }
 });
 
 export const showProduct = createAsyncThunk(
     'inventory/showProduct',
     async (id: string) => {
-        const product = await axios.get(`/products/${id}`);
-        return product.data;
+        try{
+            const product = await axios.get(`/products/${id}`);
+            return product.data;
+        }
+        catch(error){ return error.message; }
 });
 
 export const editProduct = createAsyncThunk(
     'inventory/editProduct', 
     async (product: interfaces.Product) => {
-        await axios.put(`/products/${product.id}`, product);
-        toast.success('Edit product successfully.');
-        return product;
+        try{
+            await axios.put(`/products/${product.id}`, product);
+            toast.success('Edit product successfully.');
+            return product;
+        }
+        catch(error){ return error.message; }
 });
 
 export const inventorySlice = createSlice({
@@ -77,22 +90,41 @@ export const inventorySlice = createSlice({
     },
     extraReducers(builder){
         builder
+            // editProduct asyncThunk
             .addCase(
                 editProduct.fulfilled, 
                 (state, action: PayloadAction<interfaces.Product>) => {
                     state.product = {...action.payload};
             })
+            .addCase(editProduct.pending, (state) => {state.status = 'loading';})
+            .addCase(editProduct.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // showProduct asyncThunk
             .addCase(
                 showProduct.fulfilled,
                 (state,  action: PayloadAction<interfaces.Product>) => {
                     state.product = {...action.payload};
+                    state.status = 'succeeded';
             })
+            .addCase(showProduct.pending, (state) => {state.status = 'loading';})
+            .addCase(showProduct.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // showStock asyncThunk
             .addCase(
                 showStock.fulfilled,
                 (state, action: PayloadAction<interfaces.Stock>) => {
                     state.stock.data = action.payload.data;
                 }
             )
+            .addCase(showStock.pending, (state) => {state.status = 'loading';})
+            .addCase(showStock.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
     }
 })
 

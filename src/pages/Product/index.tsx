@@ -16,6 +16,7 @@ import { showProduct } from '../../store/modules/products/reducer';
 import Modal from '../../components/Modal';
 import useModal from "../../hooks/useModal";
 import { AppThunkDispatch } from '../../store';
+import Loading from '../../components/Loading';
 
 export default function Product(){
     interface Url{
@@ -48,6 +49,7 @@ export default function Product(){
         });
     }, [cart, item]);
     useEffect(() => {
+        setTimeout(() => {}, 2000);
         dispatch(showProduct(url.id));
     }, [dispatch, url.id]);
     useMemo(() => {
@@ -103,6 +105,7 @@ export default function Product(){
     }, [changeItemQuantity, isLoggedIn, item]);
     return (
         <ProductContainer>
+            <Loading/>
             <Modal isOpen={isOpen} toggle={toggle}>
                 <EditProduct item={item}/>
             </Modal>

@@ -6,11 +6,15 @@ import history from '../../../services/history';
 
 interface InitialState {
     isLoggedIn: boolean,
+    status: string,
+    error: string,
     user: (interfaces.User),
 }
 
 const initialState: (InitialState) = {
     isLoggedIn: false,
+    status: 'idle',
+    error: '',
     user: {
         id: '',
         name: '',
@@ -83,28 +87,52 @@ export const userSlice = createSlice({
     },
     extraReducers(builder){
         builder
+            // registerUser asyncThunk
             .addCase(
                 registerUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
                     state.isLoggedIn = !state.isLoggedIn;
                     state.user = action.payload;
             })
+            .addCase(registerUser.pending, (state) => {state.status = 'loading';})
+            .addCase(registerUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // editUser asyncThunk
             .addCase(
                 editUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
                     state.user = action.payload;
             })
+            .addCase(editUser.pending, (state) => {state.status = 'loading';})
+            .addCase(editUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // deleteUser asyncThunk 
             .addCase(
                 deleteUser.fulfilled,
                 (state) => {
                     state.isLoggedIn = !state.isLoggedIn;
                     state.user = initialState.user;
             })
+            .addCase(deleteUser.pending, (state) => {state.status = 'loading';})
+            .addCase(deleteUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // loginUser asyncThunk
             .addCase(
                 loginUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
                     state.isLoggedIn = !state.isLoggedIn;
                     state.user = action.payload;
+            })
+            .addCase(loginUser.pending, (state) => {state.status = 'loading';})
+            .addCase(loginUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
             })
     }
 })

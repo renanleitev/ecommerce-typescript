@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
 import {changeQuantity, removeItem} from '../../store/modules/products/reducer';
+import Loading from '../../components/Loading';
 
 export default function Shopping(){
     const cart = useSelector((state: IRootState) => state.products.cart);
@@ -21,6 +22,22 @@ export default function Shopping(){
     useEffect(() => {
         setShoppingCart([...cart]);
     }, [cart]);
+    const changeProductQuantity = useCallback(
+        (item: interfaces.Product, operation: string) => {
+        const newItem: interfaces.Product = {...item}; 
+        if (operation === 'add') {
+            newItem.quantity++;
+            newItem.totalPrice = item.totalPrice + Number.parseFloat(item.price);
+            toast.success(`Added ${item.name} successfully!`);
+        }
+        if (operation === 'remove' && item.quantity > 0){
+            newItem.quantity--;
+            newItem.totalPrice = item.totalPrice - Number.parseFloat(item.price);
+            toast.success(`Removed ${item.name} successfully!`);
+        }
+        dispatch(changeQuantity({...newItem}));
+        setShoppingCart([...cart]);
+    }, [cart, dispatch])
     const handleCheckout = useCallback(() => {
         let total = 0;
         cart.forEach((item: interfaces.Product) => {
@@ -29,36 +46,17 @@ export default function Shopping(){
         toast.success(`Thank you! Your total is $${total}`);
     }, [cart]);
     const handleIncrement = useCallback((item: interfaces.Product) => { 
-        const newItem = {
-            ...item,
-            quantity: item.quantity + 1,
-            totalPrice: item.totalPrice + Number.parseFloat(item.price),
-        }
-        dispatch(changeQuantity({...newItem}));
-        toast.success(`Added ${item.name} successfully!`);
-        setShoppingCart([...cart]);
-    }, [cart, dispatch]);
+        changeProductQuantity(item, 'add');
+    }, [changeProductQuantity]);
     const handleDecrement = useCallback((item: interfaces.Product) => {
-        const newItem: interfaces.Product = {
-            ...item,
-            quantity: item.quantity - 1,
-            totalPrice: item.totalPrice - Number.parseFloat(item.price),
-        }
-        if (newItem.quantity === 0) {
-            newItem.quantity++;
-            newItem.totalPrice += Number.parseFloat(item.price);
-            toast.error('Cannot remove item.');
-        } else {
-            toast.success(`Removed ${item.name} successfully!`);
-            dispatch(changeQuantity({...newItem}));
-            setShoppingCart([...cart]);
-        }
-    }, [cart, dispatch]);
+        changeProductQuantity(item, 'remove');
+    }, [changeProductQuantity]);
     const handleRemove = useCallback((item: interfaces.Product) => {
         if (item !== undefined) dispatch(removeItem(item));
     }, [dispatch]);
     return (
         <CartContainer>
+            <Loading/>
             {isLoggedIn ? (
                 <CheckoutContainer onClick={handleCheckout}>
                     <FaShoppingCart size={30}/>
