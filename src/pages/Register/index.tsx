@@ -1,7 +1,7 @@
-import React, {useState, useCallback, useMemo } from 'react';
+import React, {useState, useCallback } from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { useDispatch } from 'react-redux';
-import InputUser from '../../components/InputUser';
+import Input from '../../components/Input';
 import {registerUser} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
 import Validation from '../../services/validation';
@@ -9,47 +9,23 @@ import { AppThunkDispatch } from '../../store';
 
 export default function Register(){
     const dispatch = useDispatch<AppThunkDispatch>();
-    const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
-    const [address, setAddress] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState(''); 
-    const [user, setUser] = useState<interfaces.User>({
-        id: '',
-        name: name,
-        surname: surname,
-        address: address,
-        email: email,
-        password: password,
-    });
-    useMemo(() => {
-        setUser({
-            id: '',
-            name: name,
-            surname: surname,
-            address: address,
-            email: email,
-            password: password,
-        })
-    }, [address, email, name, password, surname]);
+    const [user, setUser] = useState<interfaces.User>();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = Validation(user, repeatPassword);
+        const formErrors = Validation(user);
         if (!formErrors){
             dispatch(registerUser(user));
         }
-    }, [dispatch, repeatPassword, user]);
+    }, [dispatch, user]);
     return (
             <Container>
                 <Form onSubmit={handleSubmit}>
                     <h2>Create an account</h2>
-                    <InputUser data={name} setData={setName} placeholder='name'/>
-                    <InputUser data={surname} setData={setSurname} placeholder='surname'/>
-                    <InputUser data={address} setData={setAddress} placeholder='address'/>
-                    <InputUser data={email} setData={setEmail} placeholder='email'/>
-                    <InputUser data={password} setData={setPassword} placeholder='password'/>
-                    <InputUser data={repeatPassword} setData={setRepeatPassword} placeholder='repeat password'/>
+                    <Input data={user} setData={setUser} keyName='name' keyValue=''/>
+                    <Input data={user} setData={setUser} keyName='surname' keyValue=''/>
+                    <Input data={user} setData={setUser} keyName='address' keyValue=''/>
+                    <Input data={user} setData={setUser} keyName='email' keyValue=''/>
+                    <Input data={user} setData={setUser} keyName='password' keyValue=''/>
                     <button type="submit">Create</button>
                 </Form>
             </Container>

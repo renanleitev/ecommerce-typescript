@@ -7,17 +7,7 @@ interface InitialState {
     stock: {
         data: Array<object>,
     },
-    product: {
-        id: string,
-        name: string,
-        images: string,
-        price: string,
-        quantity: number,
-        totalPrice: number,
-        os: string,
-        description: string,
-        additionalFeatures: string,
-    },
+    product: (interfaces.Product),
     cart: Array<object>,
 }
 

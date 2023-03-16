@@ -24,16 +24,10 @@ export interface User extends Base {
     password: string,
 }
 export interface Input {
+    data: Product | User,
     setData: Function,
-}
-export interface InputProduct extends Input {
-    data: Product,
     keyName: string,
     keyValue: string,
-}
-export interface InputUser extends Input {
-    data: string,
-    placeholder: string,
 }
 export interface ResponseGenerator{
     config?:any,

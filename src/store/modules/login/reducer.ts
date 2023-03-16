@@ -33,6 +33,8 @@ export const loginUser = createAsyncThunk(
                 userLogin.email = user.email;
                 userLogin.address = user.address;
                 userLogin.password = user.password;
+                toast.success('Loggin successfully.');
+                history.push('/');
             }
         });
         return userLogin;

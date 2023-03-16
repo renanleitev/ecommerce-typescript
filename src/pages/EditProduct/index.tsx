@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Form } from '../../styles/GlobalStyle';
-import InputProduct from '../../components/InputProduct';
+import InputProduct from '../../components/Input';
 import * as interfaces from '../../interfaces';
 import {editProduct} from '../../store/modules/products/reducer';
 import { useDispatch } from 'react-redux';
@@ -10,16 +9,10 @@ import { AppThunkDispatch } from '../../store';
 const EditProduct: React.FC<interfaces.Item> = (props: interfaces.Item) => {
     const dispatch = useDispatch<AppThunkDispatch>();
     const [item, setItem] = useState<interfaces.Product>(props.item);
-    const [confirmEdit, setConfirmEdit] = useState(false);
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        if(confirmEdit){
-            dispatch(editProduct({...item}));
-        } else {
-            toast.success('Do you confirm the changes?');
-            setConfirmEdit(true);
-        }
-    }, [confirmEdit, dispatch, item]);
+        dispatch(editProduct({...item}));
+    }, [dispatch, item]);
     return (
         <Form onSubmit={handleSubmit}>
             <h1>Edit Product</h1> 
