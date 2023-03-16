@@ -1,31 +1,35 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import InputUser from '../../components/InputUser';
 import EditUser from '../EditUser';
 import { IRootState } from '../../store/modules/rootReducer';
-import {loginSuccess} from '../../store/modules/login/reducer';
-import { loginUser } from '../../api/users';
-import { toast } from 'react-toastify';
-import history from '../../services/history';
+import {loginUser} from '../../store/modules/login/reducer';
+import { AppThunkDispatch } from '../../store';
 
 export default function Login(){
+    const dispatch = useDispatch<AppThunkDispatch>();
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const dispatch = useDispatch();
-    const handleSubmit = useCallback(async (event: React.FormEvent) => {
+    const user = useSelector((state: IRootState) => state.login.user);
+    const [email, setEmail] = useState(user.email);
+    const [password, setPassword] = useState(user.password);
+    const [loggedUser, setLoggedUser] = useState({
+        ...user,
+        email: email,
+        password: password,
+    });
+    useMemo(() => {
+        setLoggedUser({
+            ...user,
+            email: email,
+            password: password,
+        })
+    }, [email, password, user]);
+    const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const user = await loginUser(email, password);
-        if (user.name !== '') {
-            dispatch(loginSuccess(user));
-            toast.success('Login successfully.');
-            history.push('/');
-        } else {
-            toast.error('Email/password invalid.');
-        }
-    }, [dispatch, email, password]);
+        dispatch(loginUser(loggedUser));
+    }, [dispatch, loggedUser]);
     return (
         <Container>
             {(!isLoggedIn && 

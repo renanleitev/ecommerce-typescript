@@ -13,7 +13,7 @@ import { Nav, Cart } from './styled';
 import history from '../../services/history';
 import {toast} from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
-import {deleteSuccess} from '../../store/modules/login/reducer';
+import {logoutSuccess} from '../../store/modules/login/reducer';
 import {removeCart} from '../../store/modules/products/reducer';
 
 export default function Header(){
@@ -23,7 +23,7 @@ export default function Header(){
     const dispatch = useDispatch();
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
-            dispatch(deleteSuccess());
+            dispatch(logoutSuccess());
             dispatch(removeCart());
             toast.success('Logout sucessufully.');
             history.push('/');

@@ -2,12 +2,13 @@ import React, {useState, useCallback, useMemo } from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { useDispatch } from 'react-redux';
 import InputUser from '../../components/InputUser';
-import {registerSuccess} from '../../store/modules/login/reducer';
+import {registerUser} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
 import Validation from '../../services/validation';
-import {registerUser} from '../../api/users';
+import { AppThunkDispatch } from '../../store';
 
 export default function Register(){
+    const dispatch = useDispatch<AppThunkDispatch>();
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [address, setAddress] = useState('');
@@ -32,13 +33,11 @@ export default function Register(){
             password: password,
         })
     }, [address, email, name, password, surname]);
-    const dispatch = useDispatch();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
         const formErrors = Validation(user, repeatPassword);
         if (!formErrors){
-            registerUser(user);
-            dispatch(registerSuccess(user));
+            dispatch(registerUser(user));
         }
     }, [dispatch, repeatPassword, user]);
     return (

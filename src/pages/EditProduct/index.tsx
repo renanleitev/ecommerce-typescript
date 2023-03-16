@@ -3,17 +3,18 @@ import { toast } from 'react-toastify';
 import { Form } from '../../styles/GlobalStyle';
 import InputProduct from '../../components/InputProduct';
 import * as interfaces from '../../interfaces';
-import {editItem} from '../../store/modules/products/reducer';
+import {editProduct} from '../../store/modules/products/reducer';
 import { useDispatch } from 'react-redux';
+import { AppThunkDispatch } from '../../store';
 
 const EditProduct: React.FC<interfaces.Item> = (props: interfaces.Item) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppThunkDispatch>();
     const [item, setItem] = useState<interfaces.Product>(props.item);
     const [confirmEdit, setConfirmEdit] = useState(false);
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
         if(confirmEdit){
-            dispatch(editItem(item));
+            dispatch(editProduct({...item}));
         } else {
             toast.success('Do you confirm the changes?');
             setConfirmEdit(true);
@@ -26,12 +27,6 @@ const EditProduct: React.FC<interfaces.Item> = (props: interfaces.Item) => {
             <InputProduct data={item} setData={setItem} keyName='price' keyValue={props.item.price}/>
             <InputProduct data={item} setData={setItem} keyName='images' keyValue={props.item.images}/>
             <InputProduct data={item} setData={setItem} keyName='os' keyValue={props.item.os}/>
-            <InputProduct data={item} setData={setItem} keyName='screenResolution' keyValue={props.item.display.screenResolution}/>
-            <InputProduct data={item} setData={setItem} keyName='screenSize' keyValue={props.item.display.screenSize}/>
-            <InputProduct data={item} setData={setItem} keyName='hdd' keyValue={props.item.storage.hdd}/>
-            <InputProduct data={item} setData={setItem} keyName='ram' keyValue={props.item.storage.ram}/>
-            <InputProduct data={item} setData={setItem} keyName='cpu' keyValue={props.item.hardware.cpu}/>
-            <InputProduct data={item} setData={setItem} keyName='wifi' keyValue={props.item.connectivity.wifi}/>
             <InputProduct data={item} setData={setItem} keyName='description' keyValue={props.item.description}/>
             <button type="submit">Edit Product</button>
         </Form>

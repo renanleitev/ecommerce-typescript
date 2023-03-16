@@ -6,68 +6,10 @@ const InputProduct: React.FC<interfaces.InputProduct> = (props: interfaces.Input
     const data = props.data;
     const setData = props.setData;
     const handleInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        switch(keyName){
-            case 'screenResolution':
-                setData({
-                    ...data,
-                    display: {
-                        ...data.display,
-                        [keyName]: e.currentTarget.value,
-                    }
-                });
-                break;
-            case 'screenSize':
-                setData({
-                    ...data,
-                display: {
-                    ...data.display,
-                    [keyName]: e.currentTarget.value,
-                }
-                });
-                break;
-            case 'hdd':
-                setData({
-                    ...data,
-                    storage: {
-                        ...data.storage,
-                        [keyName]: e.currentTarget.value,
-                    }
-                });
-                break;
-            case 'ram':
-                setData({
-                    ...data,
-                    storage: {
-                        ...data.storage,
-                        [keyName]: e.currentTarget.value,
-                    }
-                });
-                break;
-            case 'cpu':
-                setData({
-                    ...data,
-                    hardware: {
-                        ...data.hardware,
-                        [keyName]: e.currentTarget.value,
-                    }
-                });
-                break;
-            case 'wifi':
-                setData({
-                    ...data,
-                    connectivity: {
-                        ...data.connectivity,
-                        [keyName]: e.currentTarget.value,
-                    }
-                });
-                break;
-            default:
-                setData({
-                    ...data,
-                    [keyName]: e.currentTarget.value,
-                });
-                break;
-            }
+        setData({
+            ...data,
+            [keyName]: e.currentTarget.value,
+        });
     }, [data, keyName, setData]);
     return (
         <>

@@ -4,15 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputUser from '../../components/InputUser';
 import { toast } from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
-import {editSuccess} from '../../store/modules/login/reducer';
+import {editUser, deleteUser} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
 import Validation from '../../services/validation';
-import {editUser} from '../../api/users';
-import {deleteSuccess} from '../../store/modules/login/reducer';
-import {removeUser} from '../../api/users';
 import { ButtonContainer } from './styled';
+import { AppThunkDispatch } from '../../store';
 
 export default function EditUser(){
+    const dispatch = useDispatch<AppThunkDispatch>();
     const user = useSelector((state: IRootState) => state.login.user);
     const [name, setName] = useState(user.name);
     const [surname, setSurname] = useState(user.surname);
@@ -22,7 +21,6 @@ export default function EditUser(){
     const [repeatPassword, setRepeatPassword] = useState(user.password);
     const [confirmEdit, setConfirmEdit] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
-    const dispatch = useDispatch();
     const [editedUser, setEditedUser] = useState<interfaces.User>({...user});
     useMemo(() => {
         setEditedUser({
@@ -38,8 +36,7 @@ export default function EditUser(){
         event.preventDefault();
         const formErrors = Validation(editedUser, repeatPassword);
         if(confirmEdit && !formErrors){
-            editUser(editedUser);
-            dispatch(editSuccess(editedUser));
+            dispatch(editUser(editedUser));
         } else {
             toast.success('Do you confirm the changes?');
             setConfirmEdit(true);
@@ -48,14 +45,13 @@ export default function EditUser(){
     const handleDelete = useCallback((event: React.FormEvent) => {
         event.preventDefault();
         if (confirmDelete){
-            dispatch(deleteSuccess());
-            removeUser(user);
+            dispatch(deleteUser(editedUser));
         } 
         else {
             toast.success('Do you want to delete your account?');
             setConfirmDelete(true);
         }
-    }, [confirmDelete, dispatch, user]);
+    }, [confirmDelete, dispatch, editedUser]);
     return (
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>

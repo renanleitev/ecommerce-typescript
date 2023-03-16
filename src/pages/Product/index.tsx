@@ -8,28 +8,27 @@ import {toast} from 'react-toastify';
 import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
 import {
-    findProduct, 
     addItem,
     changeQuantity,
     removeItem
 } from '../../store/modules/products/reducer';
-import { showProduct } from '../../api/products';
+import { showProduct } from '../../store/modules/products/reducer';
 import Modal from '../../components/Modal';
 import useModal from "../../hooks/useModal";
+import { AppThunkDispatch } from '../../store';
 
 export default function Product(){
     interface Url{
         id: string,
     }
     const url: Url = useParams();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppThunkDispatch>();
     const user = useSelector((state: IRootState) => state.login.user);
     const cart = useSelector((state: IRootState) => state.products.cart);
     const product = useSelector((state: IRootState) => state.products.product);
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const [quantity, setQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [firsLoad, setFirstLoad] = useState(true);
     const { isOpen, toggle } = useModal();
     const [item, setItem] = useState<interfaces.Product>({
         ...product,
@@ -40,7 +39,7 @@ export default function Product(){
     useEffect(() => {
         if (user.name === 'admin') setIsAdmin(true);
     }, [user.name]);
-    useEffect(() => {
+    useMemo(() => {
         cart.forEach((element: interfaces.Product) => {
             if (element.id === item.id){
                 item.totalPrice = element.totalPrice;
@@ -49,15 +48,8 @@ export default function Product(){
         });
     }, [cart, item]);
     useEffect(() => {
-        async function getProduct(){
-            if (firsLoad){
-                const response = await showProduct(url.id);
-                dispatch(findProduct(response));
-            } 
-            setFirstLoad(false);
-        }
-        getProduct();
-    }, [dispatch, firsLoad, url.id]);
+        dispatch(showProduct(url.id));
+    }, [dispatch, url.id]);
     useMemo(() => {
         setItem({
                     ...product,
@@ -117,12 +109,7 @@ export default function Product(){
             <ItemContainer>
                 <h1>Info</h1> 
                 <p>Operational System: {item.os}</p>
-                <p>Resolution: {item.display.screenResolution}</p>
-                <p>Screen Size: {item.display.screenSize}</p>
-                <p>Storage: {item.storage.hdd}</p>
-                <p>Memory: {item.storage.ram}</p>
-                <p>CPU: {item.hardware.cpu}</p>
-                <p>Wifi: {item.connectivity.wifi}</p>
+                <p>Additional Features: {item.additionalFeatures}</p>
                 <p>Description: {item.description}</p>
                 <ProductContainer>
                     <CartButton onClick={addProduct}>Add to cart</CartButton>

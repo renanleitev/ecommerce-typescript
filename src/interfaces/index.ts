@@ -8,21 +8,8 @@ export interface Product extends Base {
     quantity: number,
     totalPrice: number,
     os: string,
-    display: {
-        screenResolution: string,
-        screenSize: string,
-    },
-    storage: {
-        hdd: string,
-        ram: string,
-    },
-    hardware: {
-        cpu: string,
-    },
-    connectivity: {
-        wifi: string,
-    },
     description: string,
+    additionalFeatures: string,
 }
 export interface Stock {
     data: Array<object>,

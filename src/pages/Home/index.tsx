@@ -4,25 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
 import { ProductContainer, ArrowLeft, ArrowRight } from './styled';
 import { IRootState } from '../../store/modules/rootReducer';
-import {findStock} from '../../store/modules/products/reducer';
+import { showStock } from '../../store/modules/products/reducer';
 import * as interfaces from '../../interfaces';
-import { showStock } from '../../api/products';
+import { AppThunkDispatch } from '../../store';
 
 export default function Home(){
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppThunkDispatch>();
     const [count, setCount] = useState(0);
     const [limit, setLimit] = useState(5);
-    const [firsLoad, setFirstLoad] = useState(true);
     useEffect(() => {
-        async function getStock(){
-            if (firsLoad){   
-                const stock = await showStock();
-                dispatch(findStock(stock));
-            }
-            setFirstLoad(false);
-        }
-        getStock();
-    }, [dispatch, firsLoad]);
+        dispatch(showStock());
+    }, [dispatch]);
     const stock = useSelector((state: IRootState) => state.products.stock);
     const handlePrevious = useCallback(() => {
         if (limit >= 5) setLimit(5);

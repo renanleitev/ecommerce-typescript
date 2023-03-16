@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
-import * as apiProducts from '../../../api/products';
+import { toast } from 'react-toastify';
+import axios from '../../../services/axios';
 
 interface InitialState {
     stock: {
@@ -14,21 +15,8 @@ interface InitialState {
         quantity: number,
         totalPrice: number,
         os: string,
-        display: {
-            screenResolution: string,
-            screenSize: string,
-        },
-        storage: {
-            hdd: string,
-            ram: string,
-        },
-        hardware: {
-            cpu: string,
-        },
-        connectivity: {
-            wifi: string,
-        },
         description: string,
+        additionalFeatures: string,
     },
     cart: Array<object>,
 }
@@ -45,34 +33,38 @@ const initialState: (InitialState) = {
             quantity: 0,
             totalPrice: 0,
             os: '',
-            display: {
-                screenResolution: '',
-                screenSize: '',
-            },
-            storage: {
-                hdd: '',
-                ram: '',
-            },
-            hardware: {
-                cpu: '',
-            },
-            connectivity: {
-                wifi: '',
-            },
             description: '',
+            additionalFeatures: '',
     },
     cart: [],
 };
+
+export const showStock = createAsyncThunk(
+    'inventory/showStock',
+    async () => {
+        const stock = await axios.get('/products/');
+        return stock;
+});
+
+export const showProduct = createAsyncThunk(
+    'inventory/showProduct',
+    async (id: string) => {
+        const product = await axios.get(`/products/${id}`);
+        return product.data;
+});
+
+export const editProduct = createAsyncThunk(
+    'inventory/editProduct', 
+    async (product: interfaces.Product) => {
+        await axios.put(`/products/${product.id}`, product);
+        toast.success('Edit product successfully.');
+        return product;
+});
+
 export const inventorySlice = createSlice({
     name: 'inventory',
     initialState: initialState,
     reducers: {
-        findStock: (state, action: PayloadAction<interfaces.Stock>) => {
-            state.stock.data = action.payload.data;
-        },
-        findProduct: (state, action: PayloadAction<interfaces.Product>) => {
-            state.product = {...action.payload};
-        },
         addItem: (state, action: PayloadAction<interfaces.Product>) => {            
             state.cart.push({...action.payload});
         },
@@ -89,24 +81,36 @@ export const inventorySlice = createSlice({
                 if (item.id === action.payload.id) state.cart.splice(index, 1);
             })
         },
-        editItem: (state, action: PayloadAction<interfaces.Product>) => {
-            apiProducts.editProduct(action.payload);
-            state.product = {...action.payload};
-        },
         removeCart: (state) => {
             state.cart = initialState.cart;
         }
+    },
+    extraReducers(builder){
+        builder
+            .addCase(
+                editProduct.fulfilled, 
+                (state, action: PayloadAction<interfaces.Product>) => {
+                    state.product = {...action.payload};
+            })
+            .addCase(
+                showProduct.fulfilled,
+                (state,  action: PayloadAction<interfaces.Product>) => {
+                    state.product = {...action.payload};
+            })
+            .addCase(
+                showStock.fulfilled,
+                (state, action: PayloadAction<interfaces.Stock>) => {
+                    state.stock.data = action.payload.data;
+                }
+            )
     }
 })
 
 export const { 
-    findStock, 
-    findProduct, 
     addItem,
     changeQuantity,
     removeItem,
     removeCart,
-    editItem,
 } = inventorySlice.actions;
 
 export const inventoryReducer = inventorySlice.reducer;
