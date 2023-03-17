@@ -49,7 +49,6 @@ export default function Product(){
         });
     }, [cart, item]);
     useEffect(() => {
-        setTimeout(() => {}, 2000);
         dispatch(showProduct(url.id));
     }, [dispatch, url.id]);
     useMemo(() => {

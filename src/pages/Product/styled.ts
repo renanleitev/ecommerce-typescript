@@ -12,6 +12,7 @@ export const ItemContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     p {
         font-size: 20px;
         margin-bottom: 10px;
@@ -28,7 +29,6 @@ export const ItemContainer = styled.div`
     }
     h1{
         margin-bottom: 10px;
-        text-align: center;
     }
     form{
         width: 400px;
