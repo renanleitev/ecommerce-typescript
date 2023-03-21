@@ -91,6 +91,7 @@ export const userSlice = createSlice({
             .addCase(
                 registerUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
+                    state.status = 'succeeded';
                     state.isLoggedIn = !state.isLoggedIn;
                     state.user = action.payload;
             })
@@ -103,6 +104,7 @@ export const userSlice = createSlice({
             .addCase(
                 editUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
+                    state.status = 'succeeded';
                     state.user = action.payload;
             })
             .addCase(editUser.pending, (state) => {state.status = 'loading';})
@@ -114,6 +116,7 @@ export const userSlice = createSlice({
             .addCase(
                 deleteUser.fulfilled,
                 (state) => {
+                    state.status = 'succeeded';
                     state.isLoggedIn = !state.isLoggedIn;
                     state.user = initialState.user;
             })

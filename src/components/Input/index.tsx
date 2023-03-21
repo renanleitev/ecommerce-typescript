@@ -1,8 +1,9 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import * as interfaces from '../../interfaces';
 
-const InputProduct: React.FC<interfaces.Input> = (props: interfaces.Input) => {
+const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
     const keyName = props.keyName;
+    const keyValue = props.keyValue;
     const data = props.data;
     const setData = props.setData;
     const [type, setType] = useState('text');
@@ -31,7 +32,7 @@ const InputProduct: React.FC<interfaces.Input> = (props: interfaces.Input) => {
             <input
             id={keyName}
             type={type}
-            defaultValue={props.keyValue}
+            defaultValue={keyValue}
             onChange={handleInput}
             placeholder={keyName.charAt(0).toUpperCase() + keyName.slice(1)}
             />
@@ -39,4 +40,4 @@ const InputProduct: React.FC<interfaces.Input> = (props: interfaces.Input) => {
     );
 }
 
-export default InputProduct;
+export default Input;

@@ -105,8 +105,8 @@ export const inventorySlice = createSlice({
             .addCase(
                 showProduct.fulfilled,
                 (state,  action: PayloadAction<interfaces.Product>) => {
-                    state.product = {...action.payload};
                     state.status = 'succeeded';
+                    state.product = {...action.payload};
             })
             .addCase(showProduct.pending, (state) => {state.status = 'loading';})
             .addCase(showProduct.rejected, (state, action) => {
