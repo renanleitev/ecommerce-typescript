@@ -24,26 +24,26 @@ export default function Shopping(){
     }, [cart]);
     const changeProductQuantity = useCallback(
         (item: interfaces.Product, operation: string) => {
-        const newItem: interfaces.Product = {...item}; 
-        if (operation === 'add') {
-            newItem.quantity++;
-            newItem.totalPrice = item.totalPrice + Number.parseFloat(item.price);
-            toast.success(`Added ${item.name} successfully!`);
-        }
-        if (operation === 'remove' && item.quantity > 0){
-            newItem.quantity--;
-            newItem.totalPrice = item.totalPrice - Number.parseFloat(item.price);
-            toast.success(`Removed ${item.name} successfully!`);
-        }
-        dispatch(changeQuantity({...newItem}));
-        setShoppingCart([...cart]);
+            const newItem: interfaces.Product = {...item}; 
+            if (operation === 'add') {
+                newItem.quantity++;
+                newItem.totalPrice = item.totalPrice + Number.parseFloat(item.price);
+                toast.success(`Added ${item.name} successfully!`);
+            }
+            if (operation === 'remove' && item.quantity > 0){
+                newItem.quantity--;
+                newItem.totalPrice = item.totalPrice - Number.parseFloat(item.price);
+                toast.success(`Removed ${item.name} successfully!`);
+            }
+            dispatch(changeQuantity({...newItem}));
+            setShoppingCart([...cart]);
     }, [cart, dispatch])
     const handleCheckout = useCallback(() => {
         let total = 0;
         cart.forEach((item: interfaces.Product) => {
             if (item !== undefined) total += item.totalPrice;
         });
-        toast.success(`Thank you! Your total is $${total}`);
+        toast.success(`Thank you! Your total is $${total.toFixed(2)}`);
     }, [cart]);
     const handleIncrement = useCallback((item: interfaces.Product) => { 
         changeProductQuantity(item, 'add');

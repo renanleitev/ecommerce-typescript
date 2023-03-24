@@ -94,6 +94,7 @@ export const inventorySlice = createSlice({
             .addCase(
                 editProduct.fulfilled, 
                 (state, action: PayloadAction<interfaces.Product>) => {
+                    state.status = 'succeeded';
                     state.product = {...action.payload};
             })
             .addCase(editProduct.pending, (state) => {state.status = 'loading';})
@@ -117,6 +118,7 @@ export const inventorySlice = createSlice({
             .addCase(
                 showStock.fulfilled,
                 (state, action: PayloadAction<interfaces.Stock>) => {
+                    state.status = 'succeeded';
                     state.stock.data = action.payload.data;
                 }
             )
