@@ -5,7 +5,7 @@ import axios from '../../../services/axios';
 import history from '../../../services/history';
 import { InitialStateLogin } from '../../../interfaces';
 
-const initialState: (InitialStateLogin) = {
+export const initialState: (InitialStateLogin) = {
     isLoggedIn: false,
     status: 'idle',
     error: '',
@@ -25,12 +25,7 @@ export const loginUser = createAsyncThunk(
         const users: interfaces.ResponseGenerator = await axios.get('/users');
         users.data.forEach((user: interfaces.User) => {
             if ((userLogin.email === user.email) && (userLogin.password === user.password)){
-                userLogin.id = user.id;
-                userLogin.name = user.name;
-                userLogin.surname = user.surname;
-                userLogin.email = user.email;
-                userLogin.address = user.address;
-                userLogin.password = user.password;
+                userLogin = {...user};
                 toast.success('Loggin successfully.');
                 history.push('/');
             }
@@ -75,7 +70,7 @@ export const userSlice = createSlice({
     initialState: initialState,
     reducers: {
         logoutSuccess: (state) => {
-            state.isLoggedIn = !state.isLoggedIn;
+            state.isLoggedIn = false;
             state.user = initialState.user;
         },
     },
@@ -86,7 +81,7 @@ export const userSlice = createSlice({
                 registerUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
                     state.status = 'succeeded';
-                    state.isLoggedIn = !state.isLoggedIn;
+                    state.isLoggedIn = true;
                     state.user = action.payload;
             })
             .addCase(registerUser.pending, (state) => {state.status = 'loading';})
@@ -111,7 +106,7 @@ export const userSlice = createSlice({
                 deleteUser.fulfilled,
                 (state) => {
                     state.status = 'succeeded';
-                    state.isLoggedIn = !state.isLoggedIn;
+                    state.isLoggedIn = false;
                     state.user = initialState.user;
             })
             .addCase(deleteUser.pending, (state) => {state.status = 'loading';})
@@ -123,7 +118,7 @@ export const userSlice = createSlice({
             .addCase(
                 loginUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
-                    state.isLoggedIn = !state.isLoggedIn;
+                    state.isLoggedIn = true;
                     state.user = action.payload;
             })
             .addCase(loginUser.pending, (state) => {state.status = 'loading';})

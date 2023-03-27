@@ -10,10 +10,10 @@ import {
     editProduct
 } from '../modules/products/reducer';
 import { 
-    dispatchEx,
+    dispatchProductEx,
     mockProduct,
-    mockState,
-    store,
+    mockProductState,
+    storeProduct,
 } from '../utils';
 import axios from '../../services/axios';
 import * as interfaces from '../../interfaces';
@@ -86,15 +86,15 @@ describe('Testing products reducers', () => {
         expect(inventoryReducer(undefined, { type: undefined })).toEqual(initialState);
     });
     it('should add item to cart', () => {
-        expect(inventoryReducer(initialState, addItem(mockProduct))).toEqual(mockState);
+        expect(inventoryReducer(initialState, addItem(mockProduct))).toEqual(mockProductState);
     });
     it('should change item quantity', () => {
-        expect(inventoryReducer(mockState, changeQuantity({
+        expect(inventoryReducer(mockProductState, changeQuantity({
             ...mockProduct,
             quantity: 2,
             totalPrice: 400.11,
         }))).toEqual({
-            ...mockState,
+            ...mockProductState,
             cart: [{
                 ...mockProduct,
                 quantity: 2,
@@ -103,10 +103,10 @@ describe('Testing products reducers', () => {
         });
     });
     it('should remove item of cart', () => {
-        expect(inventoryReducer(mockState, removeItem(mockProduct))).toEqual(initialState);
+        expect(inventoryReducer(mockProductState, removeItem(mockProduct))).toEqual(initialState);
     });
     it('should remove all items of cart', () => {
-        expect(inventoryReducer(mockState, removeCart())).toEqual(initialState);
+        expect(inventoryReducer(mockProductState, removeCart())).toEqual(initialState);
     });
 });
 
@@ -114,15 +114,15 @@ describe('Testing products async thunks', () => {
     it('should get stock of products', async () => {
         const expectedResult = {data: {...mockProduct}};
         axios.get = jest.fn().mockResolvedValue(expectedResult);
-        const result = await dispatchEx(showStock());
+        const result = await dispatchProductEx(showStock());
         expect(result.payload.data).toEqual(mockProduct);
-        expect(store.getState().stock.data).toEqual(mockProduct);
+        expect(storeProduct.getState().stock.data).toEqual(mockProduct);
     });
     it('should get product', async () => {
         const expectedResult = {data: {...mockProduct}};
         axios.get = jest.fn().mockResolvedValue(expectedResult);
-        await dispatchEx(showProduct('1'));
-        expect(store.getState().product).toEqual(mockProduct);
+        await dispatchProductEx(showProduct('1'));
+        expect(storeProduct.getState().product).toEqual(mockProduct);
     });
     it('should edit product', async () => {
         const editedProduct: interfaces.Product = {
@@ -130,7 +130,7 @@ describe('Testing products async thunks', () => {
             price: '777.77',
         };
         axios.put = jest.fn().mockResolvedValue(editedProduct);
-        await dispatchEx(editProduct(editedProduct));
-        expect(store.getState().product).toEqual(editedProduct);
+        await dispatchProductEx(editProduct(editedProduct));
+        expect(storeProduct.getState().product).toEqual(editedProduct);
     });
 });
