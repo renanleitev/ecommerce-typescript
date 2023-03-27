@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import InputProduct from '../../components/Input';
 import EditUser from '../EditUser';
-import { IRootState } from '../../store/modules/rootReducer';
+import { IRootState } from '../../interfaces';
 import {loginUser} from '../../store/modules/login/reducer';
 import { AppThunkDispatch } from '../../store';
 

@@ -9,14 +9,13 @@ import {
     CheckoutContainer } from './styled';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
 import {changeQuantity, removeItem} from '../../store/modules/products/reducer';
 import Loading from '../../components/Loading';
 
 export default function Shopping(){
-    const cart = useSelector((state: IRootState) => state.products.cart);
-    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
+    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const dispatch = useDispatch();
     const [shoppingCart, setShoppingCart] = useState([...cart]);
     useEffect(() => {

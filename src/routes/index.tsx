@@ -7,7 +7,7 @@ import Shopping from "../pages/Shopping";
 import Product from "../pages/Product";
 import Page404 from '../pages/Page404';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../store/modules/rootReducer';
+import { IRootState } from "../interfaces";
 
 export default function Routes(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);

@@ -37,3 +37,22 @@ export interface ResponseGenerator{
     status?:number,
     statusText?:string
 }
+interface BaseInitialState {
+    status: string,
+    error: string,
+}
+export interface InitialStateProducts extends BaseInitialState {
+    stock: {
+        data: Array<object>,
+    },
+    product: Product,
+    cart: Array<object>,
+}
+export interface InitialStateLogin extends BaseInitialState {
+    isLoggedIn: boolean,
+    user: User,
+}
+export interface IRootState {
+    login: InitialStateLogin,
+    products: InitialStateProducts,
+};

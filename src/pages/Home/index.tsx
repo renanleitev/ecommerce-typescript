@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
 import { ProductContainer, ArrowLeft, ArrowRight } from './styled';
-import { IRootState } from '../../store/modules/rootReducer';
 import { showStock } from '../../store/modules/products/reducer';
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
@@ -15,7 +14,7 @@ export default function Home(){
     useEffect(() => {
         dispatch(showStock());
     }, [dispatch]);
-    const stock = useSelector((state: IRootState) => state.products.stock);
+    const stock = useSelector((state: interfaces.IRootState) => state.products.stock);
     const handlePrevious = useCallback(() => {
         if (count >= 5) setCount(0);
     }, [count]);

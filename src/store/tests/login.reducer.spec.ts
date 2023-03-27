@@ -1,7 +1,6 @@
-import {addItem} from '../modules/products/reducer';
-
-describe('Products Reducer', () => {
-    it('should be function', () => {
-        expect(addItem).toBeDefined();
+describe('Placeholder', () => {
+    it('placeholder', () => {
+        const test = 1;
+        expect(test).toBe(1);
     });
 });

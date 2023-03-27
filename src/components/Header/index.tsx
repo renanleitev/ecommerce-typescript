@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Nav, Cart } from './styled';
 import history from '../../services/history';
 import {toast} from 'react-toastify';
-import { IRootState } from '../../store/modules/rootReducer';
+import { IRootState } from '../../interfaces';
 import {logoutSuccess} from '../../store/modules/login/reducer';
 import {removeCart} from '../../store/modules/products/reducer';
 

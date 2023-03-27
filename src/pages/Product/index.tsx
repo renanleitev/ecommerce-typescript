@@ -5,7 +5,6 @@ import { ItemContainer, CartButton } from './styled';
 import {ProductContainer} from '../Home/styled';
 import EditProduct from '../EditProduct';
 import {toast} from 'react-toastify';
-import { IRootState } from '../../store/modules/rootReducer';
 import * as interfaces from '../../interfaces';
 import {
     addItem,
@@ -24,10 +23,10 @@ export default function Product(){
     }
     const url: Url = useParams();
     const dispatch = useDispatch<AppThunkDispatch>();
-    const user = useSelector((state: IRootState) => state.login.user);
-    const cart = useSelector((state: IRootState) => state.products.cart);
-    const product = useSelector((state: IRootState) => state.products.product);
-    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
+    const user = useSelector((state: interfaces.IRootState) => state.login.user);
+    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
+    const product = useSelector((state: interfaces.IRootState) => state.products.product);
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const [quantity, setQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const { isOpen, toggle } = useModal();

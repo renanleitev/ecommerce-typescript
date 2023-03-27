@@ -3,15 +3,9 @@ import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
 import axios from '../../../services/axios';
 import history from '../../../services/history';
+import { InitialStateLogin } from '../../../interfaces';
 
-interface InitialState {
-    isLoggedIn: boolean,
-    status: string,
-    error: string,
-    user: (interfaces.User),
-}
-
-const initialState: (InitialState) = {
+const initialState: (InitialStateLogin) = {
     isLoggedIn: false,
     status: 'idle',
     error: '',
@@ -98,7 +92,7 @@ export const userSlice = createSlice({
             .addCase(registerUser.pending, (state) => {state.status = 'loading';})
             .addCase(registerUser.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error.message || "Something went wrong";
             })
             // editUser asyncThunk
             .addCase(
@@ -110,7 +104,7 @@ export const userSlice = createSlice({
             .addCase(editUser.pending, (state) => {state.status = 'loading';})
             .addCase(editUser.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error.message || "Something went wrong";
             })
             // deleteUser asyncThunk 
             .addCase(
@@ -123,7 +117,7 @@ export const userSlice = createSlice({
             .addCase(deleteUser.pending, (state) => {state.status = 'loading';})
             .addCase(deleteUser.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error.message || "Something went wrong";
             })
             // loginUser asyncThunk
             .addCase(
@@ -135,7 +129,7 @@ export const userSlice = createSlice({
             .addCase(loginUser.pending, (state) => {state.status = 'loading';})
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error.message || "Something went wrong";
             })
     }
 })

@@ -3,7 +3,6 @@ import { Form } from '../../styles/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import { toast } from 'react-toastify';
-import { IRootState } from '../../store/modules/rootReducer';
 import {editUser, deleteUser} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
 import Validation from '../../services/validation';
@@ -12,7 +11,7 @@ import { AppThunkDispatch } from '../../store';
 
 export default function EditUser(){
     const dispatch = useDispatch<AppThunkDispatch>();
-    const user = useSelector((state: IRootState) => state.login.user);
+    const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const [editedUser, setEditedUser] = useState<interfaces.User>({...user});
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();

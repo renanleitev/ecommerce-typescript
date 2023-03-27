@@ -2,18 +2,9 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
 import axios from '../../../services/axios';
+import { InitialStateProducts } from '../../../interfaces';
 
-interface InitialState {
-    status: string,
-    error: string,
-    stock: {
-        data: Array<object>,
-    },
-    product: (interfaces.Product),
-    cart: Array<object>,
-}
-
-const initialState: (InitialState) = {
+export const initialState: (InitialStateProducts) = {
     status: 'idle',
     error: '',
     stock: {
@@ -100,7 +91,7 @@ export const inventorySlice = createSlice({
             .addCase(editProduct.pending, (state) => {state.status = 'loading';})
             .addCase(editProduct.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error.message || "Something went wrong";
             })
             // showProduct asyncThunk
             .addCase(
@@ -112,7 +103,7 @@ export const inventorySlice = createSlice({
             .addCase(showProduct.pending, (state) => {state.status = 'loading';})
             .addCase(showProduct.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error.message || "Something went wrong";
             })
             // showStock asyncThunk
             .addCase(
@@ -125,7 +116,7 @@ export const inventorySlice = createSlice({
             .addCase(showStock.pending, (state) => {state.status = 'loading';})
             .addCase(showStock.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.error.message || "Something went wrong";
             })
     }
 })
