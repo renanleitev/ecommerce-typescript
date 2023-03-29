@@ -11,10 +11,10 @@ import Loading from '../../components/Loading';
 export default function Home(){
     const dispatch = useDispatch<AppThunkDispatch>();
     const [count, setCount] = useState(0);
-    useEffect(() => {
-        dispatch(showStock());
-    }, [dispatch]);
     const stock = useSelector((state: interfaces.IRootState) => state.products.stock);
+    useEffect(() => {
+        if (stock.data === undefined) dispatch(showStock());
+    }, [dispatch]);
     const handlePrevious = useCallback(() => {
         if (count >= 5) setCount(0);
     }, [count]);

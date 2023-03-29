@@ -34,7 +34,18 @@ export const storeLogin = configureStore({
     reducer: login.userReducer,
 });
 
-export const mockProductState = {...products.initialState, cart: [mockProduct]};
+export const mockProductStateCart = {
+    ...products.initialState,
+    cart: [mockProduct],
+};
+
+export const mockProductStateStock = {
+    ...products.initialState,
+    stock: {
+        data: [{...mockProduct}],
+    }, 
+    cart: [mockProduct],
+};
 
 export const mockUserState = {
     ...login.initialState, 
@@ -55,7 +66,18 @@ export const mockStoreUserLoggedIn = configureStore({
     }),
     preloadedState: {
         login: mockUserState,
-        products: mockProductState,
+        products: mockProductStateCart,
+    },
+});
+
+export const mockStoreProductCart = configureStore({
+    reducer: combineReducers({
+        login: login.userReducer,
+        products: products.inventoryReducer,
+    }),
+    preloadedState: {
+        login: mockUserState,
+        products: mockProductStateStock,
     },
 });
 

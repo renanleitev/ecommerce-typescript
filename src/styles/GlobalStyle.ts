@@ -1,6 +1,8 @@
 import styled, { createGlobalStyle } from "styled-components";
 import * as colors from '../config/colors';
-import 'react-toastify/dist/ReactToastify.css';
+import { injectStyle } from "react-toastify/dist/inject-style";
+
+injectStyle();
 
 export default createGlobalStyle`
     * {

@@ -12,7 +12,7 @@ import {
 import { 
     dispatchProductEx,
     mockProduct,
-    mockProductState,
+    mockProductStateCart,
     storeProduct,
 } from '../services/_utils';
 import axios from '../services/axios';
@@ -86,15 +86,15 @@ describe('Testing products reducers', () => {
         expect(inventoryReducer(undefined, { type: undefined })).toEqual(initialState);
     });
     it('should add item to cart', () => {
-        expect(inventoryReducer(initialState, addItem(mockProduct))).toEqual(mockProductState);
+        expect(inventoryReducer(initialState, addItem(mockProduct))).toEqual(mockProductStateCart);
     });
     it('should change item quantity', () => {
-        expect(inventoryReducer(mockProductState, changeQuantity({
+        expect(inventoryReducer(mockProductStateCart, changeQuantity({
             ...mockProduct,
             quantity: 2,
             totalPrice: 400.11,
         }))).toEqual({
-            ...mockProductState,
+            ...mockProductStateCart,
             cart: [{
                 ...mockProduct,
                 quantity: 2,
@@ -103,10 +103,10 @@ describe('Testing products reducers', () => {
         });
     });
     it('should remove item of cart', () => {
-        expect(inventoryReducer(mockProductState, removeItem(mockProduct))).toEqual(initialState);
+        expect(inventoryReducer(mockProductStateCart, removeItem(mockProduct))).toEqual(initialState);
     });
     it('should remove all items of cart', () => {
-        expect(inventoryReducer(mockProductState, removeCart())).toEqual(initialState);
+        expect(inventoryReducer(mockProductStateCart, removeCart())).toEqual(initialState);
     });
 });
 
