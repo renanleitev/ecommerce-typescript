@@ -57,7 +57,7 @@ export default function Product(){
                     quantity: quantity,
                 })
     }, [product, quantity, totalPrice]);
-    const changeItemQuantity = useCallback((operation: string) => {
+    const changeProductQuantity = useCallback((operation: string) => {
         if (operation === 'add') {
             item.totalPrice = totalPrice + Number.parseFloat(item.price);
             item.quantity++;
@@ -76,14 +76,14 @@ export default function Product(){
         if (isLoggedIn){
             const findItem = cart.find((product: interfaces.Product) => product.id === item.id);
             if (findItem) {
-                changeItemQuantity('add');
+                changeProductQuantity('add');
             } else {
-                changeItemQuantity('add');
+                changeProductQuantity('add');
                 dispatch(addItem({...item}));
             } 
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [isLoggedIn, cart, item, changeItemQuantity, dispatch]);
+    }, [isLoggedIn, cart, item, changeProductQuantity, dispatch]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
             dispatch(removeItem(item));
@@ -94,13 +94,13 @@ export default function Product(){
         if (!isLoggedIn) toast.error('You must be logged in!');
     }, [dispatch, isLoggedIn, item]);
     const incrementQuantity = useCallback(() => {
-        if (isLoggedIn && item.quantity > 0) changeItemQuantity('add');
+        if (isLoggedIn && item.quantity > 0) changeProductQuantity('add');
         if (!isLoggedIn || item.quantity === 0) toast.error('Can not add the item.');
-    }, [changeItemQuantity, isLoggedIn, item]);
+    }, [changeProductQuantity, isLoggedIn, item]);
     const decrementQuantity = useCallback(() => {
-        if (isLoggedIn && item.quantity > 1) changeItemQuantity('remove');
+        if (isLoggedIn && item.quantity > 1) changeProductQuantity('remove');
         if (!isLoggedIn || item.quantity === 0) toast.error('Can not remove the item.');
-    }, [changeItemQuantity, isLoggedIn, item]);
+    }, [changeProductQuantity, isLoggedIn, item]);
     return (
         <ProductContainer>
             <Loading/>

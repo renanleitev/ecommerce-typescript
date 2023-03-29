@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 describe('Testing Footer', () => {
     render(<Footer/>);
-    const getLinks = screen.getAllByRole('link', { hidden: true });
+    const getLinks = screen.getAllByRole('link');
     it('should be initial render', () => {
         const test = 't';
         expect(screen.queryByText(test)).toBeNull();
