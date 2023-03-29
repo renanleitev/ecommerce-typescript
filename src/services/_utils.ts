@@ -36,15 +36,16 @@ export const storeLogin = configureStore({
 
 export const mockProductStateCart = {
     ...products.initialState,
-    cart: [mockProduct],
+    cart: [{...mockProduct}],
 };
 
 export const mockProductStateStock = {
     ...products.initialState,
     stock: {
         data: [{...mockProduct}],
-    }, 
-    cart: [mockProduct],
+    },
+    product: {...mockProduct}, 
+    cart: [{...mockProduct}],
 };
 
 export const mockUserState = {
@@ -86,5 +87,3 @@ type ThunkDispatchType = ThunkDispatch<unknown, unknown, AnyAction>;
 export const dispatchProductEx = storeProduct.dispatch as ThunkDispatchType;
 
 export const dispatchLoginEx = storeLogin.dispatch as ThunkDispatchType;
-
-export const dispatchMockStoreEx = mockStore.dispatch as ThunkDispatchType;

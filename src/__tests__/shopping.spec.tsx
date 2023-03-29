@@ -20,14 +20,19 @@ describe('Testing Shopping page', () => {
     });
     it('should have one item in cart', () => {
         render(RenderComponent(<Shopping/>, mockStoreUserLoggedIn));
+        // URL 
         const linkItem = screen.getByRole('link');
         expect(linkItem.innerHTML).toBe(`${mockProduct.name}`);  
+        // Image 
         const imgItem = screen.getByRole('img').getAttribute('src');
-        expect(imgItem).toBe(`${mockProduct.images}`); 
+        expect(imgItem).toBe(`${mockProduct.images}`);
+        // Price   
         const priceItem = screen.getByText(/price/i);
         expect(priceItem.innerHTML).toBe(`Price: $${mockProduct.price}`);  
+        // Quantity
         const quantItem = screen.getByText(/quantity/i);
         expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`);  
+        // Total Price
         const totalItem = screen.getByText(/total/i);
         expect(totalItem.innerHTML).toBe(`Total: $${mockProduct.totalPrice}`);
     });

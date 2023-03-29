@@ -1,10 +1,7 @@
 import React from 'react';
 import {screen, render} from '@testing-library/react';
 import Home from '../pages/Home';
-import {
-    mockStoreProductCart,
-    mockProduct,
-} from '../services/_utils';
+import {mockProduct, mockStoreProductCart} from '../services/_utils';
 import { RenderComponent } from '../services/_utilsComponents';
 
 afterEach(() => {
@@ -18,6 +15,5 @@ describe('Testing Home page', () => {
         expect(linkItem.innerHTML).toBe(`${mockProduct.name}`);  
         const imgItem = screen.getByRole('img').getAttribute('src');  
         expect(imgItem).toBe(`${mockProduct.images}`); 
-        expect(1).toBe(1); 
     });
 });
