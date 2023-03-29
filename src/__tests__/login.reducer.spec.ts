@@ -6,17 +6,17 @@ import {
     registerUser,
     editUser,
     deleteUser,
-} from "../modules/login/reducer";
+} from "../store/modules/login/reducer";
 import { 
     dispatchLoginEx,
     mockUser, 
     mockUserState, 
     storeLogin 
-} from "../utils";
-import axios from '../../services/axios';
-import * as interfaces from '../../interfaces';
+} from "../services/_utils";
+import axios from '../services/axios';
+import * as interfaces from '../interfaces';
 
-jest.mock('../../services/axios');
+jest.mock('../services/axios');
 
 afterEach(() => {
     jest.clearAllMocks();

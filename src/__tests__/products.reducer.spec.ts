@@ -8,17 +8,17 @@ import {
     showStock,
     showProduct,
     editProduct
-} from '../modules/products/reducer';
+} from '../store/modules/products/reducer';
 import { 
     dispatchProductEx,
     mockProduct,
     mockProductState,
     storeProduct,
-} from '../utils';
-import axios from '../../services/axios';
-import * as interfaces from '../../interfaces';
+} from '../services/_utils';
+import axios from '../services/axios';
+import * as interfaces from '../interfaces';
 
-jest.mock('../../services/axios');
+jest.mock('../services/axios');
 
 afterEach(() => {
     jest.clearAllMocks();

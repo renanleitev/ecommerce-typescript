@@ -1,8 +1,9 @@
 import { ThunkDispatch, AnyAction } from '@reduxjs/toolkit';
-import * as products from './modules/products/reducer';
-import * as login from './modules/login/reducer';
+import * as products from '../store/modules/products/reducer';
+import * as login from '../store/modules/login/reducer';
 import * as interfaces from '../interfaces';
 import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from "redux";
 
 export const mockProduct: interfaces.Product = {
     id: '1',
@@ -35,10 +36,33 @@ export const storeLogin = configureStore({
 
 export const mockProductState = {...products.initialState, cart: [mockProduct]};
 
-export const mockUserState = {...login.initialState, user: {...mockUser}};
+export const mockUserState = {
+    ...login.initialState, 
+    user: {...mockUser},
+    isLoggedIn: true,
+};
+export const mockStore = configureStore({
+    reducer: combineReducers({
+        login: login.userReducer,
+        products: products.inventoryReducer,
+    })
+});
+
+export const mockStoreUserLoggedIn = configureStore({
+    reducer: combineReducers({
+        login: login.userReducer,
+        products: products.inventoryReducer,
+    }),
+    preloadedState: {
+        login: mockUserState,
+        products: mockProductState,
+    },
+});
 
 type ThunkDispatchType = ThunkDispatch<unknown, unknown, AnyAction>;
 
 export const dispatchProductEx = storeProduct.dispatch as ThunkDispatchType;
 
 export const dispatchLoginEx = storeLogin.dispatch as ThunkDispatchType;
+
+export const dispatchMockStoreEx = mockStore.dispatch as ThunkDispatchType;
