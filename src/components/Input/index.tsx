@@ -2,13 +2,9 @@ import React, {useState, useCallback, useMemo} from 'react';
 import * as interfaces from '../../interfaces';
 
 const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
-    const keyName = props.keyName;
-    const keyValue = props.keyValue;
-    const data = props.data;
-    const setData = props.setData;
     const [type, setType] = useState('text');
     useMemo(() => {
-        switch(keyName){
+        switch(props.keyName){
             case 'password':
                 setType('password');
                 break;
@@ -19,22 +15,22 @@ const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
                 setType('text');
                 break;
         }
-    }, [keyName]);
+    }, [props.keyName]);
     const handleInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        setData({
-            ...data,
-            [keyName]: e.currentTarget.value,
+        props.setData({
+            ...props.data,
+            [props.keyName]: e.currentTarget.value,
         });
-    }, [data, keyName, setData]);
+    }, [props.data, props.keyName, props.setData]);
     return (
         <>
-            <label htmlFor={keyName}>{keyName.charAt(0).toUpperCase() + keyName.slice(1)}</label>
+            <label htmlFor={props.keyName}>{props.keyName.charAt(0).toUpperCase() + props.keyName.slice(1)}</label>
             <input
-            id={keyName}
+            id={props.keyName}
             type={type}
-            defaultValue={keyValue}
+            defaultValue={props.keyValue}
             onChange={handleInput}
-            placeholder={keyName.charAt(0).toUpperCase() + keyName.slice(1)}
+            placeholder={props.keyName.charAt(0).toUpperCase() + props.keyName.slice(1)}
             />
         </>
     );

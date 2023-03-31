@@ -32,6 +32,10 @@ export interface Input {
     keyName: string,
     keyValue: string,
 }
+export interface TableProducts {
+    stock: Array<Product>,
+    setStock: CallableFunction,
+}
 interface BaseInitialState {
     status: string,
     error: string,

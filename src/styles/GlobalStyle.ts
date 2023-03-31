@@ -10,6 +10,7 @@ export default createGlobalStyle`
         padding: 0;
         outline: none;
         box-sizing: border-box;
+        overflow-x: hidden;
     }
     body {
         font-family: sans-serif;
