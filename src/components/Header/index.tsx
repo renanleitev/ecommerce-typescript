@@ -5,7 +5,8 @@ import {
     FaUserAlt, 
     FaUserEdit, 
     FaUserPlus,
-    FaShoppingCart, 
+    FaShoppingCart,
+    FaSearch 
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -55,6 +56,9 @@ export default function Header(){
                         <FaShoppingCart size={24}/>
                     </Cart>
                 )}
+            </Link>
+            <Link to="/stock">
+                <FaSearch size={24}/>
             </Link>
             <Link to="/">
                 {isLoggedIn && <FaSignInAlt onClick={handleLogin} size={24}/>}

@@ -1,5 +1,6 @@
 import {
     initialState,
+    initialProduct,
     inventoryReducer,
     addItem,
     changeQuantity,
@@ -46,8 +47,8 @@ describe('Testing initialState', () => {
     it('error should be empty string', () => {
         expect(initialState.error).toBe('');
     });
-    it('stock.data should be an array of object', () => {
-        expect(initialState.stock.data).toEqual([{}]);
+    it('stock.data should be an array of Product', () => {
+        expect(initialState.stock.data).toEqual([{...initialProduct}]);
     });
     it('product.id should be an empty string', () => {
         expect(initialState.product.id).toBe('');

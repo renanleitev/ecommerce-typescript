@@ -8,10 +8,11 @@ import {
     ItemContainer,
     CheckoutContainer } from './styled';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import * as interfaces from '../../interfaces';
-import {changeQuantity, removeItem} from '../../store/modules/products/reducer';
+import {removeItem} from '../../store/modules/products/reducer';
 import Loading from '../../components/Loading';
+import { changeProductQuantity } from '../../services/changeProductQuantity';
+import { checkoutCart } from '../../services/checkoutCart';
 
 export default function Shopping(){
     const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
@@ -21,34 +22,13 @@ export default function Shopping(){
     useEffect(() => {
         setShoppingCart([...cart]);
     }, [cart]);
-    const changeProductQuantity = useCallback(
-        (item: interfaces.Product, operation: string) => {
-            const newItem: interfaces.Product = {...item}; 
-            if (operation === 'add') {
-                newItem.quantity++;
-                newItem.totalPrice = item.totalPrice + Number.parseFloat(item.price);
-                toast.success(`Added ${item.name} successfully!`);
-            }
-            if (operation === 'remove' && item.quantity > 0){
-                newItem.quantity--;
-                newItem.totalPrice = item.totalPrice - Number.parseFloat(item.price);
-                toast.success(`Removed ${item.name} successfully!`);
-            }
-            dispatch(changeQuantity({...newItem}));
-            setShoppingCart([...cart]);
-    }, [cart, dispatch])
-    const handleCheckout = useCallback(() => {
-        let total = 0;
-        cart.forEach((item: interfaces.Product) => {
-            if (item !== undefined) total += item.totalPrice;
-        });
-        toast.success(`Thank you! Your total is $${total.toFixed(2)}`);
-    }, [cart]);
     const handleIncrement = useCallback((item: interfaces.Product) => { 
-        changeProductQuantity(item, 'add');
+        changeProductQuantity(item, 'add', dispatch);
+        setShoppingCart([...cart]);
     }, [changeProductQuantity]);
     const handleDecrement = useCallback((item: interfaces.Product) => {
-        changeProductQuantity(item, 'remove');
+        changeProductQuantity(item, 'remove', dispatch);
+        setShoppingCart([...cart]);
     }, [changeProductQuantity]);
     const handleRemove = useCallback((item: interfaces.Product) => {
         if (item !== undefined) dispatch(removeItem(item));
@@ -57,7 +37,7 @@ export default function Shopping(){
         <CartContainer>
             <Loading/>
             {isLoggedIn ? (
-                <CheckoutContainer onClick={handleCheckout}>
+                <CheckoutContainer onClick={() => checkoutCart(cart)}>
                     <FaShoppingCart size={30}/>
                 </CheckoutContainer>
                 ) : (<></>)}

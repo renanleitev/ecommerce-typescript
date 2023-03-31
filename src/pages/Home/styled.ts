@@ -4,6 +4,9 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 export const ProductContainer = styled.div`
     display: flex;
     flex-direction: row;
+    p{
+        padding: 10px;
+    }
 `;
 
 export const ArrowLeft = styled(FaArrowLeft)`

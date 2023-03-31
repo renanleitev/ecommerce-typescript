@@ -11,8 +11,11 @@ export interface Product extends Base {
     description: string,
     additionalFeatures: string,
 }
-export interface Stock {
-    data: Array<object>,
+export interface StockData {
+    data: Array<Product>,
+}
+export interface UserData {
+    data: Array<User> 
 }
 export interface Item {
     item: Product,
@@ -25,17 +28,9 @@ export interface User extends Base {
 }
 export interface Input {
     data: Product | User,
-    setData: Function,
+    setData: CallableFunction,
     keyName: string,
     keyValue: string,
-}
-export interface ResponseGenerator{
-    config?:any,
-    data?:any,
-    headers?:any,
-    request?:any,
-    status?:number,
-    statusText?:string
 }
 interface BaseInitialState {
     status: string,
@@ -43,10 +38,10 @@ interface BaseInitialState {
 }
 export interface InitialStateProducts extends BaseInitialState {
     stock: {
-        data: Array<object>,
+        data: Array<Product>,
     },
     product: Product,
-    cart: Array<object>,
+    cart: Array<Product>,
 }
 export interface InitialStateLogin extends BaseInitialState {
     isLoggedIn: boolean,
@@ -55,4 +50,4 @@ export interface InitialStateLogin extends BaseInitialState {
 export interface IRootState {
     login: InitialStateLogin,
     products: InitialStateProducts,
-};
+}

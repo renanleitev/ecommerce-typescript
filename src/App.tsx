@@ -24,6 +24,6 @@ function App() {
             </PersistGate>
         </Provider>
     );
-};
+}
 
 export default App;

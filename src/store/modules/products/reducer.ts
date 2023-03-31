@@ -2,25 +2,27 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
 import axios from '../../../services/axios';
-import { InitialStateProducts } from '../../../interfaces';
+import { InitialStateProducts, Product } from '../../../interfaces';
+
+export const initialProduct: Product = {
+    id: '',
+    name: '',
+    images: '',
+    price: '',
+    quantity: 0,
+    totalPrice: 0,
+    os: '',
+    description: '',
+    additionalFeatures: '',
+}
 
 export const initialState: (InitialStateProducts) = {
     status: 'idle',
     error: '',
     stock: {
-        data: [{}],
+        data: [{...initialProduct}],
     },
-    product: {
-            id: '',
-            name: '',
-            images: '',
-            price: '',
-            quantity: 0,
-            totalPrice: 0,
-            os: '',
-            description: '',
-            additionalFeatures: '',
-    },
+    product: initialProduct,
     cart: [],
 };
 
@@ -108,7 +110,7 @@ export const inventorySlice = createSlice({
             // showStock asyncThunk
             .addCase(
                 showStock.fulfilled,
-                (state, action: PayloadAction<interfaces.Stock>) => {
+                (state, action: PayloadAction<interfaces.StockData>) => {
                     state.status = 'succeeded';
                     state.stock.data = action.payload.data;
                 }

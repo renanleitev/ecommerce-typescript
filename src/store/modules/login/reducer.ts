@@ -22,15 +22,17 @@ export const initialState: (InitialStateLogin) = {
 export const loginUser = createAsyncThunk(
     'user/loginUser',
     async(userLogin: interfaces.User) => {
-        const users: interfaces.ResponseGenerator = await axios.get('/users');
+        const users: interfaces.UserData = await axios.get('/users');
+        let userLoggedIn;
         users.data.forEach((user: interfaces.User) => {
             if ((userLogin.email === user.email) && (userLogin.password === user.password)){
-                userLogin = {...user};
-                toast.success('Loggin successfully.');
+                toast.success('Login successfully.');
                 history.push('/');
-            }
+                userLoggedIn = {...user};
+                return userLoggedIn;
+            } 
         });
-        return userLogin;
+        return userLoggedIn || initialState.user;
     }
 );
 
@@ -118,8 +120,12 @@ export const userSlice = createSlice({
             .addCase(
                 loginUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
-                    state.isLoggedIn = true;
-                    state.user = action.payload;
+                    if (action.payload.name !== '') {
+                        state.isLoggedIn = true;
+                        state.user = action.payload;
+                    } else {
+                        toast.error('Email/password invalid.');
+                    }
             })
             .addCase(loginUser.pending, (state) => {state.status = 'loading';})
             .addCase(loginUser.rejected, (state, action) => {
