@@ -1,29 +1,26 @@
-import React, {useState, useMemo, useCallback, useEffect} from "react";
+import React, {useState, useMemo, useCallback} from "react";
+import {FaShoppingCart} from 'react-icons/fa';
 import { Table } from "./styled";
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
-import { 
+import {
     showStock, 
     addItem, 
-    removeItem,
+    changeQuantity
 } from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import { CartButton } from "../../pages/Product/styled";
-import { changeProductQuantity } from "../../services/changeProductQuantity";
+import { DivCartButton } from "../../pages/Product/styled";
+import mapStock from "../../services/mapStock";
 
 const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.TableProducts) => {
     const dispatch = useDispatch<AppThunkDispatch>();
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
     const [sorting, setSorting] = useState(true);
-    const [shoppingCart, setShoppingCart] = useState([...cart]);
     const [stock, setStock] = useState([...props.stock]);
     const [originalStock, setOriginalStock] = useState([...props.stock]);
-    useEffect(() => {
-        setShoppingCart([...cart]);
-    }, [cart]);
     useMemo(() => {
         dispatch(showStock());
     }, [dispatch]);
@@ -50,29 +47,10 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
         setStock(sorting ? sortedStock : sortedStock.reverse());
         sorting ? setSorting(false) : setSorting(true);
     }, [sorting, stock]);
-    const changeQuantity = useCallback(
+    const changeItemQuantity = useCallback(
         (product: interfaces.Product, operation: string) => {
-            function mapStock(stock: Array<interfaces.Product>) {
-                return stock.map((item: interfaces.Product) => {
-                    if (item.name === product.name) {
-                        if (operation === 'add') {
-                            return {...item, 
-                                quantity: item.quantity + 1,
-                                totalPrice: item.totalPrice + Number.parseFloat(item.price)
-                            }
-                        }
-                        if (operation === 'remove') {
-                            return {...item, 
-                                quantity: item.quantity - 1,
-                                totalPrice: item.totalPrice - Number.parseFloat(item.price)
-                            }
-                        }
-                    }
-                    return {...item};
-                })
-            }
-            setStock(mapStock(stock));
-            setOriginalStock(mapStock(originalStock));
+            setStock(mapStock(stock, product, operation));
+            setOriginalStock(mapStock(originalStock, product, operation));
     }, [stock]);
     const searchTable = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const searchTerm = e.currentTarget.value.toString().toLowerCase();
@@ -83,6 +61,14 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
             product.description.toLowerCase().indexOf(searchTerm) > -1,
         ));
     }, [stock]);
+    const handleCheckout = useCallback((product: interfaces.Product) => {
+        if (!cart.some(({id}) => id === product.id) && product.quantity > 0) {
+            dispatch(addItem(product));
+        }
+        if (cart.some(({id}) => id === product.id)) {
+            dispatch(changeQuantity({...product}));
+        } 
+    }, [cart]);
     return (
         <>
         <input
@@ -120,8 +106,7 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
                 </tr>
             </thead>
             <tbody>
-                {stock
-                .map((product: interfaces.Product, index: number) => {
+                {stock.map((product: interfaces.Product, index: number) => {
                     return (
                         <tr className='product' key={index}> 
                             <td>
@@ -142,6 +127,8 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
                                     ${product.price}
                                 </p>
                             </td>
+                            {isLoggedIn ? (
+                            <>
                             <td>
                                 <p key={index+4}>
                                     {product.quantity}
@@ -152,17 +139,34 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
                                     ${product.totalPrice.toFixed(2)}
                                 </p>
                             </td>
-                            {isLoggedIn ? (
-                                <td>
-                                <CartButton 
-                                onClick={() => changeQuantity(product, 'add')}>
-                                    +
-                                </CartButton>
-                                <CartButton 
-                                onClick={() => changeQuantity(product, 'remove')}>
-                                    -
-                                </CartButton>
+                            <td>
+                                <DivCartButton className="dropdown">
+                                    <button className="dropbtn">
+                                        ...
+                                    </button>
+                                    <div className="dropdown-content">
+                                        <button 
+                                        onClick={() => changeItemQuantity(product, 'add')}
+                                        className="hidden"
+                                        >
+                                            +
+                                        </button>
+                                        <button 
+                                        onClick={() => changeItemQuantity(product, 'remove')}
+                                        className="hidden"
+                                        >
+                                            -
+                                        </button>
+                                        <button
+                                        onClick={() => handleCheckout(product)}
+                                        className="hidden"
+                                        >
+                                            <FaShoppingCart size={22}/>
+                                        </button>
+                                    </div>
+                                </DivCartButton>
                             </td>
+                            </>
                             ) : (<></>)}
                         </tr>
                     )

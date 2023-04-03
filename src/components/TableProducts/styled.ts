@@ -12,7 +12,7 @@ export const Table = styled.table`
     border-radius: 20px;
     text-align: center;
     table-layout: fixed;
-    width: 900px;
+    width: 1000px;
     a {
         color: ${colors.primaryDarkColor};
     }

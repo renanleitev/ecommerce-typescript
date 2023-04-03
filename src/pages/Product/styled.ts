@@ -48,3 +48,35 @@ export const CartButton = styled.button`
         background-color: ${colors.sucessColor};
     }
 `;
+
+export const DivCartButton = styled.div`
+    display: inline-block;
+    .dropbtn {
+        height: 40px;
+        width: 40px;
+        padding: 0;
+    }
+    .dropdown-content {
+        display: none;
+        width: 160px;
+        margin-top: -40px;
+        margin-left: -10px;
+        z-index: 1;
+    }
+    :hover .dropdown-content {
+        display: flex;
+        flex-direction: row;
+    }
+    :hover .dropbtn {
+        background-color: ${colors.infoColor};
+    }
+    .hidden{
+        margin-left: 4px;
+        width: 50px;
+        height: 40px;
+        padding: 0;
+    }
+    .hidden:hover{
+        background-color: ${colors.infoColor};
+    }
+`;
