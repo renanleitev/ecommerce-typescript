@@ -12,7 +12,7 @@ export const Table = styled.table`
     border-radius: 20px;
     text-align: center;
     table-layout: fixed;
-    width: 700px;
+    width: 900px;
     a {
         color: ${colors.primaryDarkColor};
     }
@@ -30,5 +30,10 @@ export const Table = styled.table`
     .product{
         height: 100px;
     }
-    
+    th:hover {
+        cursor: pointer;
+    }
+    .addCart{
+        width: 10px;
+    }
 `;

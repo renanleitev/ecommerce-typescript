@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
@@ -12,29 +12,12 @@ export default function ShowTable(){
     useMemo(() => {
         dispatch(showStock());
     }, [dispatch]);
-    const [currentStock, setCurrentStock] = useState(stock.data);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [searchValue, setSearchValue] = useState('');
-    const searchTable = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        const searchTerm = e.currentTarget.value.toString().toLowerCase();
-        setSearchValue(searchTerm);
-        const filtered = currentStock.filter(
-            product =>
-                product.description.toLowerCase().indexOf(searchTerm) > -1,
-        );
-        setFilteredProducts(filtered);
-    }, []);
+    const currentStock = stock.data.map((item: interfaces.Product) => {
+            return {...item, quantity: 0, totalPrice: 0};
+    });
     return (
         <DivTable>
-            <input
-            onChange={searchTable}
-            placeholder={'Search for products...'}
-            />
-            {searchValue ? (
-                <TableProducts stock={filteredProducts} setStock={setFilteredProducts}/>
-            ) : (
-                <TableProducts stock={currentStock} setStock={setCurrentStock}/>
-            )}
+            <TableProducts stock={currentStock}/>
         </DivTable>
     )
 }

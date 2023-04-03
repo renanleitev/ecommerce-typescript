@@ -34,7 +34,6 @@ export interface Input {
 }
 export interface TableProducts {
     stock: Array<Product>,
-    setStock: CallableFunction,
 }
 interface BaseInitialState {
     status: string,
