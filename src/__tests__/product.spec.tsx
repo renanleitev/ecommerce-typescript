@@ -19,63 +19,63 @@ describe('Testing Product page', () => {
         const description = screen.getByText(/description/i);
         expect(description.innerHTML).toBe(`Description: ${mockProduct.description}`);
         // Operational System
-        const opSystem = screen.getByText(/operational/i);
-        expect(opSystem.innerHTML).toBe(`Operational System: ${mockProduct.os}`);  
+        const opSystemProduct = screen.getByText(/operational/i);
+        expect(opSystemProduct.innerHTML).toBe(`Operational System: ${mockProduct.os}`);  
         // Additional Features
         const addFeatures = screen.getByText(/additional/i);
         expect(addFeatures.innerHTML).toBe(`Additional Features: ${mockProduct.additionalFeatures}`);  
         // Image
-        const imgItem = screen.getByRole('img').getAttribute('src');  
-        expect(imgItem).toBe(`${mockProduct.images}`);  
+        const imgProduct = screen.getByRole('img').getAttribute('src');  
+        expect(imgProduct).toBe(`${mockProduct.images}`);  
         // Price
-        const priceItem = screen.getByText(/price/i);
-        expect(priceItem.innerHTML).toBe(`Price: $${mockProduct.price}`);  
+        const priceProduct = screen.getByText(/price/i);
+        expect(priceProduct.innerHTML).toBe(`Price: $${mockProduct.price}`);  
         // Total Price
-        const totalItem = screen.getByText(/total/i);
-        expect(totalItem.innerHTML).toBe(`Total: $${mockProduct.totalPrice}`);
+        const totalPriceProduct = screen.getByText(/total/i);
+        expect(totalPriceProduct.innerHTML).toBe(`Total: $${mockProduct.totalPrice}`);
         // Quantity
-        const quantItem = screen.getByText(/quantity/i);
-        expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`); 
+        const quantProduct = screen.getByText(/quantity/i);
+        expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`); 
     });
     it('should add quantity of item (previously added)', async () => {
         render(RenderComponent(<Product/>, mockStoreProductCart));
-        const quantItem = screen.getByText(/quantity/i);
-        // addItem
-        const addItem = screen.getByText(/\+/i);
-        fireEvent.click(addItem);
-        expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity + 1}`); 
-        // addItem with toast
-        const addItemToast = await screen.findByText(/added/i);
-        expect(addItemToast.innerHTML).toBe(`Added ${mockProduct.name} successfully!`);
+        const quantProduct = screen.getByText(/quantity/i);
+        // addProduct
+        const addProduct = screen.getByText(/\+/i);
+        fireEvent.click(addProduct);
+        expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity + 1}`); 
+        // addProduct with toast
+        const addProductToast = await screen.findByText(/added/i);
+        expect(addProductToast.innerHTML).toBe(`Added ${mockProduct.name} successfully!`);
     });
     it('should remove quantity of item, but item.quantity === 1', async () => {
         render(RenderComponent(<Product/>, mockStoreProductCart));
-        const quantItem = screen.getByText(/quantity/i); 
-        // removeItem
-        const removeItem = screen.getByText(/-/i);
-        fireEvent.click(removeItem);
-        expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity - 1}`); 
-        // Trying to removeItem with item.quantity === 1
-        const removeItemToast = await screen.findByText(/can not/i); 
-        expect(removeItemToast.innerHTML).toBe(`Can not remove the item.`);
+        const quantProduct = screen.getByText(/quantity/i); 
+        // removeProduct
+        const removeProduct = screen.getByText(/-/i);
+        fireEvent.click(removeProduct);
+        expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity - 1}`); 
+        // Trying to removeProduct with product.quantity === 1
+        const removeProductToast = await screen.findByText(/can not/i); 
+        expect(removeProductToast.innerHTML).toBe(`Can not remove the product.`);
     });
     it('should remove item of cart', async () => {
         render(RenderComponent(<Product/>, mockStoreProductCart));
-        const quantItem = screen.getByText(/quantity/i); 
-        // removeItem
-        const removeItem = screen.getByText(/remove/i);
-        fireEvent.click(removeItem);
-        expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity - 1}`); 
+        const quantProduct = screen.getByText(/quantity/i); 
+        // removeProduct
+        const removeProduct = screen.getByText(/remove/i);
+        fireEvent.click(removeProduct);
+        expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity - 1}`); 
     });
     it('should add quantity of item (item not added)', async () => {
         render(RenderComponent(<Product/>, mockStore));
-        const quantItem = screen.getByText(/quantity/i);
-        // Can not addItem, if was not added to the cart
-        const addItem = screen.getByText(/\+/i);
-        fireEvent.click(addItem);
-        expect(quantItem.innerHTML).toBe(`Quantity: 0`); 
-        // addItem with toast
-        const addItemToast = await screen.findByText(/can not/i); 
-        expect(addItemToast.innerHTML).toBe(`Can not add the item.`);
+        const quantProduct = screen.getByText(/quantity/i);
+        // Can not addProduct, if was not added to the cart
+        const addProduct = screen.getByText(/\+/i);
+        fireEvent.click(addProduct);
+        expect(quantProduct.innerHTML).toBe(`Quantity: 0`); 
+        // addProduct with toast
+        const addProductToast = await screen.findByText(/can not/i); 
+        expect(addProductToast.innerHTML).toBe(`Can not add the product.`); 
     });
 });

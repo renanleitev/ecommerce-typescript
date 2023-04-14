@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import isEmail from 'validator/lib/isEmail';
 import * as interfaces from '../interfaces';
 
-export default function Validation(user: interfaces.User){
+export default function validationUser(user: interfaces.User){
     let error = false;
     if (user.name.length < 3 || user.name.length > 255) {
         error = true;

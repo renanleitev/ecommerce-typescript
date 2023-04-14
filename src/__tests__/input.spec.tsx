@@ -2,7 +2,6 @@ import React from 'react';
 import {screen, render} from '@testing-library/react';
 import Input from '../components/Input';
 import {
-    mockStore,
     mockStoreUserLoggedIn,
     mockProduct,
     mockUser

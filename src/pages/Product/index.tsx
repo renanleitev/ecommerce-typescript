@@ -6,13 +6,14 @@ import {ProductContainer} from '../Home/styled';
 import EditProduct from '../EditProduct';
 import {toast} from 'react-toastify';
 import * as interfaces from '../../interfaces';
-import {addItem, removeItem} from '../../store/modules/products/reducer';
+import {addProductCart, removeProductCart} from '../../store/modules/products/reducer';
 import { showProduct } from '../../store/modules/products/reducer';
 import Modal from '../../components/Modal';
 import useModal from "../../hooks/useModal";
 import { AppThunkDispatch } from '../../store';
 import Loading from '../../components/Loading';
-import { changeProductQuantity } from '../../services/changeProductQuantity';
+import { addProductQuantity } from '../../services/addProductQuantity';
+import { removeProductQuantity } from '../../services/removeProductQuantity';
 
 export default function Product(){
     interface Url{id: string}
@@ -23,78 +24,78 @@ export default function Product(){
     const product = useSelector((state: interfaces.IRootState) => state.products.product);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const { isOpen, toggle } = useModal();
-    const [item, setItem] = useState<interfaces.Product>({...product, quantity: 0, totalPrice: 0});
+    const [newProduct, setNewProduct] = useState<interfaces.Product>({...product, quantity: 0, totalPrice: 0});
     const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
         if (user.name === 'admin') setIsAdmin(true);
     }, [user.name]);
     useMemo(() => {
         cart.forEach((element: interfaces.Product) => {
-            if (element.id === item.id) {
-                item.quantity = element.quantity;
-                item.totalPrice = element.totalPrice;
+            if (element.id === newProduct.id) {
+                newProduct.quantity = element.quantity;
+                newProduct.totalPrice = element.totalPrice;
             }
         });
-    }, [cart, item]);
+    }, [cart, newProduct]);
     useEffect(() => {
         dispatch(showProduct(url.id));
-        setItem({...product, quantity: 0, totalPrice: 0});
+        setNewProduct({...product, quantity: 0, totalPrice: 0});
     }, [dispatch, url.id, product]);
     const addProduct = useCallback(() => {
         if (isLoggedIn){
-            const findItem = cart.find((product: interfaces.Product) => product.id === item.id);
-            if (findItem) {
-                setItem(changeProductQuantity(item, 'add', dispatch));
+            const findnewProduct = cart.find((product: interfaces.Product) => product.id === newProduct.id);
+            if (findnewProduct) {
+                setNewProduct(addProductQuantity(newProduct, dispatch));
             } else {
-                dispatch(addItem({...item}));
-                setItem(changeProductQuantity(item, 'add', dispatch));
+                dispatch(addProductCart({...newProduct}));
+                setNewProduct(addProductQuantity(newProduct, dispatch));
             } 
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [isLoggedIn, cart, item, changeProductQuantity, dispatch]);
+    }, [isLoggedIn, cart, newProduct, addProductQuantity, dispatch]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
-            dispatch(removeItem(item));
-            item.quantity = 0;
-            item.totalPrice = 0;
-            toast.success(`Removed ${item.name} successfully!`);
+            dispatch(removeProductCart(newProduct));
+            newProduct.quantity = 0;
+            newProduct.totalPrice = 0;
+            toast.success(`Removed ${newProduct.name} successfully!`);
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [dispatch, isLoggedIn, item]);
+    }, [dispatch, isLoggedIn, newProduct]);
     const incrementQuantity = useCallback(() => {
-        if (isLoggedIn && item.quantity > 0){
-            setItem(changeProductQuantity(item, 'add', dispatch));
+        if (isLoggedIn && newProduct.quantity > 0){
+            setNewProduct(addProductQuantity(newProduct, dispatch));
         } 
-        if (!isLoggedIn || item.quantity === 0) toast.error('Can not add the item.');
-    }, [changeProductQuantity, isLoggedIn, item]);
+        if (!isLoggedIn || newProduct.quantity === 0) toast.error('Can not add the product.');
+    }, [addProductQuantity, isLoggedIn, newProduct]);
     const decrementQuantity = useCallback(() => {
-        if (isLoggedIn && item.quantity > 1) {
-            setItem(changeProductQuantity(item, 'remove', dispatch));
+        if (isLoggedIn && newProduct.quantity > 1) {
+            setNewProduct(removeProductQuantity(newProduct, dispatch));
         }
-        if (!isLoggedIn || item.quantity === 0) toast.error('Can not remove the item.');
-    }, [changeProductQuantity, isLoggedIn, item]);
+        if (!isLoggedIn || newProduct.quantity === 0) toast.error('Can not remove the product.');
+    }, [addProductQuantity, isLoggedIn, newProduct]);
     return (
         <ProductContainer>
             <Loading/>
             <Modal isOpen={isOpen} toggle={toggle}>
-                <EditProduct item={item}/>
+                <EditProduct item={newProduct}/>
             </Modal>
             <ItemContainer>
-                <h1>{item.name}</h1>
-                <img src={item.images} alt=''/>
+                <h1>{newProduct.name}</h1>
+                <img src={newProduct.images} alt=''/>
                 <ProductContainer>
-                <p>Price: ${item.price}</p>
-                <p>Quantity: {item.quantity}</p>
-                <p>Total: ${item.totalPrice.toFixed(2)}</p>
+                <p>Price: ${newProduct.price}</p>
+                <p>Quantity: {newProduct.quantity}</p>
+                <p>Total: ${newProduct.totalPrice.toFixed(2)}</p>
                 </ProductContainer>
-                <p>Operational System: {item.os}</p>
-                <p>Additional Features: {item.additionalFeatures}</p>
-                <p>Description: {item.description}</p>
+                <p>Operational System: {newProduct.os}</p>
+                <p>Additional Features: {newProduct.additionalFeatures}</p>
+                <p>Description: {newProduct.description}</p>
                 <ProductContainer>
                     <CartButton onClick={addProduct}>Add to cart</CartButton>
                     <CartButton onClick={incrementQuantity}>+</CartButton>
                     <CartButton onClick={decrementQuantity}>-</CartButton>
-                    <CartButton onClick={removeProduct}>Remove item</CartButton>
+                    <CartButton onClick={removeProduct}>Remove newProduct</CartButton>
                     {isAdmin ? (<CartButton onClick={toggle}>Edit Product</CartButton>) : (<></>)}
                 </ProductContainer>
             </ItemContainer> 

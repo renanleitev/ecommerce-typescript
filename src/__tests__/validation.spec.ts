@@ -1,9 +1,9 @@
 import { mockUser } from "../services/_utils";
-import Validation from "../services/validation";
+import validationUser from "../services/validationUser";
 
 describe('Testing validation', () => {
     it('should return false', () => {
-        const error = Validation(mockUser);
+        const error = validationUser(mockUser);
         expect(error).toBe(false);
     });
 });

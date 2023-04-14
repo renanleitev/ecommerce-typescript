@@ -61,10 +61,10 @@ export const inventorySlice = createSlice({
     name: 'inventory',
     initialState: initialState,
     reducers: {
-        addItem: (state, action: PayloadAction<interfaces.Product>) => {            
+        addProductCart: (state, action: PayloadAction<interfaces.Product>) => {            
             state.cart.push({...action.payload});
         },
-        changeQuantity: (state, action: PayloadAction<interfaces.Product>) => {
+        changeProductQuantityCart: (state, action: PayloadAction<interfaces.Product>) => {
             state.cart.forEach((item: interfaces.Product) =>{
                 if (item.id === action.payload.id) {
                     item.quantity = action.payload.quantity;
@@ -72,12 +72,12 @@ export const inventorySlice = createSlice({
                 }
             });
         },
-        removeItem: (state, action: PayloadAction<interfaces.Product>) => {
+        removeProductCart: (state, action: PayloadAction<interfaces.Product>) => {
             state.cart.forEach((item: interfaces.Product, index: number) => {
                 if (item.id === action.payload.id) state.cart.splice(index, 1);
             })
         },
-        removeCart: (state) => {
+        removeAllProductsCart: (state) => {
             state.cart = initialState.cart;
         }
     },
@@ -124,10 +124,10 @@ export const inventorySlice = createSlice({
 })
 
 export const { 
-    addItem,
-    changeQuantity,
-    removeItem,
-    removeCart,
+    addProductCart,
+    changeProductQuantityCart,
+    removeProductCart,
+    removeAllProductsCart,
 } = inventorySlice.actions;
 
 export const inventoryReducer = inventorySlice.reducer;

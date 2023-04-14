@@ -12,7 +12,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { DivCartButton } from "../../pages/Product/styled";
-import mapStock from "../../services/mapStock";
+import mapStockAddProduct from "../../services/mapStockAddProduct";
+import mapStockRemoveProduct from "../../services/mapStockRemoveProduct";
 
 const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.TableProducts) => {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -26,20 +27,20 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
     }, [dispatch]);
     const applySorting = useCallback((key: string) => {
         const sortedStock = stock.sort(
-            (a: interfaces.Product, b: interfaces.Product) => {
+            (previousProduct: interfaces.Product, nextProduct: interfaces.Product) => {
             switch (key) {
                 case 'name':
-                    return a[key].localeCompare(b[key]);
+                    return previousProduct[key].localeCompare(nextProduct[key]);
                 case 'images':
-                    return a[key].localeCompare(b[key]);
+                    return previousProduct[key].localeCompare(nextProduct[key]);
                 case 'price':
-                    return Number.parseFloat(a[key]) - Number.parseFloat(b[key]);
+                    return Number.parseFloat(previousProduct[key]) - Number.parseFloat(nextProduct[key]);
                 case 'quantity':
-                    return a[key] - b[key];
+                    return previousProduct[key] - nextProduct[key];
                 case 'totalPrice':
-                    return a[key] - b[key];
+                    return previousProduct[key] - nextProduct[key];
                 case 'description':
-                    return a[key].localeCompare(b[key]);
+                    return previousProduct[key].localeCompare(nextProduct[key]);
                 default:
                     break;
             }
@@ -47,10 +48,15 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
         setStock(sorting ? sortedStock : sortedStock.reverse());
         sorting ? setSorting(false) : setSorting(true);
     }, [sorting, stock]);
-    const changeItemQuantity = useCallback(
-        (product: interfaces.Product, operation: string) => {
-            setStock(mapStock(stock, product, operation));
-            setOriginalStock(mapStock(originalStock, product, operation));
+    const addProductQuantity = useCallback(
+        (product: interfaces.Product) => {
+            setStock(mapStockAddProduct(stock, product));
+            setOriginalStock(mapStockAddProduct(originalStock, product));
+    }, [stock]);
+    const removeProductQuantity = useCallback(
+        (product: interfaces.Product) => {
+            setStock(mapStockRemoveProduct(stock, product));
+            setOriginalStock(mapStockRemoveProduct(originalStock, product));
     }, [stock]);
     const searchTable = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const searchTerm = e.currentTarget.value.toString().toLowerCase();
@@ -146,23 +152,17 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
                                     </button>
                                     <div className="dropdown-content">
                                         <button 
-                                        onClick={() => changeItemQuantity(product, 'add')}
+                                        onClick={() => addProductQuantity(product)}
                                         className="hidden"
-                                        >
-                                            +
-                                        </button>
+                                        >+</button>
                                         <button 
-                                        onClick={() => changeItemQuantity(product, 'remove')}
+                                        onClick={() => removeProductQuantity(product)}
                                         className="hidden"
-                                        >
-                                            -
-                                        </button>
+                                        >-</button>
                                         <button
                                         onClick={() => handleCheckout(product)}
                                         className="hidden"
-                                        >
-                                            <FaShoppingCart size={22}/>
-                                        </button>
+                                        ><FaShoppingCart size={22}/></button>
                                     </div>
                                 </DivCartButton>
                             </td>

@@ -15,7 +15,7 @@ import history from '../../services/history';
 import {toast} from 'react-toastify';
 import { IRootState } from '../../interfaces';
 import {logoutSuccess} from '../../store/modules/login/reducer';
-import {removeCart} from '../../store/modules/products/reducer';
+import {removeAllProductsCart} from '../../store/modules/products/reducer';
 
 export default function Header(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -25,7 +25,7 @@ export default function Header(){
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
             dispatch(logoutSuccess());
-            dispatch(removeCart());
+            dispatch(removeAllProductsCart());
             toast.success('Logout sucessufully.');
             history.push('/');
         }

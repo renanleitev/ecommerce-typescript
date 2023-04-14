@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import * as interfaces from '../../interfaces';
+import capitalizeString from '../../services/capitalizeString';
 
 const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
     const [type, setType] = useState('text');
@@ -24,13 +25,13 @@ const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
     }, [props.data, props.keyName, props.setData]);
     return (
         <>
-            <label htmlFor={props.keyName}>{props.keyName.charAt(0).toUpperCase() + props.keyName.slice(1)}</label>
+            <label htmlFor={props.keyName}>{capitalizeString(props.keyName)}</label>
             <input
             id={props.keyName}
             type={type}
             defaultValue={props.keyValue}
             onChange={handleInput}
-            placeholder={props.keyName.charAt(0).toUpperCase() + props.keyName.slice(1)}
+            placeholder={capitalizeString(props.keyName)}
             />
         </>
     );

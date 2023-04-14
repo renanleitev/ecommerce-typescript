@@ -5,7 +5,7 @@ import Input from '../../components/Input';
 import { toast } from 'react-toastify';
 import {editUser, deleteUser} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
-import Validation from '../../services/validation';
+import validationUser from '../../services/validationUser';
 import { ButtonContainer } from './styled';
 import { AppThunkDispatch } from '../../store';
 
@@ -15,7 +15,7 @@ export default function EditUser(){
     const [editedUser, setEditedUser] = useState<interfaces.User>({...user});
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = Validation(editedUser);
+        const formErrors = validationUser(editedUser);
         if(formErrors){
             toast.error('Form data error. Please, try again.');
         } else if (user.id === undefined) {

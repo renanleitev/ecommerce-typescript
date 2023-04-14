@@ -9,9 +9,10 @@ import {
     CheckoutContainer } from './styled';
 import { Link } from 'react-router-dom';
 import * as interfaces from '../../interfaces';
-import {removeItem} from '../../store/modules/products/reducer';
+import {removeProductCart} from '../../store/modules/products/reducer';
 import Loading from '../../components/Loading';
-import { changeProductQuantity } from '../../services/changeProductQuantity';
+import { addProductQuantity } from '../../services/addProductQuantity';
+import { removeProductQuantity } from '../../services/removeProductQuantity';
 import { checkoutCart } from '../../services/checkoutCart';
 
 export default function Shopping(){
@@ -23,15 +24,15 @@ export default function Shopping(){
         setShoppingCart([...cart]);
     }, [cart]);
     const handleIncrement = useCallback((item: interfaces.Product) => { 
-        changeProductQuantity(item, 'add', dispatch);
+        addProductQuantity(item, dispatch);
         setShoppingCart([...cart]);
-    }, [changeProductQuantity]);
+    }, [addProductQuantity]);
     const handleDecrement = useCallback((item: interfaces.Product) => {
-        changeProductQuantity(item, 'remove', dispatch);
+        removeProductQuantity(item, dispatch);
         setShoppingCart([...cart]);
-    }, [changeProductQuantity]);
+    }, [removeProductQuantity]);
     const handleRemove = useCallback((item: interfaces.Product) => {
-        if (item !== undefined) dispatch(removeItem(item));
+        if (item !== undefined) dispatch(removeProductCart(item));
     }, [dispatch]);
     return (
         <CartContainer>

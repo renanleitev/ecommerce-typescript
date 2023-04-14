@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import {registerUser} from '../../store/modules/login/reducer';
 import * as interfaces from '../../interfaces';
-import Validation from '../../services/validation';
+import validationUser from '../../services/validationUser';
 import { AppThunkDispatch } from '../../store';
 
 export default function Register(){
@@ -12,7 +12,7 @@ export default function Register(){
     const [user, setUser] = useState<interfaces.User>();
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = Validation(user);
+        const formErrors = validationUser(user);
         if (!formErrors){
             dispatch(registerUser(user));
         }
