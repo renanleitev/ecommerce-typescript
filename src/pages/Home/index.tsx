@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
@@ -22,7 +22,7 @@ export default function Home(){
                         <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>
                         <img key={index+2} src={product.images} alt=''/>
                         <p key={index+3}>${product.price}</p>
-                    </Container> 
+                    </Container>          
                 )
             })}
         </ProductContainer>       

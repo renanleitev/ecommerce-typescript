@@ -74,6 +74,7 @@
       "name": "Samsung Phone",
       "additionalFeatures": "Front Facing 7.0MP Camera",
       "os": "Samsung UI 12",
+      "price": "150.67",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (4000 mAH)",
   	      "standbytime" : "12 hours"
@@ -124,6 +125,7 @@
       "name": "Xiaomi Phone",
       "additionalFeatures": "Front Facing 9.9MP Camera",
       "os": "Xiaomi OS",
+      "price": "179.22",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (2000 mAH)",
   	      "standbytime" : "2 hours"
@@ -174,6 +176,7 @@
       "name": "Dell XPS 12",
       "additionalFeatures": "Front Facing 1.3MP Camera",
       "os": "Windows 11",
+      "price": "224.35",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (7000 mAH)",
   	      "standbytime" : "24 hours"
@@ -224,6 +227,7 @@
       "name": "Asus Zenbook",
       "additionalFeatures": "Front Facing 1.3MP Camera",
       "os": "Ubuntu Linux",
+      "price": "198.12",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (7000 mAH)",
   	      "standbytime" : "24 hours"
@@ -273,7 +277,8 @@
       "id": 6,
       "name": "Lenovo Book",
       "additionalFeatures": "Front Facing 1.3MP Camera",
-      "os": "Macintosh OS X 10.7",
+      "os": "Windows 11",
+      "price": "121.37",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (7000 mAH)",
   	      "standbytime" : "24 hours"
@@ -323,7 +328,8 @@
       "id": 7,
       "name": "Notebook Acer",
       "additionalFeatures": "Front Facing 1.3MP Camera",
-      "os": "Macintosh OS X 10.7",
+      "os": "Windows 10",
+      "price": "207.14",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (7000 mAH)",
   	      "standbytime" : "24 hours"
@@ -373,7 +379,8 @@
       "id": 8,
       "name": "Chromebook Acer",
       "additionalFeatures": "Front Facing 1.3MP Camera",
-      "os": "Macintosh OS X 10.7",
+      "os": "Chrome OS",
+      "price": "94.56",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (7000 mAH)",
   	      "standbytime" : "24 hours"
@@ -423,7 +430,8 @@
       "id": 9,
       "name": "Tablet S6 Lite",
       "additionalFeatures": "Front Facing 1.3MP Camera",
-      "os": "Macintosh OS X 10.7",
+      "os": "Android 12",
+      "price": "150.67",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (7000 mAH)",
   	      "standbytime" : "24 hours"
@@ -474,6 +482,7 @@
       "name": "Ipad Apple",
       "additionalFeatures": "Front Facing 1.3MP Camera",
       "os": "Macintosh OS X 10.7",
+      "price": "259.19",
       "battery": {
           "type": "Lithium Ion (Li-Ion) (7000 mAH)",
   	      "standbytime" : "24 hours"

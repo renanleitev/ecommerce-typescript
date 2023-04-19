@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const DivTable = styled.div`
     text-align: center;
+    padding-bottom: 70px;
     input {
         margin-top: 20px;
         width: 500px;

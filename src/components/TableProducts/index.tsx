@@ -5,8 +5,8 @@ import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
 import {
     showStock, 
-    addItem, 
-    changeQuantity
+    addProductCart, 
+    changeProductQuantityCart
 } from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -69,10 +69,10 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
     }, [stock]);
     const handleCheckout = useCallback((product: interfaces.Product) => {
         if (!cart.some(({id}) => id === product.id) && product.quantity > 0) {
-            dispatch(addItem(product));
+            dispatch(addProductCart(product));
         }
         if (cart.some(({id}) => id === product.id)) {
-            dispatch(changeQuantity({...product}));
+            dispatch(changeProductQuantityCart({...product}));
         } 
     }, [cart]);
     return (

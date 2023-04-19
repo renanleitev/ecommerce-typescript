@@ -7,7 +7,6 @@ export const Table = styled.table`
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
-    margin-bottom: 70px;
     padding: 20px;
     border-radius: 20px;
     text-align: center;

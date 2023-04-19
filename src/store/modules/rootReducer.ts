@@ -7,4 +7,6 @@ const rootReducer = combineReducers({
     products: inventoryReducer,
 });
 
+export type IRootReducer = typeof rootReducer;
+
 export default rootReducer;

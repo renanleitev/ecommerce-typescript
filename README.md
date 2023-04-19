@@ -22,6 +22,14 @@ O servidor irá rodar na porta 80, sendo acessível pelo endereço:
 
         http://localhost/
 
+Por fim, altere o arquivo axios.js, localizado em `ecommerce-react\src\services\axios.js`:
+
+        import axios from 'axios';
+        
+        export default axios.create({
+            baseURL: 'http://localhost',
+        });
+
 Link para o repositório Docker: https://github.com/clue/docker-json-server
 
 b) Via NPM:
