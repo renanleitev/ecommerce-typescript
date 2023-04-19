@@ -58,6 +58,7 @@ export const Container = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-left: 10px;
     img {
         width: 150px;
         margin-top: 100%;

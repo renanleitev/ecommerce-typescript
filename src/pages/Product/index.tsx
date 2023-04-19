@@ -19,12 +19,22 @@ export default function Product(){
     interface Url{id: string}
     const url: Url = useParams();
     const dispatch = useDispatch<AppThunkDispatch>();
-    const user = useSelector((state: interfaces.IRootState) => state.login.user);
-    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
-    const product = useSelector((state: interfaces.IRootState) => state.products.product);
-    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
+    const user = useSelector(
+        (state: interfaces.IRootState) => state.login.user
+    );
+    const cart = useSelector(
+        (state: interfaces.IRootState) => state.products.cart
+    );
+    const product = useSelector(
+        (state: interfaces.IRootState) => state.products.product
+    );
+    const isLoggedIn = useSelector(
+        (state: interfaces.IRootState) => state.login.isLoggedIn
+    );
     const { isOpen, toggle } = useModal();
-    const [newProduct, setNewProduct] = useState<interfaces.Product>({...product, quantity: 0, totalPrice: 0});
+    const [newProduct, setNewProduct] = useState<interfaces.Product>(
+        {...product, quantity: 0, totalPrice: 0}
+    );
     const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
         if (user.name === 'admin') setIsAdmin(true);
@@ -95,7 +105,7 @@ export default function Product(){
                     <CartButton onClick={addProduct}>Add to cart</CartButton>
                     <CartButton onClick={incrementQuantity}>+</CartButton>
                     <CartButton onClick={decrementQuantity}>-</CartButton>
-                    <CartButton onClick={removeProduct}>Remove newProduct</CartButton>
+                    <CartButton onClick={removeProduct}>Remove Product</CartButton>
                     {isAdmin ? (<CartButton onClick={toggle}>Edit Product</CartButton>) : (<></>)}
                 </ProductContainer>
             </ItemContainer> 

@@ -14,14 +14,21 @@ import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { DivCartButton } from "../../pages/Product/styled";
 import mapStockAddProduct from "../../services/mapStockAddProduct";
 import mapStockRemoveProduct from "../../services/mapStockRemoveProduct";
+import Pagination from '../../components/Pagination';
 
 const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.TableProducts) => {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
-    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
+    const isLoggedIn = useSelector(
+        (state: interfaces.IRootState) => state.login.isLoggedIn
+    );
+    const cart = useSelector(
+        (state: interfaces.IRootState) => state.products.cart
+    );
     const [sorting, setSorting] = useState(true);
     const [stock, setStock] = useState([...props.stock]);
     const [originalStock, setOriginalStock] = useState([...props.stock]);
+    const [firstProduct, setFirstProduct] = useState(0);
+    const [lastProduct, setLastProduct] = useState(3);
     useMemo(() => {
         dispatch(showStock());
     }, [dispatch]);
@@ -112,7 +119,9 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
                 </tr>
             </thead>
             <tbody>
-                {stock.map((product: interfaces.Product, index: number) => {
+                {stock
+                .slice(firstProduct, lastProduct)
+                .map((product: interfaces.Product, index: number) => {
                     return (
                         <tr className='product' key={index}> 
                             <td>
@@ -173,6 +182,13 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
                 })}
             </tbody>
         </Table>
+        <Pagination
+            data={stock}
+            currentPage={1}
+            productsPerPage={3}
+            setIndexOfFirstProduct={setFirstProduct}
+            setIndexOfLastProduct={setLastProduct}
+        ></Pagination>
         </>
     )
 }

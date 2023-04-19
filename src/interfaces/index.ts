@@ -54,3 +54,10 @@ export interface IRootState {
     login: InitialStateLogin,
     products: InitialStateProducts,
 }
+export interface ProductPagination {
+    data: Array<Product>,
+    currentPage: number,
+    productsPerPage: number,
+    setIndexOfFirstProduct: CallableFunction,
+    setIndexOfLastProduct: CallableFunction
+}
