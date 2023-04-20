@@ -10,7 +10,7 @@ const Pagination: React.FC<interfaces.ProductPagination> = (props: interfaces.Pr
         lastProduct: 0
     });    
     const pageNumbers: Array<number> = [];
-    for (let i = 1; i <= Math.ceil(props.data.length/pageStatus.productsPerPage); i++) {
+    for (let i = 1; i <= Math.ceil(props.dataLength/pageStatus.productsPerPage); i++) {
         pageNumbers.push(i);
     }
     const paginationProduct = useCallback((numberOfPage: number) => {

@@ -2,12 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
-import { ProductContainer } from './styled';
+import { ProductContainer, HomeContainer } from './styled';
 import { showStock } from '../../store/modules/products/reducer';
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
 import Pagination from '../../components/Pagination';
-import { HomeContainer } from './styled';
 
 export default function Home(){
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -33,7 +32,7 @@ export default function Home(){
                 })}
             </ProductContainer>     
             <Pagination
-                data={stock.data}
+                dataLength={stock.data.length}
                 currentPage={1}
                 productsPerPage={3}
                 setIndexOfFirstProduct={setFirstProduct}

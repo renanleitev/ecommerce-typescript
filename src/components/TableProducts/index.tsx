@@ -183,7 +183,7 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
             </tbody>
         </Table>
         <Pagination
-            data={stock}
+            dataLength={stock.length}
             currentPage={1}
             productsPerPage={3}
             setIndexOfFirstProduct={setFirstProduct}

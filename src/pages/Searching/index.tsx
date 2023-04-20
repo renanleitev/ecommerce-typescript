@@ -6,7 +6,7 @@ import { showStock } from '../../store/modules/products/reducer';
 import TableProducts from '../../components/TableProducts';
 import { DivTable } from './styled';
 
-export default function ShowTable(){
+export default function Searching(){
     const dispatch = useDispatch<AppThunkDispatch>();
     const stock = useSelector((state: interfaces.IRootState) => state.products.stock);
     useMemo(() => {

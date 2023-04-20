@@ -6,7 +6,7 @@ import Home from '../pages/Home';
 import Shopping from "../pages/Shopping";
 import Product from "../pages/Product";
 import Page404 from '../pages/Page404';
-import ShowTable from "../pages/ShowTable";
+import Searching from "../pages/Searching";
 import { useSelector } from 'react-redux';
 import { IRootState } from "../interfaces";
 
@@ -20,7 +20,7 @@ export default function Routes(){
             (<Route exact path='/edit' component={Login}/>) : 
             (<Route exact path='/login' component={Login}/>)}
             <Route exact path='/shopping' component={Shopping}/>
-            <Route exact path='/stock' component={ShowTable}/>
+            <Route exact path='/stock' component={Searching}/>
             <Route exact path='/product/:id' component={Product}/>
             <Route path='*' component={Page404}/>
         </Switch>

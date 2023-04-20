@@ -55,7 +55,7 @@ export interface IRootState {
     products: InitialStateProducts,
 }
 export interface ProductPagination {
-    data: Array<Product>,
+    dataLength: number,
     currentPage: number,
     productsPerPage: number,
     setIndexOfFirstProduct: CallableFunction,
