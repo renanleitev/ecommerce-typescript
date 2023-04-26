@@ -1,13 +1,11 @@
-import React, {useState, useMemo, useCallback} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {FaShoppingCart} from 'react-icons/fa';
 import { Table } from "./styled";
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
 import {
-    showStock, 
     addProductCart, 
     changeProductQuantityCart,
-    showStockPerPage
 } from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,27 +14,31 @@ import { DivCartButton } from "../../pages/Product/styled";
 import mapStockAddProduct from "../../services/mapStockAddProduct";
 import mapStockRemoveProduct from "../../services/mapStockRemoveProduct";
 import Pagination from '../../components/Pagination';
+import Loading from "../Loading";
 
 export default function TableProducts(){
     const dispatch = useDispatch<AppThunkDispatch>();
+    const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
-    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage.data);
+    const allStock = useSelector((state: interfaces.IRootState) => state.products.stock);
+    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
     const [sorting, setSorting] = useState(true);
-    const [stock, setStock] = useState([...stockPerPage.map((item: interfaces.Product) => {
+    const [stock, setStock] = useState([...stockPerPage.data.map((item: interfaces.Product) => {
         return {...item, quantity: 0, totalPrice: 0};
     })]);
-    const [originalStock, setOriginalStock] = useState([...stockPerPage.map((item: interfaces.Product) => {
+    const [originalStock, setOriginalStock] = useState([...stockPerPage.data.map((item: interfaces.Product) => {
         return {...item, quantity: 0, totalPrice: 0};
     })]);
     const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
         currentPage: 1,
         productsPerPage: 3
     }); 
-    useMemo(() => {
-        dispatch(showStock());
-        dispatch(showStockPerPage(pageStatus));
-    }, [dispatch]);
+    useEffect(() => {
+        setStock([...stockPerPage.data.map((item: interfaces.Product) => {
+            return {...item, quantity: 0, totalPrice: 0};
+        })]);
+    }, [stockPerPage]);
     const applySorting = useCallback((key: string) => {
         const sortedStock = stock.sort(
             (previousProduct: interfaces.Product, nextProduct: interfaces.Product) => {
@@ -93,6 +95,7 @@ export default function TableProducts(){
         onChange={searchTable}
         placeholder={'Search for products...'}
         />
+        {isLoading === 'loading' ? <Loading/> : 
         <Table>
             <thead>
                 <tr>
@@ -185,9 +188,9 @@ export default function TableProducts(){
                     )
                 })}
             </tbody>
-        </Table>
+        </Table>}
         <Pagination
-            dataLength={stock.length}
+            dataLength={allStock.data.length}
             pageStatus={pageStatus}
             setPageStatus={setPageStatus}
         ></Pagination>

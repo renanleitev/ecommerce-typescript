@@ -19,18 +19,10 @@ export default function Product(){
     interface Url{id: string}
     const url: Url = useParams();
     const dispatch = useDispatch<AppThunkDispatch>();
-    const user = useSelector(
-        (state: interfaces.IRootState) => state.login.user
-    );
-    const cart = useSelector(
-        (state: interfaces.IRootState) => state.products.cart
-    );
-    const product = useSelector(
-        (state: interfaces.IRootState) => state.products.product
-    );
-    const isLoggedIn = useSelector(
-        (state: interfaces.IRootState) => state.login.isLoggedIn
-    );
+    const user = useSelector((state: interfaces.IRootState) => state.login.user);
+    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
+    const product = useSelector((state: interfaces.IRootState) => state.products.product);
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const { isOpen, toggle } = useModal();
     const [newProduct, setNewProduct] = useState<interfaces.Product>(
         {...product, quantity: 0, totalPrice: 0}
@@ -49,8 +41,10 @@ export default function Product(){
     }, [cart, newProduct]);
     useEffect(() => {
         dispatch(showProduct(url.id));
+    }, []);
+    useMemo(() => {
         setNewProduct({...product, quantity: 0, totalPrice: 0});
-    }, [dispatch, url.id, product]);
+    }, [product]);
     const addProduct = useCallback(() => {
         if (isLoggedIn){
             const findnewProduct = cart.find((product: interfaces.Product) => product.id === newProduct.id);
@@ -94,13 +88,13 @@ export default function Product(){
                 <h1>{newProduct.name}</h1>
                 <img src={newProduct.images} alt=''/>
                 <ProductContainer>
-                <p>Price: ${newProduct.price}</p>
-                <p>Quantity: {newProduct.quantity}</p>
-                <p>Total: ${newProduct.totalPrice.toFixed(2)}</p>
+                    <p>Price: ${newProduct.price}</p>
+                    <p>Quantity: {newProduct.quantity}</p>
+                    <p>Total: ${newProduct.totalPrice.toFixed(2)}</p>
                 </ProductContainer>
-                <p>Operational System: {newProduct.os}</p>
-                <p>Additional Features: {newProduct.additionalFeatures}</p>
-                <p>Description: {newProduct.description}</p>
+                    <p>Operational System: {newProduct.os}</p>
+                    <p>Additional Features: {newProduct.additionalFeatures}</p>
+                    <p>Description: {newProduct.description}</p>
                 <ProductContainer>
                     <CartButton onClick={addProduct}>Add to cart</CartButton>
                     <CartButton onClick={incrementQuantity}>+</CartButton>
