@@ -6,7 +6,8 @@ import { AppThunkDispatch } from '../../store';
 import {
     showStock, 
     addProductCart, 
-    changeProductQuantityCart
+    changeProductQuantityCart,
+    showStockPerPage
 } from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,21 +17,25 @@ import mapStockAddProduct from "../../services/mapStockAddProduct";
 import mapStockRemoveProduct from "../../services/mapStockRemoveProduct";
 import Pagination from '../../components/Pagination';
 
-const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.TableProducts) => {
+export default function TableProducts(){
     const dispatch = useDispatch<AppThunkDispatch>();
-    const isLoggedIn = useSelector(
-        (state: interfaces.IRootState) => state.login.isLoggedIn
-    );
-    const cart = useSelector(
-        (state: interfaces.IRootState) => state.products.cart
-    );
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
+    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
+    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage.data);
     const [sorting, setSorting] = useState(true);
-    const [stock, setStock] = useState([...props.stock]);
-    const [originalStock, setOriginalStock] = useState([...props.stock]);
-    const [firstProduct, setFirstProduct] = useState(0);
-    const [lastProduct, setLastProduct] = useState(3);
+    const [stock, setStock] = useState([...stockPerPage.map((item: interfaces.Product) => {
+        return {...item, quantity: 0, totalPrice: 0};
+    })]);
+    const [originalStock, setOriginalStock] = useState([...stockPerPage.map((item: interfaces.Product) => {
+        return {...item, quantity: 0, totalPrice: 0};
+    })]);
+    const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
+        currentPage: 1,
+        productsPerPage: 3
+    }); 
     useMemo(() => {
         dispatch(showStock());
+        dispatch(showStockPerPage(pageStatus));
     }, [dispatch]);
     const applySorting = useCallback((key: string) => {
         const sortedStock = stock.sort(
@@ -120,7 +125,6 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
             </thead>
             <tbody>
                 {stock
-                .slice(firstProduct, lastProduct)
                 .map((product: interfaces.Product, index: number) => {
                     return (
                         <tr className='product' key={index}> 
@@ -184,13 +188,9 @@ const TableProducts: React.FC<interfaces.TableProducts> = (props: interfaces.Tab
         </Table>
         <Pagination
             dataLength={stock.length}
-            currentPage={1}
-            productsPerPage={3}
-            setIndexOfFirstProduct={setFirstProduct}
-            setIndexOfLastProduct={setLastProduct}
+            pageStatus={pageStatus}
+            setPageStatus={setPageStatus}
         ></Pagination>
         </>
     )
 }
-
-export default TableProducts;

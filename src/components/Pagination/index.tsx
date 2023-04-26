@@ -1,24 +1,21 @@
 import React, { useState, useCallback } from 'react';
 import * as interfaces from '../../interfaces';
 import {PaginationContainer} from './styled';
+import { useDispatch } from 'react-redux';
+import { AppThunkDispatch } from '../../store';
+import { showStockPerPage } from '../../store/modules/products/reducer';
 
 const Pagination: React.FC<interfaces.ProductPagination> = (props: interfaces.ProductPagination) => {
-    const [pageStatus] = useState({
-        currentPage: props.currentPage,
-        productsPerPage: props.productsPerPage,
-        firstProduct: 0,
-        lastProduct: 0
-    });    
+    const dispatch = useDispatch<AppThunkDispatch>();
+    const [pageStatus] = useState<interfaces.PageNumberStatus>(props.pageStatus);    
     const pageNumbers: Array<number> = [];
     for (let i = 1; i <= Math.ceil(props.dataLength/pageStatus.productsPerPage); i++) {
         pageNumbers.push(i);
     }
     const paginationProduct = useCallback((numberOfPage: number) => {
         pageStatus.currentPage = numberOfPage;
-        pageStatus.lastProduct = pageStatus.currentPage * pageStatus.productsPerPage;
-        pageStatus.firstProduct = pageStatus.lastProduct - pageStatus.productsPerPage
-        props.setIndexOfFirstProduct(pageStatus.firstProduct);
-        props.setIndexOfLastProduct(pageStatus.lastProduct);
+        dispatch(showStockPerPage(pageStatus));
+        props.setPageStatus(pageStatus);
     }, []);
     return (
         <PaginationContainer>

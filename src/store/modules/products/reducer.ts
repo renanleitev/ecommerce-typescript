@@ -16,10 +16,13 @@ export const initialProduct: Product = {
     additionalFeatures: '',
 }
 
-export const initialState: (InitialStateProducts) = {
+export const initialState: InitialStateProducts = {
     status: 'idle',
     error: '',
     stock: {
+        data: [{...initialProduct}],
+    },
+    stockPerPage: {
         data: [{...initialProduct}],
     },
     product: initialProduct,
@@ -32,6 +35,16 @@ export const showStock = createAsyncThunk(
         try{
             const stock = await axios.get('/products/');
             return stock;
+        }
+        catch(error){ return error.message; }
+});
+
+export const showStockPerPage = createAsyncThunk(
+    'inventory/showStockPerPage',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try{
+            const stockPerPage = await axios.get(`/products?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`);
+            return stockPerPage;
         }
         catch(error){ return error.message; }
 });
@@ -112,11 +125,24 @@ export const inventorySlice = createSlice({
                 showStock.fulfilled,
                 (state, action: PayloadAction<interfaces.StockData>) => {
                     state.status = 'succeeded';
-                    state.stock.data = action.payload.data;
+                    state.stock = action.payload;
                 }
             )
             .addCase(showStock.pending, (state) => {state.status = 'loading';})
             .addCase(showStock.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // showStockPerPage asyncThunk
+            .addCase(
+                showStockPerPage.fulfilled,
+                (state, action: PayloadAction<interfaces.StockData>) => {
+                    state.status = 'succeeded';
+                    state.stockPerPage = action.payload;
+                }    
+            )
+            .addCase(showStockPerPage.pending, (state) => {state.status = 'loading';})
+            .addCase(showStockPerPage.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })

@@ -32,15 +32,15 @@ export interface Input {
     keyName: string,
     keyValue: string,
 }
-export interface TableProducts {
-    stock: Array<Product>,
-}
 interface BaseInitialState {
     status: string,
     error: string,
 }
 export interface InitialStateProducts extends BaseInitialState {
     stock: {
+        data: Array<Product>,
+    },
+    stockPerPage: {
         data: Array<Product>,
     },
     product: Product,
@@ -54,10 +54,12 @@ export interface IRootState {
     login: InitialStateLogin,
     products: InitialStateProducts,
 }
+export interface PageNumberStatus {
+    currentPage: number,
+    productsPerPage: number
+}
 export interface ProductPagination {
     dataLength: number,
-    currentPage: number,
-    productsPerPage: number,
-    setIndexOfFirstProduct: CallableFunction,
-    setIndexOfLastProduct: CallableFunction
+    pageStatus: PageNumberStatus,
+    setPageStatus: CallableFunction
 }

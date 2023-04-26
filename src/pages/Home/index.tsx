@@ -3,40 +3,48 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
 import { ProductContainer, HomeContainer } from './styled';
-import { showStock } from '../../store/modules/products/reducer';
+import { showStock, showStockPerPage } from '../../store/modules/products/reducer';
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
 import Pagination from '../../components/Pagination';
+import Loading from '../../components/Loading';
 
 export default function Home(){
     const dispatch = useDispatch<AppThunkDispatch>();
     const stock = useSelector((state: interfaces.IRootState) => state.products.stock);
-    const [firstProduct, setFirstProduct] = useState(0);
-    const [lastProduct, setLastProduct] = useState(3);
+    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
+    const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
+    const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
+        currentPage: 1,
+        productsPerPage: 3
+    }); 
     useMemo(() => {
         dispatch(showStock());
-    }, [dispatch]);
+    }, []);
+    useMemo(() => {
+        dispatch(showStockPerPage(pageStatus));
+    }, []);
     return (
         <HomeContainer>
+            {isLoading === 'loading' ?
+            <Loading/> :
             <ProductContainer>
-                {stock.data
-                .slice(firstProduct, lastProduct)
-                .map((product: interfaces.Product, index: number) => {
-                    return (
-                        <Container key={index}> 
-                            <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>
-                            <img key={index+2} src={product.images} alt=''/>
-                            <p key={index+3}>${product.price}</p>
-                        </Container>          
-                    )
-                })}
-            </ProductContainer>     
+            {stockPerPage.data
+            .map((product: interfaces.Product, index: number) => {
+                return (
+                    <Container key={index}> 
+                        <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>
+                        <img key={index+2} src={product.images} alt=''/>
+                        <p key={index+3}>${product.price}</p>
+                    </Container>          
+                )
+            })}
+            </ProductContainer>}
+            {!stockPerPage && <Container>No products.</Container>}
             <Pagination
                 dataLength={stock.data.length}
-                currentPage={1}
-                productsPerPage={3}
-                setIndexOfFirstProduct={setFirstProduct}
-                setIndexOfLastProduct={setLastProduct}
+                pageStatus={pageStatus}
+                setPageStatus={setPageStatus}
             ></Pagination>
         </HomeContainer>    
     )
