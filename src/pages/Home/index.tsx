@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
@@ -11,13 +11,12 @@ import Loading from '../../components/Loading';
 
 export default function Home(){
     const dispatch = useDispatch<AppThunkDispatch>();
-    const stock = useSelector((state: interfaces.IRootState) => state.products.stock);
     const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
-    const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
+    const pageStatus = {
         currentPage: 1,
         productsPerPage: 3
-    }); 
+    };
     useMemo(() => {
         dispatch(showStock());
     }, []);
@@ -41,11 +40,7 @@ export default function Home(){
             })}
             </ProductContainer>}
             {!stockPerPage && <Container>No products.</Container>}
-            <Pagination
-                dataLength={stock.data.length}
-                pageStatus={pageStatus}
-                setPageStatus={setPageStatus}
-            ></Pagination>
+            <Pagination pageStatus={pageStatus}/>
         </HomeContainer>    
     )
 }

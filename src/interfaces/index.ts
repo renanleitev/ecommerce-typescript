@@ -43,6 +43,7 @@ export interface InitialStateProducts extends BaseInitialState {
     stockPerPage: {
         data: Array<Product>,
     },
+    pageStatus: PageNumberStatus
     product: Product,
     cart: Array<Product>,
 }
@@ -58,8 +59,14 @@ export interface PageNumberStatus {
     currentPage: number,
     productsPerPage: number
 }
-export interface ProductPagination {
-    dataLength: number,
-    pageStatus: PageNumberStatus,
-    setPageStatus: CallableFunction
+export interface Pagination {
+    pageStatus: PageNumberStatus
+}
+export interface TableHead {
+    stock: Array<Product>,
+    setStock: CallableFunction
+}
+export interface TableBody extends TableHead {
+    originalStock: Array<Product>,
+    setOriginalStock: CallableFunction
 }

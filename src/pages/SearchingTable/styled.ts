@@ -1,6 +1,19 @@
 import styled from "styled-components";
 import * as colors from '../../config/colors';
 
+export const DivTable = styled.div`
+    text-align: center;
+    padding-bottom: 70px;
+    input {
+        margin-top: 20px;
+        width: 500px;
+        height: 40px;
+        border-radius: 20px;
+        text-indent: 20px;
+        border: none;
+    }
+`;
+
 export const Table = styled.table`
     background-color: ${colors.primaryWhiteColor};
     color: ${colors.primaryDarkColor};

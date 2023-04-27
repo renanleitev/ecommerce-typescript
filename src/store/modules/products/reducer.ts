@@ -25,6 +25,10 @@ export const initialState: InitialStateProducts = {
     stockPerPage: {
         data: [{...initialProduct}],
     },
+    pageStatus: {
+        currentPage: 1,
+        productsPerPage: 3
+    },
     product: initialProduct,
     cart: [],
 };
@@ -33,7 +37,8 @@ export const showStock = createAsyncThunk(
     'inventory/showStock',
     async () => {
         try{
-            const stock = await axios.get('/products/');
+            const url = '/products/';
+            const stock = await axios.get(url);
             return stock;
         }
         catch(error){ return error.message; }
@@ -43,7 +48,8 @@ export const showStockPerPage = createAsyncThunk(
     'inventory/showStockPerPage',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try{
-            const stockPerPage = await axios.get(`/products?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`);
+            const url = `/products?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`;
+            const stockPerPage = await axios.get(url);
             return stockPerPage;
         }
         catch(error){ return error.message; }
@@ -53,7 +59,8 @@ export const showProduct = createAsyncThunk(
     'inventory/showProduct',
     async (id: string) => {
         try{
-            const product = await axios.get(`/products/${id}`);
+            const url = `/products/${id}`;
+            const product = await axios.get(url);
             return product.data;
         }
         catch(error){ return error.message; }
@@ -63,7 +70,8 @@ export const editProduct = createAsyncThunk(
     'inventory/editProduct', 
     async (product: interfaces.Product) => {
         try{
-            await axios.put(`/products/${product.id}`, product);
+            const url = `/products/${product.id}`;
+            await axios.put(url, product);
             toast.success('Edit product successfully.');
             return product;
         }
@@ -92,6 +100,12 @@ export const inventorySlice = createSlice({
         },
         removeAllProductsCart: (state) => {
             state.cart = initialState.cart;
+        },
+        resetPageStatus: (state) => {
+            state.pageStatus = initialState.pageStatus;
+        },
+        changePageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
+            state.pageStatus = action.payload
         }
     },
     extraReducers(builder){
@@ -154,6 +168,8 @@ export const {
     changeProductQuantityCart,
     removeProductCart,
     removeAllProductsCart,
+    resetPageStatus,
+    changePageStatus,
 } = inventorySlice.actions;
 
 export const inventoryReducer = inventorySlice.reducer;

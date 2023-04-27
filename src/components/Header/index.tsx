@@ -57,7 +57,7 @@ export default function Header(){
                     </Cart>
                 )}
             </Link>
-            <Link to="/stock">
+            <Link to="/searching">
                 <FaSearch size={24}/>
             </Link>
             <Link to="/">
