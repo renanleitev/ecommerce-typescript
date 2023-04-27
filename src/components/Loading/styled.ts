@@ -5,9 +5,6 @@ export const LoadingContainer = styled.div`
     height: 100%;
     position: fixed;
     background: 
-        rgba(0, 0, 0, 0.834)
-        url("https://media.giphy.com/media/8agqybiK5LW8qrG3vJ/giphy.gif") 
-        center
-        no-repeat;
+        rgba(0, 0, 0, 0.834);
     z-index: 9999;
 `;

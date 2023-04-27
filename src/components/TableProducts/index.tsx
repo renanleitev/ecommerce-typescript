@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect, useMemo, useCallback} from "react";
 import {FaShoppingCart} from 'react-icons/fa';
 import { Table } from "./styled";
 import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
 import {
     addProductCart, 
+    showStockPerPage,
     changeProductQuantityCart,
 } from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
@@ -15,6 +16,7 @@ import mapStockAddProduct from "../../services/mapStockAddProduct";
 import mapStockRemoveProduct from "../../services/mapStockRemoveProduct";
 import Pagination from '../../components/Pagination';
 import Loading from "../Loading";
+import { debounce } from "lodash";
 
 export default function TableProducts(){
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -33,7 +35,10 @@ export default function TableProducts(){
     const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
         currentPage: 1,
         productsPerPage: 3
-    }); 
+    });
+    useMemo(() => {
+        dispatch(showStockPerPage(pageStatus));
+    }, []); 
     useEffect(() => {
         setStock([...stockPerPage.data.map((item: interfaces.Product) => {
             return {...item, quantity: 0, totalPrice: 0};
@@ -74,12 +79,15 @@ export default function TableProducts(){
     }, [stock]);
     const searchTable = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const searchTerm = e.currentTarget.value.toString().toLowerCase();
-        searchTerm === '' ? 
-        setStock(originalStock) : 
-        setStock(stock.filter(
-            product =>
-            product.description.toLowerCase().indexOf(searchTerm) > -1,
-        ));
+        const searching = debounce((value) => {
+            value === '' ? 
+            setStock(originalStock) : 
+            setStock(stock.filter(
+                product =>
+                product.description.toLowerCase().indexOf(value) > -1,
+            ));
+        }, 1000);
+        searching(searchTerm);
     }, [stock]);
     const handleCheckout = useCallback((product: interfaces.Product) => {
         if (!cart.some(({id}) => id === product.id) && product.quantity > 0) {
