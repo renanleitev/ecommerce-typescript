@@ -41,7 +41,7 @@ export default function Product(){
         });
     }, [cart, newProduct]);
     useEffect(() => {
-        dispatch(showProduct(url.id));
+        dispatch(showProduct(url.id));  
     }, []);
     useMemo(() => {
         setNewProduct({...product, quantity: 0, totalPrice: 0});

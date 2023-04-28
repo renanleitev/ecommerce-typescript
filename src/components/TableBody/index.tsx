@@ -31,6 +31,17 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
     useEffect(() => {
         if (user.name === 'admin') setIsAdmin(true);
     }, [user.name]);
+    useEffect(() => {
+        props.stock.map((product) => {
+                cart.map((productCart) => {
+                    if (productCart.id === product.id) {
+                        product.quantity = productCart.quantity;
+                        product.totalPrice = productCart.totalPrice;
+                    }
+                })
+            }
+        );
+    }, []);
     const { isOpen, toggle } = useModal();
     const addProductQuantity = useCallback(
         (product: interfaces.Product) => {

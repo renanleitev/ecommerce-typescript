@@ -10,7 +10,6 @@ import {
 import { Link } from 'react-router-dom';
 import * as interfaces from '../../interfaces';
 import {removeProductCart} from '../../store/modules/products/reducer';
-import Loading from '../../components/Loading';
 import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
 import { checkoutCart } from '../../services/checkoutCart';
@@ -36,7 +35,6 @@ export default function Shopping(){
     }, [dispatch]);
     return (
         <CartContainer>
-            <Loading/>
             {isLoggedIn ? (
                 <CheckoutContainer onClick={() => checkoutCart(cart)}>
                     <FaShoppingCart size={30}/>
@@ -59,7 +57,8 @@ export default function Shopping(){
                         </ButtonContainer>
                     </ItemContainer>
                 ))
-            ) : (
+            )
+             : (
                 <ItemContainer>
                     <h2>No products in your cart.</h2>
                 </ItemContainer>
