@@ -20,7 +20,7 @@
   "products": [
     {
       "id": 1,
-      "name": "Apple iBook Seila",
+      "name": "Apple iBook",
       "additionalFeatures": "Front Facing 1.3MP Camera",
       "os": "Macintosh OS X 10.7",
       "price": "200.67",
@@ -68,8 +68,8 @@
         "hdd": "750GB",
         "ram": "8GB"
       },
-      "quantity": 0,
-      "totalPrice": 0
+      "quantity": 2,
+      "totalPrice": 401.34
     },
     {
       "id": 2,

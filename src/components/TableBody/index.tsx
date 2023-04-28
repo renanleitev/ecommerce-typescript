@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
     FaShoppingCart, 
+    FaTrash,
     FaEdit,
     FaPlus,
     FaMinus
@@ -9,6 +10,7 @@ import * as interfaces from '../../interfaces';
 import { AppThunkDispatch } from '../../store';
 import {
     addProductCart, 
+    removeProductCart,
     changeProductQuantityCart,
 } from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
@@ -53,14 +55,21 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
             props.setStock(mapStockRemoveProduct(props.stock, product));
             props.setOriginalStock(mapStockRemoveProduct(props.originalStock, product));
     }, [props.stock]);
-    const handleCheckout = useCallback((product: interfaces.Product) => {
+    const removeProductFromCart = useCallback(
+        (product: interfaces.Product) => {
+            dispatch(removeProductCart(product));
+            product.quantity = 0;
+            product.totalPrice = 0;
+            toast.success(`Removed ${product.name} successfully.`);
+    }, [props.stock]);
+    const addProductToCart = useCallback((product: interfaces.Product) => {
         if (!cart.some(({id}) => id === product.id) && product.quantity > 0) {
             dispatch(addProductCart(product));
         }
         if (cart.some(({id}) => id === product.id)) {
             dispatch(changeProductQuantityCart({...product}));
         }
-        if (product.quantity > 0) toast.success(`Added ${product.name} to the cart.`);
+        if (product.quantity > 0) toast.success(`Added ${product.name} successfully.`);
     }, [cart]);
     return (
         <tbody>
@@ -119,19 +128,26 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
                                             <FaMinus size={18}/>
                                         </button>
                                         <button
-                                        onClick={() => handleCheckout(product)}
+                                        onClick={() => addProductToCart(product)}
                                         className="hidden">
                                             <FaShoppingCart size={22}/>
                                         </button>
                                         {isAdmin ? (
+                                        <>
                                         <button 
-                                            onClick={() => {
-                                                toggle();
-                                                setEditedProduct(product);
-                                            }}
-                                            className="hidden">
+                                        onClick={() => {
+                                            toggle();
+                                            setEditedProduct(product);
+                                        }}
+                                        className="hidden">
                                             <FaEdit size={22}/>
                                         </button>
+                                        <button 
+                                        onClick={() => removeProductFromCart(product)}
+                                        className="hidden">
+                                            <FaTrash size={22}/>
+                                        </button>
+                                        </>
                                         ) : (<></>)}
                                     </div>
                                 </DivCartButton>

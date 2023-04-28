@@ -37,9 +37,6 @@ export const ItemContainer = styled.div`
     form > button {
         width: 360px;
     }
-    /* input{
-        width: 360px;
-    } */
 `;
 
 export const CartButton = styled.button`
@@ -50,17 +47,21 @@ export const CartButton = styled.button`
 `;
 
 export const DivCartButton = styled.div`
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     .dropbtn {
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
         padding: 0;
     }
     .dropdown-content {
         display: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        position: absolute;
         width: 160px;
         margin-top: -40px;
-        margin-left: -10px;
         z-index: 1;
     }
     :hover .dropdown-content {
@@ -68,10 +69,12 @@ export const DivCartButton = styled.div`
         flex-direction: row;
     }
     :hover .dropbtn {
-        background-color: ${colors.infoColor};
-    }
+        display: none;
+    } 
     .hidden{
-        border-radius: 0;
+        border-radius: 4px;
+        margin-left: 2px;
+        margin-top: 2px;
         width: 50px;
         height: 40px;
         padding: 0;

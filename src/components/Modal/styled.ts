@@ -9,7 +9,7 @@ export const ModalContainer = styled.div`
         position: absolute;
         top: 0;
         left: 0;
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: ${colors.primaryDarkColor};
         display: flex;
         justify-content: center;
         align-items: center;
@@ -22,23 +22,5 @@ export const ModalContainer = styled.div`
         height: 70%;
         padding: 1rem;
         border-radius: 1rem;
-    }
-    label {
-        font-size: larger;
-        text-align: center;
-    }
-    input {
-        width: 100%;
-        padding: 20px;
-        border-radius: 20px;
-        border: 3px solid ${colors.primaryDarkColor};
-    }
-    button {
-        width: 20%;
-        align-self: center;
-        border-radius: 20px;
-    }
-    button:hover{
-        background-color: ${colors.infoColor};
     }
 `;
