@@ -6,21 +6,21 @@ import {editProduct} from '../../store/modules/products/reducer';
 import { useDispatch } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
 
-const EditProduct: React.FC<interfaces.Item> = (props: interfaces.Item) => {
+const EditProduct: React.FC<interfaces.EditProduct> = (props: interfaces.EditProduct) => {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const [item, setItem] = useState<interfaces.Product>(props.item);
+    const [product, setProduct] = useState<interfaces.Product>(props.product);
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        dispatch(editProduct({...item}));
-    }, [dispatch, item]);
+        dispatch(editProduct({...product}));
+    }, [dispatch, product]);
     return (
         <Form onSubmit={handleSubmit}>
             <h1>Edit Product</h1> 
-            <Input data={item} setData={setItem} keyName='name' keyValue={props.item.name}/>
-            <Input data={item} setData={setItem} keyName='price' keyValue={props.item.price}/>
-            <Input data={item} setData={setItem} keyName='images' keyValue={props.item.images}/>
-            <Input data={item} setData={setItem} keyName='os' keyValue={props.item.os}/>
-            <Input data={item} setData={setItem} keyName='description' keyValue={props.item.description}/>
+            <Input data={product} setData={setProduct} keyName='name' keyValue={props.product.name}/>
+            <Input data={product} setData={setProduct} keyName='price' keyValue={props.product.price}/>
+            <Input data={product} setData={setProduct} keyName='images' keyValue={props.product.images}/>
+            <Input data={product} setData={setProduct} keyName='os' keyValue={props.product.os}/>
+            <Input data={product} setData={setProduct} keyName='description' keyValue={props.product.description}/>
             <button type="submit">Edit Product</button>
         </Form>
     )

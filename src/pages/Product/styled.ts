@@ -37,9 +37,9 @@ export const ItemContainer = styled.div`
     form > button {
         width: 360px;
     }
-    input{
+    /* input{
         width: 360px;
-    }
+    } */
 `;
 
 export const CartButton = styled.button`
@@ -71,7 +71,7 @@ export const DivCartButton = styled.div`
         background-color: ${colors.infoColor};
     }
     .hidden{
-        margin-left: 4px;
+        border-radius: 0;
         width: 50px;
         height: 40px;
         padding: 0;

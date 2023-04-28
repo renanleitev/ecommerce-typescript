@@ -17,8 +17,8 @@ export interface StockData {
 export interface UserData {
     data: Array<User> 
 }
-export interface Item {
-    item: Product,
+export interface EditProduct {
+    product: Product,
 }
 export interface User extends Base {
     surname: string,
@@ -60,7 +60,8 @@ export interface PageNumberStatus {
     productsPerPage: number
 }
 export interface Pagination {
-    pageStatus: PageNumberStatus
+    pageStatus: PageNumberStatus,
+    setPageStatus: CallableFunction
 }
 export interface TableHead {
     stock: Array<Product>,

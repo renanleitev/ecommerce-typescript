@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import { DivTable, Table } from './styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
@@ -14,21 +14,24 @@ export default function SearchingTable(){
     const dispatch = useDispatch<AppThunkDispatch>();
     const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
-    const pageStatus = {
+    const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
         currentPage: 1,
         productsPerPage: 3
-    };
-    useMemo(() => {
-        dispatch(showStockPerPage(pageStatus));
-    }, []);
+    });
     const [stock, setStock] = useState([...stockPerPage.data.map((item: interfaces.Product) => {
         return {...item, quantity: 0, totalPrice: 0};
     })]);
     const [originalStock, setOriginalStock] = useState([...stockPerPage.data.map((item: interfaces.Product) => {
         return {...item, quantity: 0, totalPrice: 0};
     })]);
+    useEffect(() => {
+        dispatch(showStockPerPage(pageStatus));
+    }, []);
     useMemo(() => {
         setStock([...stockPerPage.data.map((item: interfaces.Product) => {
+            return {...item, quantity: 0, totalPrice: 0};
+        })]);
+        setOriginalStock([...stockPerPage.data.map((item: interfaces.Product) => {
             return {...item, quantity: 0, totalPrice: 0};
         })]);
     }, [stockPerPage]);
@@ -50,7 +53,7 @@ export default function SearchingTable(){
                 originalStock={originalStock}
                 setOriginalStock={setOriginalStock}/>
             </Table>
-            <Pagination pageStatus={pageStatus}/>
+            <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus}/>
             </>}
         </DivTable>
     )

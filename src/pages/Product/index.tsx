@@ -19,6 +19,7 @@ export default function Product(){
     interface Url{id: string}
     const url: Url = useParams();
     const dispatch = useDispatch<AppThunkDispatch>();
+    const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
     const product = useSelector((state: interfaces.IRootState) => state.products.product);
@@ -80,9 +81,9 @@ export default function Product(){
     }, [addProductQuantity, isLoggedIn, newProduct]);
     return (
         <ProductContainer>
-            <Loading/>
+            {isLoading === 'loading' ? <Loading/> : <>
             <Modal isOpen={isOpen} toggle={toggle}>
-                <EditProduct item={newProduct}/>
+                <EditProduct product={newProduct}/>
             </Modal>
             <ItemContainer>
                 <h1>{newProduct.name}</h1>
@@ -103,6 +104,7 @@ export default function Product(){
                     {isAdmin ? (<CartButton onClick={toggle}>Edit Product</CartButton>) : (<></>)}
                 </ProductContainer>
             </ItemContainer> 
+            </>}
         </ProductContainer>       
     )
 }
