@@ -58,10 +58,14 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
     }, [props.stock]);
     const removeProductFromCart = useCallback(
         (product: interfaces.Product) => {
-            dispatch(removeProductCart(product));
-            product.quantity = 0;
-            product.totalPrice = 0;
-            toast.success(`Removed ${product.name} successfully.`);
+            if (product.quantity > 0) {
+                dispatch(removeProductCart(product));
+                product.quantity = 0;
+                product.totalPrice = 0;
+                toast.success(`Removed ${product.name} successfully.`);
+            } else {
+                toast.error('Product is not in the cart.');
+            }
     }, [props.stock]);
     const addProductToCart = useCallback((product: interfaces.Product) => {
         if (!cart.some(({id}) => id === product.id) && product.quantity > 0) {

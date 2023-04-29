@@ -4,6 +4,7 @@ import * as colors from '../../config/colors';
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
+    justify-content: center;
     h1{
         text-align: center;
     }
