@@ -18,21 +18,21 @@ export default function SearchingTable(){
         currentPage: 1,
         productsPerPage: 3
     });
-    const [stock, setStock] = useState([...stockPerPage.data.map((item: interfaces.Product) => {
-        return {...item, quantity: 0, totalPrice: 0};
+    const [stock, setStock] = useState([...stockPerPage.data.map((product: interfaces.Product) => {
+        return {...product, quantity: 0, totalPrice: 0};
     })]);
-    const [originalStock, setOriginalStock] = useState([...stockPerPage.data.map((item: interfaces.Product) => {
-        return {...item, quantity: 0, totalPrice: 0};
+    const [originalStock, setOriginalStock] = useState([...stockPerPage.data.map((product: interfaces.Product) => {
+        return {...product, quantity: 0, totalPrice: 0};
     })]);
     useEffect(() => {
         dispatch(showStockPerPage(pageStatus));
     }, []);
     useMemo(() => {
-        setStock([...stockPerPage.data.map((item: interfaces.Product) => {
-            return {...item, quantity: 0, totalPrice: 0};
+        setStock([...stockPerPage.data.map((product: interfaces.Product) => {
+            return {...product, quantity: 0, totalPrice: 0};
         })]);
-        setOriginalStock([...stockPerPage.data.map((item: interfaces.Product) => {
-            return {...item, quantity: 0, totalPrice: 0};
+        setOriginalStock([...stockPerPage.data.map((product: interfaces.Product) => {
+            return {...product, quantity: 0, totalPrice: 0};
         })]);
     }, [stockPerPage]);
     return (

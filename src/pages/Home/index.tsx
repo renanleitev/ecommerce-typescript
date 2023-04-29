@@ -19,7 +19,7 @@ export default function Home(){
         productsPerPage: 3
     });
     useEffect(() => {
-        if (!stock) dispatch(showStock());
+        if (stock.data.length === 1) dispatch(showStock());
     }, []);
     useEffect(() => {
         dispatch(showStockPerPage(pageStatus));
@@ -29,16 +29,16 @@ export default function Home(){
             {isLoading === 'loading' ?
             <Loading/> :
             <ProductContainer>
-            {stockPerPage.data
-            .map((product: interfaces.Product, index: number) => {
+            {React.Children.toArray(
+                stockPerPage.data.map((product: interfaces.Product) => {
                 return (
-                    <Container key={index}> 
-                        <Link key={index+1} to={`product/${product.id}`}>{product.name}</Link>
-                        <img key={index+2} src={product.images} alt=''/>
-                        <p key={index+3}>${product.price}</p>
+                    <Container> 
+                        <Link to={`product/${product.id}`}>{product.name}</Link>
+                        <img src={product.images} alt=''/>
+                        <p>${product.price}</p>
                     </Container>          
                 )
-            })}
+            }))}
             </ProductContainer>}
             <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus}/>
         </HomeContainer>    

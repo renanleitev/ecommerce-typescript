@@ -37,7 +37,7 @@ describe('Testing Product page', () => {
         const quantProduct = screen.getByText(/quantity/i);
         expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`); 
     });
-    it('should add quantity of item (previously added)', async () => {
+    it('should add quantity of product (previously added)', async () => {
         render(RenderComponent(<Product/>, mockStoreProductCart));
         const quantProduct = screen.getByText(/quantity/i);
         // addProduct
@@ -48,7 +48,7 @@ describe('Testing Product page', () => {
         const addProductToast = await screen.findByText(/added/i);
         expect(addProductToast.innerHTML).toBe(`Added ${mockProduct.name} successfully!`);
     });
-    it('should remove quantity of item, but item.quantity === 1', async () => {
+    it('should remove quantity of product, but product.quantity === 1', async () => {
         render(RenderComponent(<Product/>, mockStoreProductCart));
         const quantProduct = screen.getByText(/quantity/i); 
         // removeProduct
@@ -59,7 +59,7 @@ describe('Testing Product page', () => {
         const removeProductToast = await screen.findByText(/can not/i); 
         expect(removeProductToast.innerHTML).toBe(`Can not remove the product.`);
     });
-    it('should remove item of cart', async () => {
+    it('should remove product of cart', async () => {
         render(RenderComponent(<Product/>, mockStoreProductCart));
         const quantProduct = screen.getByText(/quantity/i); 
         // removeProduct
@@ -67,7 +67,7 @@ describe('Testing Product page', () => {
         fireEvent.click(removeProduct);
         expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity - 1}`); 
     });
-    it('should add quantity of item (item not added)', async () => {
+    it('should add quantity of product (product not added)', async () => {
         render(RenderComponent(<Product/>, mockStore));
         const quantProduct = screen.getByText(/quantity/i);
         // Can not addProduct, if was not added to the cart

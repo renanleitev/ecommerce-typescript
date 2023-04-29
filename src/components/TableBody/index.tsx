@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import useModal from "../../hooks/useModal";
 import Modal from '../../components/Modal';
 import EditProduct from '../../pages/EditProduct';
+import { HiddenTd } from "./styled";
 
 const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) => {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -73,91 +74,89 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
     }, [cart]);
     return (
         <tbody>
-            {props.stock
-            .map((product: interfaces.Product, index: number) => {
+            {React.Children.toArray(props.stock.map((product: interfaces.Product) => {
                 return (
-                    <>
-                        <Modal isOpen={isOpen} toggle={toggle}>
-                            <EditProduct product={editedProduct}/>
-                        </Modal>
-                        <tr className='product' key={index}> 
+                        <tr className='product'> 
+                            <HiddenTd hidden={!isOpen}>
+                                <Modal isOpen={isOpen} toggle={toggle}>
+                                    <EditProduct product={editedProduct}/>
+                                </Modal>
+                            </HiddenTd>
                             <td>
-                                <Link key={index+1} to={`product/${product.id}`}>
+                                <Link to={`product/${product.id}`}>
                                     {product.name}
                                 </Link>
                             </td>
                             <td>
-                                <img key={index+2} src={product.images} alt=''/>
+                                <img src={product.images} alt=''/>
                             </td>
                             <td>
-                                <p key={index+3}>
+                                <p>
                                     {product.description}
                                 </p>
                             </td>
                             <td>
-                                <p key={index+4}>
+                                <p>
                                     ${product.price}
                                 </p>
                             </td>
                             {isLoggedIn ? (
                             <>
-                            <td>
-                                <p key={index+5}>
-                                    {product.quantity}
-                                </p>
-                            </td>
-                            <td>
-                                <p key={index+6}>
-                                    ${product.totalPrice.toFixed(2)}
-                                </p>
-                            </td>
-                            <td>
-                                <DivCartButton>
-                                    <button className="dropbtn">
-                                        ...
-                                    </button>
-                                    <div className="dropdown-content">
-                                        <button 
-                                        onClick={() => addProductQuantity(product)}
-                                        className="hidden">
-                                            <FaPlus size={18}/>
+                                <td>
+                                    <p>
+                                        {product.quantity}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        ${product.totalPrice.toFixed(2)}
+                                    </p>
+                                </td>
+                                <td>
+                                    <DivCartButton>
+                                        <button className="dropbtn">
+                                            ...
                                         </button>
-                                        <button 
-                                        onClick={() => removeProductQuantity(product)}
-                                        className="hidden">
-                                            <FaMinus size={18}/>
-                                        </button>
-                                        <button
-                                        onClick={() => addProductToCart(product)}
-                                        className="hidden">
-                                            <FaShoppingCart size={22}/>
-                                        </button>
-                                        {isAdmin ? (
-                                        <>
-                                        <button 
-                                        onClick={() => {
-                                            toggle();
-                                            setEditedProduct(product);
-                                        }}
-                                        className="hidden">
-                                            <FaEdit size={22}/>
-                                        </button>
-                                        <button 
-                                        onClick={() => removeProductFromCart(product)}
-                                        className="hidden">
-                                            <FaTrash size={22}/>
-                                        </button>
-                                        </>
-                                        ) : (<></>)}
-                                    </div>
-                                </DivCartButton>
-                            </td>
-                            </>
-                            ) : (<></>)}
+                                        <div className="dropdown-content">
+                                            <button 
+                                            onClick={() => addProductQuantity(product)}
+                                            className="hidden">
+                                                <FaPlus size={18}/>
+                                            </button>
+                                            <button 
+                                            onClick={() => removeProductQuantity(product)}
+                                            className="hidden">
+                                                <FaMinus size={18}/>
+                                            </button>
+                                            <button
+                                            onClick={() => addProductToCart(product)}
+                                            className="hidden">
+                                                <FaShoppingCart size={22}/>
+                                            </button>
+                                            {isAdmin ? (
+                                            <>
+                                                <button 
+                                                onClick={() => {
+                                                    toggle();
+                                                    setEditedProduct(product);
+                                                }}
+                                                className="hidden">
+                                                    <FaEdit size={22}/>
+                                                </button>
+                                                <button 
+                                                onClick={() => removeProductFromCart(product)}
+                                                className="hidden">
+                                                    <FaTrash size={22}/>
+                                                </button>
+                                            </>
+                                            ) : (<></>)}
+                                        </div>
+                                    </DivCartButton>
+                                </td>
+                            </>) : (<></>)}
                         </tr>
-                    </>
                 )
-            })}
+            }))}
         </tbody>
     )
 }

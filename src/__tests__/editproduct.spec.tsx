@@ -6,7 +6,7 @@ import { mockProduct, mockStore } from '../services/_utils';
 
 describe('Testing EditProduct page', () => {
     it('should be initial render', () => {
-        render(RenderComponent(<EditProduct item={mockProduct}/>, mockStore));
+        render(RenderComponent(<EditProduct product={mockProduct}/>, mockStore));
         // Submit button
         const editButton = screen.getByRole('button');
         expect(editButton.innerHTML).toBe('Edit Product');

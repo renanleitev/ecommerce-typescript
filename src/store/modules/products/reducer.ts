@@ -86,16 +86,16 @@ export const inventorySlice = createSlice({
             state.cart.push({...action.payload});
         },
         changeProductQuantityCart: (state, action: PayloadAction<interfaces.Product>) => {
-            state.cart.forEach((item: interfaces.Product) =>{
-                if (item.id === action.payload.id) {
-                    item.quantity = action.payload.quantity;
-                    item.totalPrice = action.payload.totalPrice;
+            state.cart.forEach((product: interfaces.Product) =>{
+                if (product.id === action.payload.id) {
+                    product.quantity = action.payload.quantity;
+                    product.totalPrice = action.payload.totalPrice;
                 }
             });
         },
         removeProductCart: (state, action: PayloadAction<interfaces.Product>) => {
-            state.cart.forEach((item: interfaces.Product, index: number) => {
-                if (item.id === action.payload.id) state.cart.splice(index, 1);
+            state.cart.forEach((product: interfaces.Product, index: number) => {
+                if (product.id === action.payload.id) state.cart.splice(index, 1);
             })
         },
         removeAllProductsCart: (state) => {

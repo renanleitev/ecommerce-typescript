@@ -18,50 +18,50 @@ describe('Testing Shopping page', () => {
         const emptyCart = screen.getByRole('heading');
         expect(emptyCart.innerHTML).toBe('No products in your cart.');  
     });
-    it('should have one item in cart', () => {
+    it('should have one Product in cart', () => {
         render(RenderComponent(<Shopping/>, mockStoreUserLoggedIn));
         // URL 
-        const linkItem = screen.getByRole('link');
-        expect(linkItem.innerHTML).toBe(`${mockProduct.name}`);  
+        const linkProduct = screen.getByRole('link');
+        expect(linkProduct.innerHTML).toBe(`${mockProduct.name}`);  
         // Image 
-        const imgItem = screen.getByRole('img').getAttribute('src');
-        expect(imgItem).toBe(`${mockProduct.images}`);
+        const imgProduct = screen.getByRole('img').getAttribute('src');
+        expect(imgProduct).toBe(`${mockProduct.images}`);
         // Price   
-        const priceItem = screen.getByText(/price/i);
-        expect(priceItem.innerHTML).toBe(`Price: $${mockProduct.price}`);  
+        const priceProduct = screen.getByText(/price/i);
+        expect(priceProduct.innerHTML).toBe(`Price: $${mockProduct.price}`);  
         // Quantity
-        const quantItem = screen.getByText(/quantity/i);
-        expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`);  
+        const quantProduct = screen.getByText(/quantity/i);
+        expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`);  
         // Total Price
-        const totalItem = screen.getByText(/total/i);
-        expect(totalItem.innerHTML).toBe(`Total: $${mockProduct.totalPrice}`);
+        const totalProduct = screen.getByText(/total/i);
+        expect(totalProduct.innerHTML).toBe(`Total: $${mockProduct.totalPrice}`);
     });
-    it('should add quantity of item in cart', async () => {
+    it('should add quantity of Product in cart', async () => {
         render(RenderComponent(<Shopping/>, mockStoreUserLoggedIn));
-        const quantItem = screen.getByText(/quantity/i);
-        // addItem
-        const addItem = screen.getByText(/\+/i);
-        fireEvent.click(addItem);
-        expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity + 1}`); 
-        // addItem with toast
-        const addItemToast = await screen.findByText(/added/i);
-        expect(addItemToast.innerHTML).toBe(`Added ${mockProduct.name} successfully!`);
+        const quantProduct = screen.getByText(/quantity/i);
+        // addProduct
+        const addProduct = screen.getByText(/\+/i);
+        fireEvent.click(addProduct);
+        expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity + 1}`); 
+        // addProduct with toast
+        const addProductToast = await screen.findByText(/added/i);
+        expect(addProductToast.innerHTML).toBe(`Added ${mockProduct.name} successfully!`);
     });
-    it('should remove quantity of item in cart', async () => {
+    it('should remove quantity of Product in cart', async () => {
         render(RenderComponent(<Shopping/>, mockStoreUserLoggedIn));
-        const quantItem = screen.getByText(/quantity/i); 
-        // removeItem
-        const removeItem = screen.getByText(/-/i);
-        fireEvent.click(removeItem);
-        expect(quantItem.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`); 
-        // removeItem with toast
-        const removeItemToast = await screen.findByText(/removed/i);
-        expect(removeItemToast.innerHTML).toBe(`Removed ${mockProduct.name} successfully!`);
+        const quantProduct = screen.getByText(/quantity/i); 
+        // removeProduct
+        const removeProduct = screen.getByText(/-/i);
+        fireEvent.click(removeProduct);
+        expect(quantProduct.innerHTML).toBe(`Quantity: ${mockProduct.quantity}`); 
+        // removeProduct with toast
+        const removeProductToast = await screen.findByText(/removed/i);
+        expect(removeProductToast.innerHTML).toBe(`Removed ${mockProduct.name} successfully!`);
     });
-    it('should remove item of cart', () => {
+    it('should remove Product of cart', () => {
         render(RenderComponent(<Shopping/>, mockStoreUserLoggedIn));
-        const removeItem = screen.getByText(/remove/i);
-        fireEvent.click(removeItem);
+        const removeProduct = screen.getByText(/remove/i);
+        fireEvent.click(removeProduct);
         const emptyCart = screen.getByRole('heading');
         expect(emptyCart.innerHTML).toBe('No products in your cart.');  
     });

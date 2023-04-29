@@ -4,13 +4,13 @@ import {changeProductQuantityCart} from '../store/modules/products/reducer';
 import { toast } from 'react-toastify';
 
 export function removeProductQuantity(
-    item: interfaces.Product,
+    product: interfaces.Product,
     dispatch: AppThunkDispatch,
 ) {
-    const newItem: interfaces.Product = {...item}; 
-    newItem.totalPrice -= Number.parseFloat(newItem.price);
-    newItem.quantity--;
-    toast.success(`Removed ${newItem.name} successfully!`);
-    dispatch(changeProductQuantityCart({...newItem}));
-    return newItem;
+    const newProduct: interfaces.Product = {...product}; 
+    newProduct.totalPrice -= Number.parseFloat(newProduct.price);
+    newProduct.quantity--;
+    toast.success(`Removed ${newProduct.name} successfully!`);
+    dispatch(changeProductQuantityCart({...newProduct}));
+    return newProduct;
 }

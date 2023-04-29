@@ -86,10 +86,10 @@ describe('Testing products reducers', () => {
     it('should return initialState', () => {
         expect(inventoryReducer(undefined, { type: undefined })).toEqual(initialState);
     });
-    it('should add item to cart', () => {
+    it('should add product to cart', () => {
         expect(inventoryReducer(initialState, addProductCart(mockProduct))).toEqual(mockProductStateCart);
     });
-    it('should change item quantity', () => {
+    it('should change product quantity', () => {
         expect(inventoryReducer(mockProductStateCart, changeProductQuantityCart({
             ...mockProduct,
             quantity: 2,
@@ -103,10 +103,10 @@ describe('Testing products reducers', () => {
             }]
         });
     });
-    it('should remove item of cart', () => {
+    it('should remove product of cart', () => {
         expect(inventoryReducer(mockProductStateCart, removeProductCart(mockProduct))).toEqual(initialState);
     });
-    it('should remove all items of cart', () => {
+    it('should remove all products of cart', () => {
         expect(inventoryReducer(mockProductStateCart, removeAllProductsCart())).toEqual(initialState);
     });
 });

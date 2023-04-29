@@ -11,9 +11,9 @@ afterEach(() => {
 describe('Testing Home page', () => {
     it('should be initial render', () => {
         render(RenderComponent(<Home/>, mockStoreProductCart));
-        const linkItem = screen.getByRole('link');
-        expect(linkItem.innerHTML).toBe(`${mockProduct.name}`);  
-        const imgItem = screen.getByRole('img').getAttribute('src');  
-        expect(imgItem).toBe(`${mockProduct.images}`); 
+        const linkProduct = screen.getByRole('link');
+        expect(linkProduct.innerHTML).toBe(`${mockProduct.name}`);  
+        const imgProduct = screen.getByRole('img').getAttribute('src');  
+        expect(imgProduct).toBe(`${mockProduct.images}`); 
     });
 });

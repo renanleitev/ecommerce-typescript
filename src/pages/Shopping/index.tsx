@@ -22,16 +22,16 @@ export default function Shopping(){
     useEffect(() => {
         setShoppingCart([...cart]);
     }, [cart]);
-    const handleIncrement = useCallback((item: interfaces.Product) => { 
-        addProductQuantity(item, dispatch);
+    const handleIncrement = useCallback((product: interfaces.Product) => { 
+        addProductQuantity(product, dispatch);
         setShoppingCart([...cart]);
     }, [addProductQuantity]);
-    const handleDecrement = useCallback((item: interfaces.Product) => {
-        removeProductQuantity(item, dispatch);
+    const handleDecrement = useCallback((product: interfaces.Product) => {
+        removeProductQuantity(product, dispatch);
         setShoppingCart([...cart]);
     }, [removeProductQuantity]);
-    const handleRemove = useCallback((item: interfaces.Product) => {
-        if (item !== undefined) dispatch(removeProductCart(item));
+    const handleRemove = useCallback((product: interfaces.Product) => {
+        if (product !== undefined) dispatch(removeProductCart(product));
     }, [dispatch]);
     return (
         <CartContainer>
@@ -40,24 +40,24 @@ export default function Shopping(){
                     <FaShoppingCart size={30}/>
                 </CheckoutContainer>
                 ) : (<></>)}
-            {isLoggedIn && shoppingCart.length >= 1 ? (
-                shoppingCart.map((item: interfaces.Product, index: number) => (
-                    <ItemContainer key={index}>
-                        <ShoppingContainer key={index+1}>
-                            <Link to={`product/${item.id}`} key={index+2}>{item.name}</Link>
-                            <img key={index+3} src={item.images} alt=''/>
-                            <p key={index+4}>Price: ${item.price}</p>
-                            <p key={index+5}>Quantity: {item.quantity}</p>
-                            <p key={index+6}>Total: ${item.totalPrice.toFixed(2)}</p>
+            {isLoggedIn && shoppingCart.length >= 1 ? 
+                React.Children.toArray(
+                    shoppingCart.map((product: interfaces.Product) => (
+                        <ItemContainer>
+                        <ShoppingContainer>
+                            <Link to={`product/${product.id}`}>{product.name}</Link>
+                            <img src={product.images} alt=''/>
+                            <p>Price: ${product.price}</p>
+                            <p>Quantity: {product.quantity}</p>
+                            <p>Total: ${product.totalPrice.toFixed(2)}</p>
                         </ShoppingContainer>
-                        <ButtonContainer key={index+7}>
-                                <button onClick={() => handleIncrement(item)}>+</button>
-                                <button onClick={() => handleDecrement(item)}>-</button>
-                                <button onClick={() => handleRemove(item)}>Remove item</button>
+                        <ButtonContainer>
+                                <button onClick={() => handleIncrement(product)}>+</button>
+                                <button onClick={() => handleDecrement(product)}>-</button>
+                                <button onClick={() => handleRemove(product)}>Remove product</button>
                         </ButtonContainer>
                     </ItemContainer>
-                ))
-            )
+                )))
              : (
                 <ItemContainer>
                     <h2>No products in your cart.</h2>
