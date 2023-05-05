@@ -9,7 +9,7 @@ import validationUser from '../../services/validationUser';
 import { ButtonContainer } from './styled';
 import { AppThunkDispatch } from '../../store';
 
-export default function EditUser(){
+export default function EditUser(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const [editedUser, setEditedUser] = useState<interfaces.User>({...user});

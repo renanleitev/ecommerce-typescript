@@ -1,7 +1,7 @@
 import { Product } from "../interfaces";
 import { toast } from "react-toastify";
 
-export function checkoutCart(cart: Array<Product>) {
+export function checkoutCart(cart: Array<Product>): number {
     let total = 0;
     cart.forEach((product: Product) => {
         if (product !== undefined) total += product.totalPrice;

@@ -7,7 +7,7 @@ interface ModalType {
   toggle: () => void;
 }
 
-export default function Modal(props: ModalType) {
+export default function Modal(props: ModalType): JSX.Element {
   return (
     <ModalContainer>
       {props.isOpen && (

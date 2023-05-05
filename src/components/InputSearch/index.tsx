@@ -1,6 +1,7 @@
 import React, {useCallback} from "react";
 import * as interfaces from '../../interfaces';
 import { debounce } from "lodash";
+// rxjs
 
 const InputSearch: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) => {
     const searchTable = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -12,7 +13,7 @@ const InputSearch: React.FC<interfaces.TableBody> = (props: interfaces.TableBody
                 product =>
                 product.description.toLowerCase().indexOf(value) > -1,
             ));
-        }, 1000);
+        }, 3000);
         searching(searchTerm);
     }, [props.stock]);
     return (

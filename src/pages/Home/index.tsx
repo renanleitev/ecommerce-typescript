@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
@@ -9,20 +9,20 @@ import { AppThunkDispatch } from '../../store';
 import Pagination from '../../components/Pagination';
 import Loading from '../../components/Loading';
 
-export default function Home(){
+export default function Home(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const stock = useSelector((state: interfaces.IRootState) => state.products.stock);
-    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
+    const allStock = useSelector((state: interfaces.IRootState) => state.products.stock);
+    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage) || {data: []};
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
         currentPage: 1,
         productsPerPage: 3
     });
     useEffect(() => {
-        if (stock.data.length === 1) dispatch(showStock());
-    }, []);
-    useEffect(() => {
         dispatch(showStockPerPage(pageStatus));
+    }, [pageStatus]);
+    useEffect(() => {
+        if (allStock.data === undefined) dispatch(showStock());
     }, []);
     return (
         <HomeContainer>

@@ -1,7 +1,7 @@
 import React from "react";
 import { BarFooter } from "./styled";
 
-export default function Footer(){
+export default function Footer(): JSX.Element {
     return (
         <BarFooter>
             <p><a href='https://github.com/renanleitev'>Renan Leite Vieira</a></p>

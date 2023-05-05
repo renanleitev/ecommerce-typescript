@@ -3,7 +3,7 @@ import * as interfaces from '../interfaces';
 export default function mapStockAddProduct(
     stock: Array<interfaces.Product>,
     product: interfaces.Product
-    ) {
+    ):  Array<interfaces.Product> {
     const updateProduct = (item: interfaces.Product) => {
         if (item.name === product.name) {
             return {...item, 

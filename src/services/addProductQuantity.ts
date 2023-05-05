@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 export function addProductQuantity(
     product: interfaces.Product,
     dispatch: AppThunkDispatch,
-) {
+): interfaces.Product {
     const newProduct: interfaces.Product = {...product}; 
     newProduct.totalPrice += Number.parseFloat(newProduct.price);
     newProduct.quantity++;

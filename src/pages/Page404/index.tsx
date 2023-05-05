@@ -2,7 +2,7 @@ import React from "react";
 
 import { Container } from '../../styles/GlobalStyle';
 
-export default function Page404() {
+export default function Page404(): JSX.Element {
     return (
         <Container>
             <h1>Error. Page not found.</h1>

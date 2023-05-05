@@ -7,7 +7,7 @@ import * as interfaces from '../../interfaces';
 import validationUser from '../../services/validationUser';
 import { AppThunkDispatch } from '../../store';
 
-export default function Register(){
+export default function Register(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
     const [user, setUser] = useState<interfaces.User>();
     const handleSubmit = useCallback((event: React.FormEvent) => {

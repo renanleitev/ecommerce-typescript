@@ -8,7 +8,7 @@ import { IRootState } from '../../interfaces';
 import {loginUser} from '../../store/modules/login/reducer';
 import { AppThunkDispatch } from '../../store';
 
-export default function Login(){
+export default function Login(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const user = useSelector((state: IRootState) => state.login.user);

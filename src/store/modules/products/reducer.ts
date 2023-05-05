@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
 import axios from '../../../services/axios';
-import { InitialStateProducts, Product } from '../../../interfaces';
+import { InitialStateProduct, Product } from '../../../interfaces';
 
 export const initialProduct: Product = {
     id: '',
@@ -16,7 +16,7 @@ export const initialProduct: Product = {
     additionalFeatures: '',
 }
 
-export const initialState: InitialStateProducts = {
+export const initialState: InitialStateProduct = {
     status: 'idle',
     error: '',
     stock: {

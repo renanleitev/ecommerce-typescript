@@ -10,9 +10,9 @@ import InputSearch from '../../components/InputSearch';
 import Loading from '../../components/Loading';
 import { showStockPerPage } from '../../store/modules/products/reducer';
 
-export default function SearchingTable(){
+export default function SearchingTable(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
+    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage) || {data: []};
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
         currentPage: 1,
@@ -26,7 +26,7 @@ export default function SearchingTable(){
     })]);
     useEffect(() => {
         dispatch(showStockPerPage(pageStatus));
-    }, []);
+    }, [pageStatus]);
     useMemo(() => {
         setStock([...stockPerPage.data.map((product: interfaces.Product) => {
             return {...product, quantity: 0, totalPrice: 0};

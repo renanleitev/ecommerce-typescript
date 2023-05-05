@@ -17,7 +17,7 @@ import { IRootState } from '../../interfaces';
 import {logoutSuccess} from '../../store/modules/login/reducer';
 import {removeAllProductsCart} from '../../store/modules/products/reducer';
 
-export default function Header(){
+export default function Header(): JSX.Element {
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const user = useSelector((state: IRootState) => state.login.user);
     const cart = useSelector((state: IRootState) => state.products.cart);

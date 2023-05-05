@@ -36,7 +36,7 @@ interface BaseInitialState {
     status: string,
     error: string,
 }
-export interface InitialStateProducts extends BaseInitialState {
+export interface InitialStateProduct extends BaseInitialState {
     stock: {
         data: Array<Product>,
     },
@@ -53,7 +53,7 @@ export interface InitialStateLogin extends BaseInitialState {
 }
 export interface IRootState {
     login: InitialStateLogin,
-    products: InitialStateProducts,
+    products: InitialStateProduct,
 }
 export interface PageNumberStatus {
     currentPage: number,
