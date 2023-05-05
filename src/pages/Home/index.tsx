@@ -22,7 +22,7 @@ export default function Home(): JSX.Element {
         dispatch(showStockPerPage(pageStatus));
     }, [pageStatus]);
     useEffect(() => {
-        if (allStock.data.length === 0) dispatch(showStock());
+        if (allStock.data.length === 1) dispatch(showStock());
     }, []);
     return (
         <HomeContainer>
