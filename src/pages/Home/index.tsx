@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyle';
@@ -22,7 +22,7 @@ export default function Home(): JSX.Element {
         dispatch(showStockPerPage(pageStatus));
     }, [pageStatus]);
     useEffect(() => {
-        if (allStock.data === undefined) dispatch(showStock());
+        if (allStock.data.length === 0) dispatch(showStock());
     }, []);
     return (
         <HomeContainer>
