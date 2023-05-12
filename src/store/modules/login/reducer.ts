@@ -21,20 +21,20 @@ export const initialState: (InitialStateLogin) = {
 
 export const loginUser = createAsyncThunk(
     'user/loginUser',
-    async(userLogin: interfaces.User) => {
-        const users: interfaces.UserData = await axios.get('/users');
-        let userLoggedIn;
-        users.data.forEach((user: interfaces.User) => {
-            if ((userLogin.email === user.email) && (userLogin.password === user.password)){
-                toast.success('Login successfully.');
-                history.push('/');
-                userLoggedIn = {...user};
-                return userLoggedIn;
-            } 
-        });
-        return userLoggedIn || initialState.user;
-    }
-);
+    async (userLogin: interfaces.User) => {
+        const response = await axios.post('/users/login', userLogin);
+
+        if (response.status === 200) {
+            toast.success('Login successfully.');
+            history.push('/');
+            const userLoggedIn = { ...response.data };
+            return userLoggedIn;
+        }
+        return initialState.user;
+    });
+
+
+
 
 export const registerUser = createAsyncThunk(
     'user/registerUser',
@@ -59,7 +59,7 @@ export const editUser = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
     'user/deleteUser',
     async (user: interfaces.User) => {
-        if (user.id !== undefined){
+        if (user.id !== undefined) {
             await axios.delete(`/users/${user.id}`);
             toast.success('Delete successful!');
             history.push('/');
@@ -76,7 +76,7 @@ export const userSlice = createSlice({
             state.user = initialState.user;
         },
     },
-    extraReducers(builder){
+    extraReducers(builder) {
         builder
             // registerUser asyncThunk
             .addCase(
@@ -85,8 +85,8 @@ export const userSlice = createSlice({
                     state.status = 'succeeded';
                     state.isLoggedIn = true;
                     state.user = action.payload;
-            })
-            .addCase(registerUser.pending, (state) => {state.status = 'loading';})
+                })
+            .addCase(registerUser.pending, (state) => { state.status = 'loading'; })
             .addCase(registerUser.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
@@ -97,8 +97,8 @@ export const userSlice = createSlice({
                 (state, action: PayloadAction<interfaces.User>) => {
                     state.status = 'succeeded';
                     state.user = action.payload;
-            })
-            .addCase(editUser.pending, (state) => {state.status = 'loading';})
+                })
+            .addCase(editUser.pending, (state) => { state.status = 'loading'; })
             .addCase(editUser.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
@@ -110,8 +110,8 @@ export const userSlice = createSlice({
                     state.status = 'succeeded';
                     state.isLoggedIn = false;
                     state.user = initialState.user;
-            })
-            .addCase(deleteUser.pending, (state) => {state.status = 'loading';})
+                })
+            .addCase(deleteUser.pending, (state) => { state.status = 'loading'; })
             .addCase(deleteUser.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
@@ -126,8 +126,8 @@ export const userSlice = createSlice({
                     } else {
                         toast.error('Email/password invalid.');
                     }
-            })
-            .addCase(loginUser.pending, (state) => {state.status = 'loading';})
+                })
+            .addCase(loginUser.pending, (state) => { state.status = 'loading'; })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
@@ -135,7 +135,7 @@ export const userSlice = createSlice({
     }
 })
 
-export const { 
+export const {
     logoutSuccess,
 } = userSlice.actions;
 

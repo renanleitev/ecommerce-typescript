@@ -19,11 +19,10 @@ export const initialProduct: Product = {
 export const initialState: InitialStateProduct = {
     status: 'idle',
     error: '',
-    stock: {
-        data: [{...initialProduct}],
-    },
     stockPerPage: {
-        data: [{...initialProduct}],
+        data: [{ ...initialProduct }],
+        total_pages: 1,
+        total_items: 1
     },
     pageStatus: {
         currentPage: 1,
@@ -33,60 +32,53 @@ export const initialState: InitialStateProduct = {
     cart: [],
 };
 
-export const showStock = createAsyncThunk(
-    'inventory/showStock',
-    async () => {
-        try{
-            const url = '/products/';
-            const stock = await axios.get(url);
-            return stock;
-        }
-        catch(error){ return error.message; }
-});
-
 export const showStockPerPage = createAsyncThunk(
     'inventory/showStockPerPage',
     async (pageStatus: interfaces.PageNumberStatus) => {
-        try{
+        try {
             const url = `/products?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`;
-            const stockPerPage = await axios.get(url);
-            return stockPerPage;
+            const response = await axios.get(url);
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
         }
-        catch(error){ return error.message; }
-});
+        catch (error) { return error.message; }
+    });
 
 export const showProduct = createAsyncThunk(
     'inventory/showProduct',
     async (id: string) => {
-        try{
+        try {
             const url = `/products/${id}`;
             const product = await axios.get(url);
             return product.data;
         }
-        catch(error){ return error.message; }
-});
+        catch (error) { return error.message; }
+    });
 
 export const editProduct = createAsyncThunk(
-    'inventory/editProduct', 
+    'inventory/editProduct',
     async (product: interfaces.Product) => {
-        try{
+        try {
             const url = `/products/${product.id}`;
             await axios.put(url, product);
             toast.success('Edit product successfully.');
             return product;
         }
-        catch(error){ return error.message; }
-});
+        catch (error) { return error.message; }
+    });
 
 export const inventorySlice = createSlice({
     name: 'inventory',
     initialState: initialState,
     reducers: {
-        addProductCart: (state, action: PayloadAction<interfaces.Product>) => {            
-            state.cart.push({...action.payload});
+        addProductCart: (state, action: PayloadAction<interfaces.Product>) => {
+            state.cart.push({ ...action.payload });
         },
         changeProductQuantityCart: (state, action: PayloadAction<interfaces.Product>) => {
-            state.cart.forEach((product: interfaces.Product) =>{
+            state.cart.forEach((product: interfaces.Product) => {
                 if (product.id === action.payload.id) {
                     product.quantity = action.payload.quantity;
                     product.totalPrice = action.payload.totalPrice;
@@ -108,16 +100,16 @@ export const inventorySlice = createSlice({
             state.pageStatus = action.payload
         }
     },
-    extraReducers(builder){
+    extraReducers(builder) {
         builder
             // editProduct asyncThunk
             .addCase(
-                editProduct.fulfilled, 
+                editProduct.fulfilled,
                 (state, action: PayloadAction<interfaces.Product>) => {
                     state.status = 'succeeded';
-                    state.product = {...action.payload};
-            })
-            .addCase(editProduct.pending, (state) => {state.status = 'loading';})
+                    state.product = { ...action.payload };
+                })
+            .addCase(editProduct.pending, (state) => { state.status = 'loading'; })
             .addCase(editProduct.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
@@ -125,37 +117,23 @@ export const inventorySlice = createSlice({
             // showProduct asyncThunk
             .addCase(
                 showProduct.fulfilled,
-                (state,  action: PayloadAction<interfaces.Product>) => {
+                (state, action: PayloadAction<interfaces.Product>) => {
                     state.status = 'succeeded';
-                    state.product = {...action.payload};
-            })
-            .addCase(showProduct.pending, (state) => {state.status = 'loading';})
+                    state.product = { ...action.payload };
+                })
+            .addCase(showProduct.pending, (state) => { state.status = 'loading'; })
             .addCase(showProduct.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })
-            // showStock asyncThunk
-            .addCase(
-                showStock.fulfilled,
-                (state, action: PayloadAction<interfaces.StockData>) => {
-                    state.status = 'succeeded';
-                    state.stock = action.payload;
-                }
-            )
-            .addCase(showStock.pending, (state) => {state.status = 'loading';})
-            .addCase(showStock.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message || "Something went wrong";
-            })
-            // showStockPerPage asyncThunk
             .addCase(
                 showStockPerPage.fulfilled,
                 (state, action: PayloadAction<interfaces.StockData>) => {
                     state.status = 'succeeded';
                     state.stockPerPage = action.payload;
-                }    
+                }
             )
-            .addCase(showStockPerPage.pending, (state) => {state.status = 'loading';})
+            .addCase(showStockPerPage.pending, (state) => { state.status = 'loading'; })
             .addCase(showStockPerPage.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
@@ -163,7 +141,7 @@ export const inventorySlice = createSlice({
     }
 })
 
-export const { 
+export const {
     addProductCart,
     changeProductQuantityCart,
     removeProductCart,
