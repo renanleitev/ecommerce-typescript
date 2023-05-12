@@ -1,4 +1,4 @@
-interface Base{
+interface Base {
     id: string,
     name: string,
 }
@@ -13,9 +13,11 @@ export interface Product extends Base {
 }
 export interface StockData {
     data: Array<Product>,
+    total_pages: number,
+    total_items: number
 }
 export interface UserData {
-    data: Array<User> 
+    data: Array<User>
 }
 export interface EditProduct {
     product: Product,
@@ -37,12 +39,7 @@ interface BaseInitialState {
     error: string,
 }
 export interface InitialStateProduct extends BaseInitialState {
-    stock: {
-        data: Array<Product>,
-    },
-    stockPerPage: {
-        data: Array<Product>,
-    },
+    stockPerPage: StockData,
     pageStatus: PageNumberStatus
     product: Product,
     cart: Array<Product>,

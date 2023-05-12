@@ -6,11 +6,11 @@ import {
     changeProductQuantityCart,
     removeProductCart,
     removeAllProductsCart,
-    showStock,
+    showStockPerPage,
     showProduct,
     editProduct
 } from '../store/modules/products/reducer';
-import { 
+import {
     dispatchProductEx,
     mockProduct,
     mockProductStateCart,
@@ -46,9 +46,6 @@ describe('Testing initialState', () => {
     });
     it('error should be empty string', () => {
         expect(initialState.error).toBe('');
-    });
-    it('stock.data should be an array of Product', () => {
-        expect(initialState.stock.data).toEqual([{...initialProduct}]);
     });
     it('product.id should be an empty string', () => {
         expect(initialState.product.id).toBe('');
@@ -113,14 +110,17 @@ describe('Testing products reducers', () => {
 
 describe('Testing products async thunks', () => {
     it('should get stock of products', async () => {
-        const expectedResult = {data: {...mockProduct}};
+        const expectedResult = { data: { ...mockProduct } };
         axios.get = jest.fn().mockResolvedValue(expectedResult);
-        const result = await dispatchProductEx(showStock());
+        const result = await dispatchProductEx(showStockPerPage({
+            currentPage: 1,
+            productsPerPage: 1
+        }));
         expect(result.payload.data).toEqual(mockProduct);
-        expect(storeProduct.getState().stock.data).toEqual(mockProduct);
+        expect(storeProduct.getState().stockPerPage.data).toEqual(mockProduct);
     });
     it('should get product', async () => {
-        const expectedResult = {data: {...mockProduct}};
+        const expectedResult = { data: { ...mockProduct } };
         axios.get = jest.fn().mockResolvedValue(expectedResult);
         await dispatchProductEx(showProduct('1'));
         expect(storeProduct.getState().product).toEqual(mockProduct);

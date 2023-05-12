@@ -36,21 +36,23 @@ export const storeLogin = configureStore({
 
 export const mockProductStateCart = {
     ...products.initialState,
-    cart: [{...mockProduct}],
+    cart: [{ ...mockProduct }],
 };
 
 export const mockProductStateStock = {
     ...products.initialState,
     stock: {
-        data: [{...mockProduct}],
+        data: [{ ...mockProduct }],
+        total_pages: 1,
+        total_items: 1
     },
-    product: {...mockProduct}, 
-    cart: [{...mockProduct}],
+    product: { ...mockProduct },
+    cart: [{ ...mockProduct }],
 };
 
 export const mockUserState = {
-    ...login.initialState, 
-    user: {...mockUser},
+    ...login.initialState,
+    user: { ...mockUser },
     isLoggedIn: true,
 };
 export const mockStore = configureStore({
