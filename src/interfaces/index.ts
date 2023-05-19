@@ -3,7 +3,7 @@ interface Base {
     name: string,
 }
 export interface Product extends Base {
-    images: string,
+    image: string,
     price: string,
     quantity: number,
     totalPrice: number,
@@ -23,10 +23,12 @@ export interface EditProduct {
     product: Product,
 }
 export interface User extends Base {
+    username: string,
     surname: string,
     address: string,
     email: string,
     password: string,
+    role: string,
 }
 export interface Input {
     data: Product | User,

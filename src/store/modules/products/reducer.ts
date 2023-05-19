@@ -7,7 +7,7 @@ import { InitialStateProduct, Product } from '../../../interfaces';
 export const initialProduct: Product = {
     id: '',
     name: '',
-    images: '',
+    image: '',
     price: '',
     quantity: 0,
     totalPrice: 0,
@@ -36,7 +36,7 @@ export const showStockPerPage = createAsyncThunk(
     'inventory/showStockPerPage',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
-            const url = `/products?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`;
+            const url = `/products/pagination?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`;
             const response = await axios.get(url);
             return {
                 data: response.data,

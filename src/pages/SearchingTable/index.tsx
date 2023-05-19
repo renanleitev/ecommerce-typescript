@@ -15,7 +15,7 @@ export default function SearchingTable(): JSX.Element {
     const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage) || { data: [], total_pages: 0, total_items: 0 };
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
-        currentPage: 1,
+        currentPage: 0,
         productsPerPage: 3
     });
     const [stock, setStock] = useState([...stockPerPage.data.map((product: interfaces.Product) => {

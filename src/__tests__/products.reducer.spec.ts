@@ -53,8 +53,8 @@ describe('Testing initialState', () => {
     it('product.name should be an empty string', () => {
         expect(initialState.product.name).toBe('');
     });
-    it('product.images should be an empty string', () => {
-        expect(initialState.product.images).toBe('');
+    it('product.image should be an empty string', () => {
+        expect(initialState.product.image).toBe('');
     });
     it('product.price should be an empty string', () => {
         expect(initialState.product.price).toBe('');

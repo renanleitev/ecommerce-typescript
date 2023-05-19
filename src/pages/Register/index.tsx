@@ -23,6 +23,7 @@ export default function Register(): JSX.Element {
                     <h2>Create an account</h2>
                     <Input data={user} setData={setUser} keyName='name' keyValue=''/>
                     <Input data={user} setData={setUser} keyName='surname' keyValue=''/>
+                    <Input data={user} setData={setUser} keyName='username' keyValue=''/>
                     <Input data={user} setData={setUser} keyName='address' keyValue=''/>
                     <Input data={user} setData={setUser} keyName='email' keyValue=''/>
                     <Input data={user} setData={setUser} keyName='password' keyValue=''/>

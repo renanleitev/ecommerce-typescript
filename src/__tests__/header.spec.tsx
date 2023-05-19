@@ -19,10 +19,10 @@ describe('Testing Header', () => {
         const getLinks = await screen.findAllByRole('link', { hidden: true});
         expect(getLinks.length).toBeGreaterThanOrEqual(4);
         expect(getLinks[0].toString()).toEqual('http://localhost/'); 
-        expect(getLinks[1].toString()).toEqual('http://localhost/login'); 
+        expect(getLinks[1].toString()).toEqual('http://localhost/auth/login'); 
         expect(getLinks[2].toString()).toEqual('http://localhost/register'); 
         expect(getLinks[3].toString()).toEqual('http://localhost/shopping');  
-        expect(screen.queryByText(/login/i).toString()).toBe('http://localhost/login');
+        expect(screen.queryByText(/login/i).toString()).toBe('http://localhost/auth/login');
         expect(screen.queryByText(/login/i).innerHTML).toBe('Login');
         expect(mockStore.getState().products.cart.length).toBe(0);
     }); 

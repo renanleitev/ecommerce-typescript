@@ -36,11 +36,11 @@ export default function Header(): JSX.Element {
                 <FaHome size={24}/>
             </Link>
             {isLoggedIn ? (
-                <Link to="/edit">
+                <Link to="/auth/edit">
                     <FaUserEdit size={30}/>
                 </Link>
                 ) : (
-                <Link to="/login">
+                <Link to="/auth/login">
                     <FaUserAlt size={24}/>
                 </Link>
             )}
@@ -65,7 +65,7 @@ export default function Header(): JSX.Element {
             </Link>
             {isLoggedIn ? 
             (<p><Link to='/edit'>Welcome, {user.name}!</Link></p>) : 
-            (<p><Link to='/login'>Login</Link></p>)}
+            (<p><Link to='/auth/login'>Login</Link></p>)}
         </Nav>
     );
 }

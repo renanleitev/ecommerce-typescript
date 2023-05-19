@@ -45,8 +45,8 @@ export default function Shopping(){
                     shoppingCart.map((product: interfaces.Product) => (
                         <ItemContainer>
                         <ShoppingContainer>
-                            <Link to={`product/${product.id}`}>{product.name}</Link>
-                            <img src={product.images} alt=''/>
+                            <Link to={`products/${product.id}`}>{product.name}</Link>
+                            <img src={product.image} alt=''/>
                             <p>Price: ${product.price}</p>
                             <p>Quantity: {product.quantity}</p>
                             <p>Total: ${product.totalPrice.toFixed(2)}</p>

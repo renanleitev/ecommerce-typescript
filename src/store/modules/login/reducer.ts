@@ -11,19 +11,20 @@ export const initialState: (InitialStateLogin) = {
     error: '',
     user: {
         id: '',
+        username: '',
         name: '',
         surname: '',
         address: '',
         email: '',
         password: '',
+        role: ''
     },
 };
 
 export const loginUser = createAsyncThunk(
     'user/loginUser',
     async (userLogin: interfaces.User) => {
-        const response = await axios.post('/users/login', userLogin);
-
+        const response = await axios.post('/auth/login', userLogin);
         if (response.status === 200) {
             toast.success('Login successfully.');
             history.push('/');
@@ -33,23 +34,21 @@ export const loginUser = createAsyncThunk(
         return initialState.user;
     });
 
-
-
-
 export const registerUser = createAsyncThunk(
     'user/registerUser',
     async (user: interfaces.User) => {
-        await axios.post('/users', user);
+        const response = await axios.post('/auth/register', user);
+        const userId = Number(response.headers['Id']);
         toast.success('Register user successfully.');
         history.push('/');
-        return user;
+        return {id: userId, ...user};
     }
 );
 
 export const editUser = createAsyncThunk(
     'user/editUser',
     async (user: interfaces.User) => {
-        await axios.put(`/users/${user.id}`, user);
+        await axios.put('/auth/edit', user);
         toast.success('Edit user successfully.');
         history.push('/');
         return user;

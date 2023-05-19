@@ -31,6 +31,7 @@ export default function EditUser(): JSX.Element {
     return (
             <Form onSubmit={handleSubmit}>
                 <h2>Edit</h2>
+                <Input data={editedUser} setData={setEditedUser} keyName='username' keyValue={user.username}/>
                 <Input data={editedUser} setData={setEditedUser} keyName='name' keyValue={user.name}/>
                 <Input data={editedUser} setData={setEditedUser} keyName='surname' keyValue={user.surname}/>
                 <Input data={editedUser} setData={setEditedUser} keyName='address' keyValue={user.address}/>

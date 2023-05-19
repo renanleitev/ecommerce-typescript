@@ -17,11 +17,11 @@ export default function Routes(){
             <Route exact path='/' component={Home}/>
             <Route exact path='/register' component={Register}/>
             {isLoggedIn ? 
-            (<Route exact path='/edit' component={Login}/>) : 
-            (<Route exact path='/login' component={Login}/>)}
+            (<Route exact path='/auth/edit' component={Login}/>) : 
+            (<Route exact path='/auth/login' component={Login}/>)}
             <Route exact path='/shopping' component={Shopping}/>
             <Route exact path='/searching' component={SearchingTable}/>
-            <Route exact path='/product/:id' component={Product}/>
+            <Route exact path='/products/:id' component={Product}/>
             <Route path='*' component={Page404}/>
         </Switch>
     );

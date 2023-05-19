@@ -87,7 +87,7 @@ export default function Product(): JSX.Element {
             </Modal>
             <ItemContainer>
                 <h1>{newProduct.name}</h1>
-                <img src={newProduct.images} alt=''/>
+                <img src={newProduct.image} alt=''/>
                 <ProductContainer>
                     <p>Price: ${newProduct.price}</p>
                     <p>Quantity: {newProduct.quantity}</p>

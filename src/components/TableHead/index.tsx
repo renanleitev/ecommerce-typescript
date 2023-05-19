@@ -12,7 +12,7 @@ const TableHead: React.FC<interfaces.TableHead> = (props: interfaces.TableHead) 
             switch (key) {
                 case 'name':
                     return previousProduct[key].localeCompare(nextProduct[key]);
-                case 'images':
+                case 'image':
                     return previousProduct[key].localeCompare(nextProduct[key]);
                 case 'price':
                     return Number.parseFloat(previousProduct[key]) - Number.parseFloat(nextProduct[key]);
@@ -35,8 +35,8 @@ const TableHead: React.FC<interfaces.TableHead> = (props: interfaces.TableHead) 
                 <th onClick={() => applySorting("name")}>
                     Name {sorting ? <FaArrowDown/> : <FaArrowUp/>}
                 </th>
-                <th onClick={() => applySorting("images")}>
-                    Images {sorting ? <FaArrowDown/> : <FaArrowUp/>}
+                <th onClick={() => applySorting("image")}>
+                    Image {sorting ? <FaArrowDown/> : <FaArrowUp/>}
                 </th>
                 <th onClick={() => applySorting("description")}>
                     Description {sorting ? <FaArrowDown/> : <FaArrowUp/>}

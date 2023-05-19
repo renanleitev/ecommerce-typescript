@@ -26,7 +26,7 @@ describe('Testing Product page', () => {
         expect(addFeatures.innerHTML).toBe(`Additional Features: ${mockProduct.additionalFeatures}`);  
         // Image
         const imgProduct = screen.getByRole('img').getAttribute('src');  
-        expect(imgProduct).toBe(`${mockProduct.images}`);  
+        expect(imgProduct).toBe(`${mockProduct.image}`);  
         // Price
         const priceProduct = screen.getByText(/price/i);
         expect(priceProduct.innerHTML).toBe(`Price: $${mockProduct.price}`);  

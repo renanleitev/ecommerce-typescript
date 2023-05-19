@@ -23,7 +23,7 @@ export default function Login(): JSX.Element {
                 (
                 <Form onSubmit={handleSubmit}>
                     <h2>Login</h2>
-                    <InputProduct data={loggedUser} setData={setLoggedUser} keyName='email' keyValue=''/>
+                    <InputProduct data={loggedUser} setData={setLoggedUser} keyName='username' keyValue=''/>
                     <InputProduct data={loggedUser} setData={setLoggedUser} keyName='password' keyValue=''/>
                     <Link className='link' to='/register'>
                         Don't have an account? Click here to make a new one!

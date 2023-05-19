@@ -87,12 +87,12 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
                                 </Modal>
                             </HiddenTd>
                             <td>
-                                <Link to={`product/${product.id}`}>
+                                <Link to={`products/${product.id}`}>
                                     {product.name}
                                 </Link>
                             </td>
                             <td>
-                                <img src={product.images} alt=''/>
+                                <img src={product.image} alt=''/>
                             </td>
                             <td>
                                 <p>

@@ -18,7 +18,7 @@ const EditProduct: React.FC<interfaces.EditProduct> = (props: interfaces.EditPro
             <h1>Edit Product</h1> 
             <Input data={product} setData={setProduct} keyName='name' keyValue={props.product.name}/>
             <Input data={product} setData={setProduct} keyName='price' keyValue={props.product.price}/>
-            <Input data={product} setData={setProduct} keyName='images' keyValue={props.product.images}/>
+            <Input data={product} setData={setProduct} keyName='image' keyValue={props.product.image}/>
             <Input data={product} setData={setProduct} keyName='os' keyValue={props.product.os}/>
             <Input data={product} setData={setProduct} keyName='description' keyValue={props.product.description}/>
             <button type="submit">Edit Product</button>

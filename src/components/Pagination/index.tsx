@@ -10,7 +10,7 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
     const stock = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
     const pageStatus = props.pageStatus;
     const pageNumbers: Array<number> = [];
-    for (let i = 1; i <= stock.total_pages; i++) {
+    for (let i = 0; i < stock.total_pages; i++) {
         pageNumbers.push(i);
     }
     const paginationProduct = useCallback((numberOfPage: number) => {
@@ -25,7 +25,7 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
                     <button
                         key={numberOfPage + 1}
                         onClick={() => paginationProduct(numberOfPage)}>
-                        {numberOfPage}
+                        {numberOfPage+1}
                     </button>
                 )
             })}

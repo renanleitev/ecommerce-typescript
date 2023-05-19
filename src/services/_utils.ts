@@ -8,7 +8,7 @@ import { combineReducers } from "redux";
 export const mockProduct: interfaces.Product = {
     id: '1',
     name: 'Celular',
-    images: 'imagem',
+    image: 'imagem',
     price: '200.56',
     quantity: 1,
     totalPrice: 200.56,
@@ -19,11 +19,13 @@ export const mockProduct: interfaces.Product = {
 
 export const mockUser: interfaces.User = {
     id: '1',
+    username: 'fulanodetal',
     name: 'Fulano',
     surname: 'Detal',
     address: 'Rua da Felicidade',
     email: 'fulanodetal@email.com',
-    password: '123456'
+    password: '123456',
+    role: 'ADMIN'
 };
 
 export const storeProduct = configureStore({

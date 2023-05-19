@@ -13,7 +13,7 @@ describe('Testing EditProduct page', () => {
         // Inputs
         expect(screen.getByLabelText('Name').getAttribute("placeholder")).toBe('Name');
         expect(screen.getByLabelText('Price').getAttribute("placeholder")).toBe('Price');
-        expect(screen.getByLabelText('Images').getAttribute("placeholder")).toBe('Images');
+        expect(screen.getByLabelText('Image').getAttribute("placeholder")).toBe('Image');
         expect(screen.getByLabelText('Os').getAttribute("placeholder")).toBe('Os');
         expect(screen.getByLabelText('Description').getAttribute("placeholder")).toBe('Description'); 
     });

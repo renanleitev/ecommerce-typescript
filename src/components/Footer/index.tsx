@@ -6,7 +6,8 @@ export default function Footer(): JSX.Element {
         <BarFooter>
             <p><a href='https://github.com/renanleitev'>Renan Leite Vieira</a></p>
             <p>@</p>
-            <p>Projeto desenvolvido em <a href='https://pt-br.reactjs.org/'>React</a> com uso do <a href='https://github.com/typicode/json-server'>JSON Server</a></p>
+            <p>Projeto desenvolvido em <a href='https://pt-br.reactjs.org/'>React</a> 
+            com uso do <a href='https://github.com/typicode/json-server'>JSON Server</a> e <a href="https://bootify.io/next-steps/)">Bootify</a></p>
         </BarFooter>
     )
 }

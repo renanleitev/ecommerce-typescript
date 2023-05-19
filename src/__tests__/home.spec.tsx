@@ -14,6 +14,6 @@ describe('Testing Home page', () => {
         const linkProduct = screen.getByRole('link');
         expect(linkProduct.innerHTML).toBe(`${mockProduct.name}`);  
         const imgProduct = screen.getByRole('img').getAttribute('src');  
-        expect(imgProduct).toBe(`${mockProduct.images}`); 
+        expect(imgProduct).toBe(`${mockProduct.image}`); 
     });
 });
