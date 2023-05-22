@@ -19,10 +19,10 @@ export default function Home(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
     useMemo(() => {
         dispatch(showStockPerPage(pageStatus));
-    }, []);
+    }, [pageStatus]);
     useEffect(() => {
         dispatch(showStockPerPage(pageStatus));
-    }, [pageStatus]);
+    }, []);
     return (
         <HomeContainer>
             {isLoading === 'loading' ?

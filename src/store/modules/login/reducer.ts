@@ -29,6 +29,8 @@ export const loginUser = createAsyncThunk(
             toast.success('Login successfully.');
             history.push('/');
             const userLoggedIn = { ...response.data };
+            const token = String(response.headers['authorization']);           
+            localStorage.setItem('token', token);
             return userLoggedIn;
         }
         return initialState.user;
@@ -73,6 +75,7 @@ export const userSlice = createSlice({
         logoutSuccess: (state) => {
             state.isLoggedIn = false;
             state.user = initialState.user;
+            localStorage.removeItem('token');
         },
     },
     extraReducers(builder) {
