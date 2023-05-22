@@ -9,15 +9,16 @@ import {
     CheckoutContainer } from './styled';
 import { Link } from 'react-router-dom';
 import * as interfaces from '../../interfaces';
-import {removeProductCart} from '../../store/modules/products/reducer';
+import {removeProductCart, saveShoppings} from '../../store/modules/products/reducer';
 import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
-import { checkoutCart } from '../../services/checkoutCart';
+import { AppThunkDispatch } from '../../store';
 
-export default function Shopping(){
+export default function Shopping(): JSX.Element{
+    const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppThunkDispatch>();
     const [shoppingCart, setShoppingCart] = useState([...cart]);
     useEffect(() => {
         setShoppingCart([...cart]);
@@ -33,17 +34,34 @@ export default function Shopping(){
     const handleRemove = useCallback((product: interfaces.Product) => {
         if (product !== undefined) dispatch(removeProductCart(product));
     }, [dispatch]);
+    const checkoutCart = useCallback((productsList: Array<interfaces.Product>, user: interfaces.User) => {
+        const newShoppingCart: interfaces.ShoppingCart = {
+            userId: 0,
+            productId: 0,
+            quantity: 0,
+            totalPrice: 0,
+        };
+        const shoppingCartList: Array<interfaces.ShoppingCart> = [];
+        productsList.map((product: interfaces.Product) => {
+            newShoppingCart.userId = Number.parseInt(user.id);
+            newShoppingCart.productId = Number.parseInt(product.id);
+            newShoppingCart.quantity = product.quantity;
+            newShoppingCart.totalPrice = product.totalPrice;
+            shoppingCartList.push({...newShoppingCart});
+        });
+        dispatch(saveShoppings(shoppingCartList));
+    }, [dispatch]);
     return (
         <CartContainer>
             {isLoggedIn ? (
-                <CheckoutContainer onClick={() => checkoutCart(cart)}>
+                <CheckoutContainer onClick={() => checkoutCart(cart, user)}>
                     <FaShoppingCart size={30}/>
                 </CheckoutContainer>
                 ) : (<></>)}
             {isLoggedIn && shoppingCart.length >= 1 ? 
                 React.Children.toArray(
                     shoppingCart.map((product: interfaces.Product) => (
-                        <ItemContainer>
+                    <ItemContainer>
                         <ShoppingContainer>
                             <Link to={`products/${product.id}`}>{product.name}</Link>
                             <img src={product.image} alt=''/>

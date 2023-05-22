@@ -1,3 +1,5 @@
+import internal from "stream"
+
 interface Base {
     id: string,
     name: string,
@@ -45,6 +47,7 @@ export interface InitialStateProduct extends BaseInitialState {
     pageStatus: PageNumberStatus
     product: Product,
     cart: Array<Product>,
+    shoppingList: Array<ShoppingList>
 }
 export interface InitialStateLogin extends BaseInitialState {
     isLoggedIn: boolean,
@@ -69,4 +72,17 @@ export interface TableHead {
 export interface TableBody extends TableHead {
     originalStock: Array<Product>,
     setOriginalStock: CallableFunction
+}
+export interface ShoppingCart {
+    quantity: number,
+    totalPrice: number,
+    userId: number,
+    productId: number,
+}
+export interface ShoppingList{
+    userName: string,
+    productName: string,
+    quantity: number,
+    totalPrice: number,
+    dateCreated: string
 }

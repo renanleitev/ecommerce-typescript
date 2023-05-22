@@ -6,7 +6,8 @@ import {
     FaUserEdit, 
     FaUserPlus,
     FaShoppingCart,
-    FaSearch 
+    FaSearch, 
+    FaShoppingBag
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,7 +16,7 @@ import history from '../../services/history';
 import {toast} from 'react-toastify';
 import { IRootState } from '../../interfaces';
 import {logoutSuccess} from '../../store/modules/login/reducer';
-import {removeAllProductsCart} from '../../store/modules/products/reducer';
+import {removeAllProductsCart, resetShoppingList} from '../../store/modules/products/reducer';
 
 export default function Header(): JSX.Element {
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -25,6 +26,7 @@ export default function Header(): JSX.Element {
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
             dispatch(logoutSuccess());
+            dispatch(resetShoppingList());
             dispatch(removeAllProductsCart());
             toast.success('Logout sucessufully.');
             history.push('/');
@@ -54,6 +56,13 @@ export default function Header(): JSX.Element {
                     <Cart>
                         <p>{cart.length}</p>
                         <FaShoppingCart size={24}/>
+                    </Cart>
+                )}
+            </Link>
+            <Link to="/shoppingList">
+                {isLoggedIn && (
+                    <Cart>
+                        <FaShoppingBag size={24}/>
                     </Cart>
                 )}
             </Link>

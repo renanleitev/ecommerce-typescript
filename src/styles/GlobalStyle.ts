@@ -38,10 +38,12 @@ export default createGlobalStyle`
         list-style: none;
     }
     body .Toastify .Toastify__toast-container .Toastify__toast--success {
+        margin-top: 70px;
         background-color: ${colors.sucessColor};
         color: white;
     }
     body .Toastify .Toastify__toast-container .Toastify__toast--error {
+        margin-top: 50px;
         background-color: ${colors.errorColor};
         color: white;
     }

@@ -30,6 +30,7 @@ export const initialState: InitialStateProduct = {
     },
     product: initialProduct,
     cart: [],
+    shoppingList: []
 };
 
 export const showStockPerPage = createAsyncThunk(
@@ -52,8 +53,8 @@ export const showProduct = createAsyncThunk(
     async (id: string) => {
         try {
             const url = `/products/${id}`;
-            const product = await axios.get(url);
-            return product.data;
+            const response = await axios.get(url);
+            return response.data;
         }
         catch (error) { return error.message; }
     });
@@ -69,6 +70,29 @@ export const editProduct = createAsyncThunk(
         }
         catch (error) { return error.message; }
     });
+
+export const showShoppings = createAsyncThunk(
+    'inventory/showShoppings',
+    async (id: string) => {
+        try {
+            const url = `/shoppings/${id}`;
+            const response = await axios.get(url);
+            return response.data;
+        }
+        catch (error) { return error.message; }
+    });
+
+export const saveShoppings = createAsyncThunk(
+    'inventory/saveShoppings',
+    async (shoppingCart: Array<interfaces.ShoppingCart>) => {
+        try {
+            const url = '/shoppings';
+            await axios.post(url, shoppingCart);
+            return shoppingCart;
+        }
+        catch (error) { return error.message; }
+    }
+);
 
 export const inventorySlice = createSlice({
     name: 'inventory',
@@ -98,10 +122,35 @@ export const inventorySlice = createSlice({
         },
         changePageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
             state.pageStatus = action.payload
-        }
+        },
+        resetShoppingList: (state) => {
+            state.shoppingList = initialState.shoppingList;
+        },
     },
     extraReducers(builder) {
         builder
+            // showShoppings asyncThunk
+            .addCase(showShoppings.fulfilled, (state, action: PayloadAction<Array<interfaces.ShoppingList>>) => {
+                state.status = 'succeeded';
+                state.shoppingList = action.payload;
+            })
+            .addCase(showShoppings.pending, (state) => { state.status = 'loading'; })
+            .addCase(showShoppings.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // saveShoppings asyncThunk
+            .addCase(
+                saveShoppings.fulfilled,
+                (state) => {
+                    state.status = 'succeeded';
+                    state.cart = initialState.cart;
+                })
+            .addCase(saveShoppings.pending, (state) => { state.status = 'loading'; })
+            .addCase(saveShoppings.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
             // editProduct asyncThunk
             .addCase(
                 editProduct.fulfilled,
@@ -148,6 +197,7 @@ export const {
     removeAllProductsCart,
     resetPageStatus,
     changePageStatus,
+    resetShoppingList,
 } = inventorySlice.actions;
 
 export const inventoryReducer = inventorySlice.reducer;
