@@ -30,7 +30,7 @@ export default function Product(): JSX.Element {
     );
     const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
-        if (user.name === 'admin') setIsAdmin(true);
+        if (user.role === 'ADMIN') setIsAdmin(true);
     }, [user.name]);
     useMemo(() => {
         cart.forEach((element: interfaces.Product) => {

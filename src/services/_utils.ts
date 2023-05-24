@@ -25,7 +25,7 @@ export const mockUser: interfaces.User = {
     address: 'Rua da Felicidade',
     email: 'fulanodetal@email.com',
     password: '123456',
-    role: 'ADMIN'
+    role: 'USER'
 };
 
 export const storeProduct = configureStore({

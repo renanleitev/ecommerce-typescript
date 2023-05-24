@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
@@ -17,12 +17,9 @@ export default function Home(): JSX.Element {
         productsPerPage: 3
     });
     const dispatch = useDispatch<AppThunkDispatch>();
-    useMemo(() => {
-        dispatch(showStockPerPage(pageStatus));
-    }, [pageStatus]);
     useEffect(() => {
         dispatch(showStockPerPage(pageStatus));
-    }, []);
+    }, [pageStatus]);
     return (
         <HomeContainer>
             {isLoading === 'loading' ?

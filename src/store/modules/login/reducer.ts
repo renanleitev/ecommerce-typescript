@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
-import axios from '../../../services/axios';
+import {axiosInstance, getAuthorizationHeader} from '../../../services/axios';
 import history from '../../../services/history';
 import { InitialStateLogin } from '../../../interfaces';
 
@@ -24,7 +24,9 @@ export const initialState: (InitialStateLogin) = {
 export const loginUser = createAsyncThunk(
     'user/loginUser',
     async (userLogin: interfaces.User) => {
-        const response = await axios.post('/auth/login', userLogin);
+        const response = await axiosInstance.post('/auth/login', userLogin, {
+            headers: { Authorization: getAuthorizationHeader() }
+        });
         if (response.status === 200) {
             toast.success('Login successfully.');
             history.push('/');
@@ -39,7 +41,9 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
     'user/registerUser',
     async (user: interfaces.User) => {
-        const response = await axios.post('/auth/register', user);
+        const response = await axiosInstance.post('/auth/register', user, {
+            headers: { Authorization: getAuthorizationHeader() }
+        });
         const userId = Number(response.headers['Id']);
         toast.success('Register user successfully.');
         history.push('/');
@@ -50,10 +54,23 @@ export const registerUser = createAsyncThunk(
 export const editUser = createAsyncThunk(
     'user/editUser',
     async (user: interfaces.User) => {
-        await axios.put('/auth/edit', user);
+        await axiosInstance.put('/auth/edit', user, {
+            headers: { Authorization: getAuthorizationHeader() }
+        });
         toast.success('Edit user successfully.');
         history.push('/');
         return user;
+    }
+);
+
+export const getAllUsers = createAsyncThunk(
+    'user/getAllUsers',
+    async () => {
+        const users = await axiosInstance.get('/users', {
+            headers: { Authorization: getAuthorizationHeader() }
+        });
+        console.log(users);
+        return users;
     }
 );
 
@@ -61,7 +78,9 @@ export const deleteUser = createAsyncThunk(
     'user/deleteUser',
     async (user: interfaces.User) => {
         if (user.id !== undefined) {
-            await axios.delete(`/users/${user.id}`);
+            await axiosInstance.delete(`/users/${user.id}`, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
             toast.success('Delete successful!');
             history.push('/');
         }
@@ -131,6 +150,17 @@ export const userSlice = createSlice({
                 })
             .addCase(loginUser.pending, (state) => { state.status = 'loading'; })
             .addCase(loginUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // getAllUsers asyncThunk
+            .addCase(
+                getAllUsers.fulfilled,
+                (state) => {
+                    state.status = 'succeeded';
+                })
+            .addCase(getAllUsers.pending, (state) => { state.status = 'loading'; })
+            .addCase(getAllUsers.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })

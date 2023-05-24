@@ -51,7 +51,7 @@ export default function Header(): JSX.Element {
                 <FaUserPlus size={30}/>
             </Link>
             }
-            <Link to="/shopping">
+            <Link to="/shoppingCart">
                 {isLoggedIn && (
                     <Cart>
                         <p>{cart.length}</p>

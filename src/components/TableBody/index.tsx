@@ -32,7 +32,7 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
     const [isAdmin, setIsAdmin] = useState(false);
     const [editedProduct, setEditedProduct] = useState<interfaces.Product>();
     useEffect(() => {
-        if (user.name === 'admin') setIsAdmin(true);
+        if (user.role === 'ADMIN') setIsAdmin(true);
     }, [user.name]);
     useEffect(() => {
         props.stock.map((product) => {

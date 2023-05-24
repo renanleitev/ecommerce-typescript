@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
-import axios from '../../../services/axios';
+import {axiosInstance, getAuthorizationHeader} from '../../../services/axios';
 import { InitialStateProduct, Product } from '../../../interfaces';
 
 export const initialProduct: Product = {
@@ -38,7 +38,9 @@ export const showStockPerPage = createAsyncThunk(
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/products/pagination?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`;
-            const response = await axios.get(url);
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
             return {
                 data: response.data,
                 total_pages: Number(response.headers['x-total-pages']),
@@ -53,7 +55,9 @@ export const showProduct = createAsyncThunk(
     async (id: string) => {
         try {
             const url = `/products/${id}`;
-            const response = await axios.get(url);
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
             return response.data;
         }
         catch (error) { return error.message; }
@@ -64,7 +68,9 @@ export const editProduct = createAsyncThunk(
     async (product: interfaces.Product) => {
         try {
             const url = `/products/${product.id}`;
-            await axios.put(url, product);
+            await axiosInstance.put(url, product, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
             toast.success('Edit product successfully.');
             return product;
         }
@@ -76,7 +82,9 @@ export const showShoppings = createAsyncThunk(
     async (id: string) => {
         try {
             const url = `/shoppings/${id}`;
-            const response = await axios.get(url);
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
             return response.data;
         }
         catch (error) { return error.message; }
@@ -87,7 +95,9 @@ export const saveShoppings = createAsyncThunk(
     async (shoppingCart: Array<interfaces.ShoppingCart>) => {
         try {
             const url = '/shoppings';
-            await axios.post(url, shoppingCart);
+            await axiosInstance.post(url, shoppingCart, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
             return shoppingCart;
         }
         catch (error) { return error.message; }

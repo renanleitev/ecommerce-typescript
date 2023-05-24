@@ -10,6 +10,7 @@ import SearchingTable from "../pages/SearchingTable";
 import { useSelector } from 'react-redux';
 import { IRootState } from "../interfaces";
 import ShoppingTable from "../pages/ShoppingTable";
+import SystemAdmin from "../pages/SystemAdmin";
 
 export default function Routes(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -20,10 +21,11 @@ export default function Routes(){
             {isLoggedIn ? 
             (<Route exact path='/auth/edit' component={Login}/>) : 
             (<Route exact path='/auth/login' component={Login}/>)}
-            <Route exact path='/shopping' component={Shopping}/>
+            <Route exact path='/shoppingCart' component={Shopping}/>
             <Route exact path='/searching' component={SearchingTable}/>
             <Route exact path='/products/:id' component={Product}/>
             <Route exact path='/shoppingList' component={ShoppingTable}/>
+            <Route exact path='/admin' component={SystemAdmin}/>
             <Route path='*' component={Page404}/>
         </Switch>
     );
