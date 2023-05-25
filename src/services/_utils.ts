@@ -21,11 +21,11 @@ export const mockUser: interfaces.User = {
     id: '1',
     username: 'fulanodetal',
     name: 'Fulano',
-    surname: 'Detal',
+    surname: 'Silva',
     address: 'Rua da Felicidade',
-    email: 'fulanodetal@email.com',
+    email: 'fulanosilva@email.com',
     password: '123456',
-    role: 'USER'
+    role: 'ROLE_USER'
 };
 
 export const storeProduct = configureStore({
@@ -38,7 +38,7 @@ export const storeLogin = configureStore({
 
 export const mockProductStateCart = {
     ...products.initialState,
-    cart: [{ ...mockProduct }],
+    shoppingCart: [{ ...mockProduct }],
 };
 
 export const mockProductStateStock = {
@@ -49,7 +49,7 @@ export const mockProductStateStock = {
         total_items: 1
     },
     product: { ...mockProduct },
-    cart: [{ ...mockProduct }],
+    shoppingCart: [{ ...mockProduct }],
 };
 
 export const mockUserState = {

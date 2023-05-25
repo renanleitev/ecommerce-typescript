@@ -21,7 +21,7 @@ export default function Product(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
-    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
+    const shoppingCart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
     const product = useSelector((state: interfaces.IRootState) => state.products.product);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const { isOpen, toggle } = useModal();
@@ -33,13 +33,13 @@ export default function Product(): JSX.Element {
         if (user.role === 'ADMIN') setIsAdmin(true);
     }, [user.name]);
     useMemo(() => {
-        cart.forEach((element: interfaces.Product) => {
+        shoppingCart.forEach((element: interfaces.Product) => {
             if (element.id === newProduct.id) {
                 newProduct.quantity = element.quantity;
                 newProduct.totalPrice = element.totalPrice;
             }
         });
-    }, [cart, newProduct]);
+    }, [shoppingCart, newProduct]);
     useEffect(() => {
         dispatch(showProduct(url.id));  
     }, []);
@@ -48,7 +48,7 @@ export default function Product(): JSX.Element {
     }, [product]);
     const addProduct = useCallback(() => {
         if (isLoggedIn){
-            const findnewProduct = cart.find((product: interfaces.Product) => product.id === newProduct.id);
+            const findnewProduct = shoppingCart.find((product: interfaces.Product) => product.id === newProduct.id);
             if (findnewProduct) {
                 setNewProduct(addProductQuantity(newProduct, dispatch));
             } else {
@@ -57,7 +57,7 @@ export default function Product(): JSX.Element {
             } 
         }
         if (!isLoggedIn) toast.error('You must be logged in!');
-    }, [isLoggedIn, cart, newProduct, addProductQuantity, dispatch]);
+    }, [isLoggedIn, shoppingCart, newProduct, addProductQuantity, dispatch]);
     const removeProduct = useCallback(() => {
         if (isLoggedIn){
             dispatch(removeProductCart(newProduct));

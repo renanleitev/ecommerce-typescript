@@ -7,18 +7,19 @@ import * as interfaces from '../../interfaces';
 import { Container } from '../../styles/GlobalStyle';
 import { HomeContainer, ProductContainer } from './styled';
 import { AppThunkDispatch } from '../../store';
-import { showStockPerPage } from '../../store/modules/products/reducer';
+import { showProductsPerPage } from '../../store/modules/products/reducer';
 
 export default function Home(): JSX.Element {
-    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage) || { data: [], total_pages: 0, total_items: 0 };
+    const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) 
+    || { data: [], total_pages: 0, total_items: 0 };
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
         currentPage: 0,
-        productsPerPage: 3
+        itemsPerPage: 3
     });
     const dispatch = useDispatch<AppThunkDispatch>();
     useEffect(() => {
-        dispatch(showStockPerPage(pageStatus));
+        dispatch(showProductsPerPage(pageStatus));
     }, [pageStatus]);
     return (
         <HomeContainer>
@@ -26,7 +27,7 @@ export default function Home(): JSX.Element {
                 <Loading /> :
                 <ProductContainer>
                     {React.Children.toArray(
-                        stockPerPage.data.map((product: interfaces.Product) => {
+                        productsPerPage.data.map((product: interfaces.Product) => {
                             return (
                                 <Container>
                                     <Link to={`products/${product.id}`}>{product.name}</Link>
@@ -36,7 +37,7 @@ export default function Home(): JSX.Element {
                             )
                         }))}
                 </ProductContainer>}
-            <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus} />
+            <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus} data={productsPerPage}/>
         </HomeContainer>
     )
 }

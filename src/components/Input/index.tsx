@@ -27,7 +27,6 @@ const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
         <>
             <label htmlFor={props.keyName}>{capitalizeString(props.keyName)}</label>
             <input
-            id={props.keyName}
             type={type}
             defaultValue={props.keyValue}
             onChange={handleInput}

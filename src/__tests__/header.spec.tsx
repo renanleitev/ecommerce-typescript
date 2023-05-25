@@ -24,7 +24,7 @@ describe('Testing Header', () => {
         expect(getLinks[3].toString()).toEqual('http://localhost/shopping');  
         expect(screen.queryByText(/login/i).toString()).toBe('http://localhost/auth/login');
         expect(screen.queryByText(/login/i).innerHTML).toBe('Login');
-        expect(mockStore.getState().products.cart.length).toBe(0);
+        expect(mockStore.getState().products.shoppingCart.length).toBe(0);
     }); 
     it('should get all links, but user is loggedin', async () => {
         render(RenderComponent(<Header/>, mockStoreUserLoggedIn));
@@ -33,6 +33,6 @@ describe('Testing Header', () => {
         expect(getLinks[0].toString()).toEqual('http://localhost/'); 
         expect(getLinks[1].toString()).toEqual('http://localhost/edit'); 
         expect(screen.queryByText(/welcome/i).innerHTML).toBe(`Welcome, ${mockUser.name}!`); 
-        expect(mockStoreUserLoggedIn.getState().products.cart.length).toBe(1); 
+        expect(mockStoreUserLoggedIn.getState().products.shoppingCart.length).toBe(1); 
     });
 });

@@ -53,7 +53,7 @@ const TableHead: React.FC<interfaces.TableHead> = (props: interfaces.TableHead) 
                         Total Price {sorting ? <FaArrowDown/> : <FaArrowUp/>}
                     </th>
                     <th>
-                        Add/Remove
+                        Options
                     </th>
                 </>
                 ) : (<></>)}

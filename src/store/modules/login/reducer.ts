@@ -3,92 +3,137 @@ import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
 import {axiosInstance, getAuthorizationHeader} from '../../../services/axios';
 import history from '../../../services/history';
-import { InitialStateLogin } from '../../../interfaces';
 
-export const initialState: (InitialStateLogin) = {
+export const initialUser: (interfaces.User) = {
+    id: '',
+    username: '',
+    name: '',
+    surname: '',
+    address: '',
+    email: '',
+    password: '',
+    role: ''
+};
+
+export const initialState: (interfaces.InitialStateLogin) = {
     isLoggedIn: false,
     status: 'idle',
     error: '',
-    user: {
-        id: '',
-        username: '',
-        name: '',
-        surname: '',
-        address: '',
-        email: '',
-        password: '',
-        role: ''
+    user: initialUser,
+    usersPerPage: {
+        data: [{ ...initialUser }],
+        total_pages: 1,
+        total_items: 1
+    },
+    pageStatus: {
+        currentPage: 1,
+        itemsPerPage: 3
     },
 };
 
 export const loginUser = createAsyncThunk(
-    'user/loginUser',
+    'login/loginUser',
     async (userLogin: interfaces.User) => {
-        const response = await axiosInstance.post('/auth/login', userLogin, {
-            headers: { Authorization: getAuthorizationHeader() }
-        });
-        if (response.status === 200) {
-            toast.success('Login successfully.');
-            history.push('/');
-            const userLoggedIn = { ...response.data };
-            const token = String(response.headers['authorization']);           
-            localStorage.setItem('token', token);
-            return userLoggedIn;
+        try {
+            const url = '/auth/login';
+            const response = await axiosInstance.post(url, userLogin, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            if (response.status === 200) {
+                toast.success('Login successfully.');
+                history.push('/');
+                const userLoggedIn = { ...response.data };
+                const token = String(response.headers['authorization']);           
+                localStorage.setItem('token', token);
+                return userLoggedIn;
+            }
+            return initialState.user;
         }
-        return initialState.user;
-    });
+        catch (error) { return error.message; }
+    }
+);
 
 export const registerUser = createAsyncThunk(
-    'user/registerUser',
+    'login/registerUser',
     async (user: interfaces.User) => {
-        const response = await axiosInstance.post('/auth/register', user, {
-            headers: { Authorization: getAuthorizationHeader() }
-        });
-        const userId = Number(response.headers['Id']);
-        toast.success('Register user successfully.');
-        history.push('/');
-        return {id: userId, ...user};
+        try {
+            const url = '/auth/register';
+            const response = await axiosInstance.post(url, user, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            const userId = Number(response.headers['Id']);
+            toast.success('Register user successfully.');
+            history.push('/');
+            return {id: userId, ...user};
+        }
+        catch (error) { return error.message; }
     }
 );
 
 export const editUser = createAsyncThunk(
-    'user/editUser',
+    'login/editUser',
     async (user: interfaces.User) => {
-        await axiosInstance.put('/auth/edit', user, {
-            headers: { Authorization: getAuthorizationHeader() }
-        });
-        toast.success('Edit user successfully.');
-        history.push('/');
-        return user;
+        try {
+            const url = '/auth/edit';
+            await axiosInstance.put(url, user, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            toast.success('Edit user successfully.');
+            return user;
+        }
+        catch (error) { return error.message; }
     }
 );
 
-export const getAllUsers = createAsyncThunk(
-    'user/getAllUsers',
+export const showUsers = createAsyncThunk(
+    'login/showUsers',
     async () => {
-        const users = await axiosInstance.get('/users', {
-            headers: { Authorization: getAuthorizationHeader() }
-        });
-        console.log(users);
-        return users;
+        try {
+            const url = '/users';
+            const users = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return users;
+        }
+        catch (error) { return error.message; }
+    }
+);
+
+export const showUsersPerPage = createAsyncThunk(
+    'login/showUsersPerPage',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users/pagination?_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
     }
 );
 
 export const deleteUser = createAsyncThunk(
-    'user/deleteUser',
+    'login/deleteUser',
     async (user: interfaces.User) => {
-        if (user.id !== undefined) {
-            await axiosInstance.delete(`/users/${user.id}`, {
-                headers: { Authorization: getAuthorizationHeader() }
-            });
-            toast.success('Delete successful!');
-            history.push('/');
+        try {
+            if (user.id !== undefined) {
+                await axiosInstance.delete(`/users/${user.id}`, {
+                    headers: { Authorization: getAuthorizationHeader() }
+                });
+                toast.success('Delete successful!');
+            }
         }
+        catch (error) { return error.message; }
     }
 );
 
 export const userSlice = createSlice({
-    name: 'user',
+    name: 'login',
     initialState: initialState,
     reducers: {
         logoutSuccess: (state) => {
@@ -115,10 +160,7 @@ export const userSlice = createSlice({
             // editUser asyncThunk
             .addCase(
                 editUser.fulfilled,
-                (state, action: PayloadAction<interfaces.User>) => {
-                    state.status = 'succeeded';
-                    state.user = action.payload;
-                })
+                (state) => {state.status = 'succeeded';})
             .addCase(editUser.pending, (state) => { state.status = 'loading'; })
             .addCase(editUser.rejected, (state, action) => {
                 state.status = 'failed';
@@ -153,14 +195,22 @@ export const userSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })
-            // getAllUsers asyncThunk
+            // showUsers asyncThunk
+            .addCase(showUsers.fulfilled, (state) => {state.status = 'succeeded';})
+            .addCase(showUsers.pending, (state) => { state.status = 'loading'; })
+            .addCase(showUsers.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // showUsersPerPage asyncThunk
             .addCase(
-                getAllUsers.fulfilled,
-                (state) => {
+                showUsersPerPage.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
                     state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
                 })
-            .addCase(getAllUsers.pending, (state) => { state.status = 'loading'; })
-            .addCase(getAllUsers.rejected, (state, action) => {
+            .addCase(showUsersPerPage.pending, (state) => { state.status = 'loading'; })
+            .addCase(showUsersPerPage.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })

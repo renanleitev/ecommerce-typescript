@@ -1,6 +1,5 @@
 import {
     initialState,
-    initialProduct,
     inventoryReducer,
     addProductCart,
     changeProductQuantityCart,
@@ -16,7 +15,7 @@ import {
     mockProductStateCart,
     storeProduct,
 } from '../services/_utils';
-import axios from '../services/axios';
+import {axiosInstance} from '../services/axios';
 import * as interfaces from '../interfaces';
 
 jest.mock('../services/axios');
@@ -75,7 +74,7 @@ describe('Testing initialState', () => {
         expect(initialState.product.additionalFeatures).toEqual('');
     });
     it('cart should be an empty array', () => {
-        expect(initialState.cart).toEqual([]);
+        expect(initialState.shoppingCart).toEqual([]);
     });
 });
 
@@ -111,17 +110,17 @@ describe('Testing products reducers', () => {
 describe('Testing products async thunks', () => {
     it('should get stock of products', async () => {
         const expectedResult = { data: { ...mockProduct } };
-        axios.get = jest.fn().mockResolvedValue(expectedResult);
+        axiosInstance.get = jest.fn().mockResolvedValue(expectedResult);
         const result = await dispatchProductEx(showStockPerPage({
             currentPage: 1,
-            productsPerPage: 1
+            itemsPerPage: 1
         }));
         expect(result.payload.data).toEqual(mockProduct);
-        expect(storeProduct.getState().stockPerPage.data).toEqual(mockProduct);
+        expect(storeProduct.getState().productsPerPage.data).toEqual(mockProduct);
     });
     it('should get product', async () => {
         const expectedResult = { data: { ...mockProduct } };
-        axios.get = jest.fn().mockResolvedValue(expectedResult);
+        axiosInstance.get = jest.fn().mockResolvedValue(expectedResult);
         await dispatchProductEx(showProduct('1'));
         expect(storeProduct.getState().product).toEqual(mockProduct);
     });
@@ -130,7 +129,7 @@ describe('Testing products async thunks', () => {
             ...mockProduct,
             price: '777.77',
         };
-        axios.put = jest.fn().mockResolvedValue(editedProduct);
+        axiosInstance.put = jest.fn().mockResolvedValue(editedProduct);
         await dispatchProductEx(editProduct(editedProduct));
         expect(storeProduct.getState().product).toEqual(editedProduct);
     });

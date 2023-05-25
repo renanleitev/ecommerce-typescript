@@ -1,21 +1,28 @@
 import React, { useCallback } from 'react';
 import * as interfaces from '../../interfaces';
 import { PaginationContainer } from './styled';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
-import { showStockPerPage } from '../../store/modules/products/reducer';
+import { showProductsPerPage } from '../../store/modules/products/reducer';
+import { showUsersPerPage } from '../../store/modules/login/reducer';
 
 const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Pagination) => {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const stock = useSelector((state: interfaces.IRootState) => state.products.stockPerPage);
     const pageStatus = props.pageStatus;
     const pageNumbers: Array<number> = [];
-    for (let i = 0; i < stock.total_pages; i++) {
-        pageNumbers.push(i);
+    function isProductDataType(object: interfaces.ProductData | interfaces.UserData): object is interfaces.ProductData {
+        return true;
     }
-    const paginationProduct = useCallback((numberOfPage: number) => {
+    for (let i = 0; i < props.data.total_pages; i++) {
+        pageNumbers.push(i);        
+    }
+    const paginationData = useCallback((numberOfPage: number) => {
         pageStatus.currentPage = numberOfPage;
-        dispatch(showStockPerPage({ ...pageStatus }));
+        if (isProductDataType(props.data)){
+            dispatch(showProductsPerPage({ ...pageStatus }));
+        } else {
+            dispatch(showUsersPerPage({ ...pageStatus }));
+        }
         props.setPageStatus({ ...pageStatus });
     }, [pageStatus]);
     return (
@@ -24,12 +31,11 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
                 return (
                     <button
                         key={numberOfPage + 1}
-                        onClick={() => paginationProduct(numberOfPage)}>
+                        onClick={() => paginationData(numberOfPage)}>
                         {numberOfPage+1}
                     </button>
                 )
             })}
-
         </PaginationContainer>
     )
 }

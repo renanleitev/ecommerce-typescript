@@ -72,34 +72,14 @@ export default function ShoppingTable(): JSX.Element{
             {React.Children.toArray(finalShoppingList.map((item: interfaces.ShoppingList) => {
                 return (
                     <tr>
-                        <td>
-                            <p>
-                                {item.userName}
-                            </p>
-                        </td>
-                        <td>
-                            <p>
-                                {item.productName}
-                            </p>
-                        </td>
-                        <td>
-                            <p>
-                                {item.quantity}
-                            </p>
-                        </td>
-                        <td>
-                            <p>
-                                {item.totalPrice}
-                            </p>
-                        </td>
-                        <td>
-                            <p>
-                                {item.dateCreated}
-                            </p>
-                        </td>
+                        <td><p>{item.userName}</p></td>
+                        <td><p>{item.productName}</p></td>
+                        <td><p>{item.quantity}</p></td>
+                        <td><p>{item.totalPrice}</p></td>
+                        <td><p>{item.dateCreated}</p></td>
                     </tr>
                 )}))}
-                </tbody>
+            </tbody>
             </Table>
             </>}
         </DivTable>

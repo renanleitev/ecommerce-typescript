@@ -30,13 +30,10 @@ export const HiddenTd = styled.td`
             border: 3px solid ${colors.primaryDarkColor};
         }
         button {
-            width: 20%;
+            width: 50%;
             margin-top: 10px;
             align-self: center;
             border-radius: 20px;
-        }
-        button:hover{
-            background-color: ${colors.infoColor};
         }
     }
 `;

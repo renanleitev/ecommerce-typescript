@@ -2,9 +2,8 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
 import {axiosInstance, getAuthorizationHeader} from '../../../services/axios';
-import { InitialStateProduct, Product } from '../../../interfaces';
 
-export const initialProduct: Product = {
+export const initialProduct: interfaces.Product = {
     id: '',
     name: '',
     image: '',
@@ -14,30 +13,30 @@ export const initialProduct: Product = {
     os: '',
     description: '',
     additionalFeatures: '',
-}
+};
 
-export const initialState: InitialStateProduct = {
+export const initialState: interfaces.InitialStateProduct = {
     status: 'idle',
     error: '',
-    stockPerPage: {
+    productsPerPage: {
         data: [{ ...initialProduct }],
         total_pages: 1,
         total_items: 1
     },
     pageStatus: {
         currentPage: 1,
-        productsPerPage: 3
+        itemsPerPage: 3
     },
     product: initialProduct,
-    cart: [],
+    shoppingCart: [],
     shoppingList: []
 };
 
-export const showStockPerPage = createAsyncThunk(
-    'inventory/showStockPerPage',
+export const showProductsPerPage = createAsyncThunk(
+    'products/showProductsPerPage',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
-            const url = `/products/pagination?_page=${pageStatus.currentPage}&_limit=${pageStatus.productsPerPage}`;
+            const url = `/products/pagination?_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
             const response = await axiosInstance.get(url, {
                 headers: { Authorization: getAuthorizationHeader() }
             });
@@ -51,7 +50,7 @@ export const showStockPerPage = createAsyncThunk(
     });
 
 export const showProduct = createAsyncThunk(
-    'inventory/showProduct',
+    'products/showProduct',
     async (id: string) => {
         try {
             const url = `/products/${id}`;
@@ -64,7 +63,7 @@ export const showProduct = createAsyncThunk(
     });
 
 export const editProduct = createAsyncThunk(
-    'inventory/editProduct',
+    'products/editProduct',
     async (product: interfaces.Product) => {
         try {
             const url = `/products/${product.id}`;
@@ -77,8 +76,23 @@ export const editProduct = createAsyncThunk(
         catch (error) { return error.message; }
     });
 
+export const createProduct = createAsyncThunk(
+    'products/createProduct',
+    async (product: interfaces.Product) => {
+        try{
+            const url = '/products';
+            await axiosInstance.post(url, product, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            toast.success('Create product successfully.');
+            return product;
+        }
+        catch (error) { return error.message; }
+    }
+)
+
 export const showShoppings = createAsyncThunk(
-    'inventory/showShoppings',
+    'products/showShoppings',
     async (id: string) => {
         try {
             const url = `/shoppings/${id}`;
@@ -91,7 +105,7 @@ export const showShoppings = createAsyncThunk(
     });
 
 export const saveShoppings = createAsyncThunk(
-    'inventory/saveShoppings',
+    'products/saveShoppings',
     async (shoppingCart: Array<interfaces.ShoppingCart>) => {
         try {
             const url = '/shoppings';
@@ -105,14 +119,14 @@ export const saveShoppings = createAsyncThunk(
 );
 
 export const inventorySlice = createSlice({
-    name: 'inventory',
+    name: 'products',
     initialState: initialState,
     reducers: {
         addProductCart: (state, action: PayloadAction<interfaces.Product>) => {
-            state.cart.push({ ...action.payload });
+            state.shoppingCart.push({ ...action.payload });
         },
         changeProductQuantityCart: (state, action: PayloadAction<interfaces.Product>) => {
-            state.cart.forEach((product: interfaces.Product) => {
+            state.shoppingCart.forEach((product: interfaces.Product) => {
                 if (product.id === action.payload.id) {
                     product.quantity = action.payload.quantity;
                     product.totalPrice = action.payload.totalPrice;
@@ -120,12 +134,12 @@ export const inventorySlice = createSlice({
             });
         },
         removeProductCart: (state, action: PayloadAction<interfaces.Product>) => {
-            state.cart.forEach((product: interfaces.Product, index: number) => {
-                if (product.id === action.payload.id) state.cart.splice(index, 1);
+            state.shoppingCart.forEach((product: interfaces.Product, index: number) => {
+                if (product.id === action.payload.id) state.shoppingCart.splice(index, 1);
             })
         },
         removeAllProductsCart: (state) => {
-            state.cart = initialState.cart;
+            state.shoppingCart = initialState.shoppingCart;
         },
         resetPageStatus: (state) => {
             state.pageStatus = initialState.pageStatus;
@@ -154,7 +168,7 @@ export const inventorySlice = createSlice({
                 saveShoppings.fulfilled,
                 (state) => {
                     state.status = 'succeeded';
-                    state.cart = initialState.cart;
+                    state.shoppingCart = initialState.shoppingCart;
                 })
             .addCase(saveShoppings.pending, (state) => { state.status = 'loading'; })
             .addCase(saveShoppings.rejected, (state, action) => {
@@ -173,6 +187,18 @@ export const inventorySlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })
+            // createProduct asyncThunk
+            .addCase(
+                createProduct.fulfilled,
+                (state, action: PayloadAction<interfaces.Product>) => {
+                    state.status = 'succeeded';
+                    state.product = { ...action.payload };
+                })
+            .addCase(createProduct.pending, (state) => { state.status = 'loading'; })
+            .addCase(createProduct.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
             // showProduct asyncThunk
             .addCase(
                 showProduct.fulfilled,
@@ -185,15 +211,16 @@ export const inventorySlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })
+            // showProductsPerPage asyncThunk
             .addCase(
-                showStockPerPage.fulfilled,
-                (state, action: PayloadAction<interfaces.StockData>) => {
+                showProductsPerPage.fulfilled,
+                (state, action: PayloadAction<interfaces.ProductData>) => {
                     state.status = 'succeeded';
-                    state.stockPerPage = action.payload;
+                    state.productsPerPage = action.payload;
                 }
             )
-            .addCase(showStockPerPage.pending, (state) => { state.status = 'loading'; })
-            .addCase(showStockPerPage.rejected, (state, action) => {
+            .addCase(showProductsPerPage.pending, (state) => { state.status = 'loading'; })
+            .addCase(showProductsPerPage.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })

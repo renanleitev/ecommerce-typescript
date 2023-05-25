@@ -16,7 +16,7 @@ import { AppThunkDispatch } from '../../store';
 
 export default function Shopping(): JSX.Element{
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
-    const cart = useSelector((state: interfaces.IRootState) => state.products.cart);
+    const cart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const dispatch = useDispatch<AppThunkDispatch>();
     const [shoppingCart, setShoppingCart] = useState([...cart]);

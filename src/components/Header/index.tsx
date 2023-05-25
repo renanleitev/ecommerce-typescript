@@ -7,7 +7,8 @@ import {
     FaUserPlus,
     FaShoppingCart,
     FaSearch, 
-    FaShoppingBag
+    FaShoppingBag,
+    FaKey
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,7 +22,7 @@ import {removeAllProductsCart, resetShoppingList} from '../../store/modules/prod
 export default function Header(): JSX.Element {
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
     const user = useSelector((state: IRootState) => state.login.user);
-    const cart = useSelector((state: IRootState) => state.products.cart);
+    const shoppingCart = useSelector((state: IRootState) => state.products.shoppingCart) || [];
     const dispatch = useDispatch();
     const handleLogin = useCallback(() => {
         if (isLoggedIn) {
@@ -54,7 +55,7 @@ export default function Header(): JSX.Element {
             <Link to="/shoppingCart">
                 {isLoggedIn && (
                     <Cart>
-                        <p>{cart.length}</p>
+                        <p>{shoppingCart.length}</p>
                         <FaShoppingCart size={24}/>
                     </Cart>
                 )}
@@ -68,6 +69,9 @@ export default function Header(): JSX.Element {
             </Link>
             <Link to="/searching">
                 <FaSearch size={24}/>
+            </Link>
+            <Link to="/admin">
+                <FaKey size={24}/>
             </Link>
             <Link to="/">
                 {isLoggedIn && <FaSignInAlt onClick={handleLogin} size={24}/>}

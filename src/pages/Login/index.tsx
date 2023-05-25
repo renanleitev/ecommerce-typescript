@@ -32,7 +32,7 @@ export default function Login(): JSX.Element {
                 </Form>
                 ))
                 ||
-                (<EditUser/>)
+                (<EditUser user={{...user}}/>)
             }
         </Container>
     );

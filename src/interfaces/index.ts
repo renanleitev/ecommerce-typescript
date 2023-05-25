@@ -1,5 +1,3 @@
-import internal from "stream"
-
 interface Base {
     id: string,
     name: string,
@@ -13,16 +11,18 @@ export interface Product extends Base {
     description: string,
     additionalFeatures: string,
 }
-export interface StockData {
-    data: Array<Product>,
+interface BaseData {
     total_pages: number,
     total_items: number
 }
-export interface UserData {
-    data: Array<User>
+export interface ProductData extends BaseData {
+    data: Array<Product>
 }
 export interface EditProduct {
     product: Product,
+}
+export interface EditUser {
+    user: User,
 }
 export interface User extends Base {
     username: string,
@@ -32,38 +32,45 @@ export interface User extends Base {
     password: string,
     role: string,
 }
+export interface UserData extends BaseData {
+    data: Array<User>
+}
 export interface Input {
     data: Product | User,
     setData: CallableFunction,
     keyName: string,
     keyValue: string,
 }
+export interface PageNumberStatus {
+    currentPage: number,
+    itemsPerPage: number
+}
 interface BaseInitialState {
     status: string,
     error: string,
 }
 export interface InitialStateProduct extends BaseInitialState {
-    stockPerPage: StockData,
-    pageStatus: PageNumberStatus
     product: Product,
-    cart: Array<Product>,
+    productsPerPage: ProductData,
+    pageStatus: PageNumberStatus,
+    shoppingCart: Array<Product>,
     shoppingList: Array<ShoppingList>
 }
 export interface InitialStateLogin extends BaseInitialState {
     isLoggedIn: boolean,
     user: User,
+    usersPerPage: UserData,
+    pageStatus: PageNumberStatus
 }
 export interface IRootState {
     login: InitialStateLogin,
     products: InitialStateProduct,
 }
-export interface PageNumberStatus {
-    currentPage: number,
-    productsPerPage: number
-}
+
 export interface Pagination {
     pageStatus: PageNumberStatus,
-    setPageStatus: CallableFunction
+    setPageStatus: CallableFunction,
+    data: ProductData | UserData
 }
 export interface TableHead {
     stock: Array<Product>,

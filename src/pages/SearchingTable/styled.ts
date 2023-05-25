@@ -25,6 +25,7 @@ export const Table = styled.table`
     text-align: center;
     table-layout: fixed;
     width: 1000px;
+    word-wrap: break-word;
     a {
         color: ${colors.primaryDarkColor};
     }
@@ -47,5 +48,8 @@ export const Table = styled.table`
     }
     .addCart{
         width: 10px;
+    }
+    button:hover{
+        background-color: ${colors.infoColor};
     }
 `;

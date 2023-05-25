@@ -8,33 +8,34 @@ import TableBody from '../../components/TableBody';
 import Pagination from '../../components/Pagination';
 import InputSearch from '../../components/InputSearch';
 import Loading from '../../components/Loading';
-import { showStockPerPage } from '../../store/modules/products/reducer';
+import { showProductsPerPage } from '../../store/modules/products/reducer';
 
 export default function SearchingTable(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const stockPerPage = useSelector((state: interfaces.IRootState) => state.products.stockPerPage) || { data: [], total_pages: 0, total_items: 0 };
+    const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) || 
+    { data: [], total_pages: 0, total_items: 0 };
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
         currentPage: 0,
-        productsPerPage: 3
+        itemsPerPage: 3
     });
-    const [stock, setStock] = useState([...stockPerPage.data.map((product: interfaces.Product) => {
+    const [stock, setStock] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
         return { ...product, quantity: 0, totalPrice: 0 };
     })]);
-    const [originalStock, setOriginalStock] = useState([...stockPerPage.data.map((product: interfaces.Product) => {
+    const [originalStock, setOriginalStock] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
         return { ...product, quantity: 0, totalPrice: 0 };
     })]);
     useEffect(() => {
-        dispatch(showStockPerPage(pageStatus));
+        dispatch(showProductsPerPage(pageStatus));
     }, [pageStatus]);
     useMemo(() => {
-        setStock([...stockPerPage.data.map((product: interfaces.Product) => {
+        setStock([...productsPerPage.data.map((product: interfaces.Product) => {
             return { ...product, quantity: 0, totalPrice: 0 };
         })]);
-        setOriginalStock([...stockPerPage.data.map((product: interfaces.Product) => {
+        setOriginalStock([...productsPerPage.data.map((product: interfaces.Product) => {
             return { ...product, quantity: 0, totalPrice: 0 };
         })]);
-    }, [stockPerPage]);
+    }, [productsPerPage]);
     return (
         <DivTable>
             {isLoading === 'loading' ? <Loading /> : <>
@@ -53,7 +54,7 @@ export default function SearchingTable(): JSX.Element {
                         originalStock={originalStock}
                         setOriginalStock={setOriginalStock} />
                 </Table>
-                <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus} />
+                <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus} data={productsPerPage}/>
             </>}
         </DivTable>
     )
