@@ -10,8 +10,8 @@ import Modal from '../../components/Modal';
 import useModal from "../../hooks/useModal";
 import { HiddenTd } from "../../components/TableBody/styled";
 import EditUser from '../EditUser';
+import CreateUser from '../CreateUser';
 
-// TODO: Construir uma página de Administrador
 export default function SystemAdmin(): JSX.Element{
     const dispatch = useDispatch<AppThunkDispatch>();
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
@@ -21,6 +21,7 @@ export default function SystemAdmin(): JSX.Element{
         currentPage: 0,
         itemsPerPage: 2
     });
+    const [option, setOption] = useState('');
     const { isOpen, toggle } = useModal();
     useEffect(() => {
         dispatch(showUsersPerPage(pageStatus));
@@ -32,24 +33,12 @@ export default function SystemAdmin(): JSX.Element{
             <Table>
             <thead>
                 <tr>
-                    <th>
-                        Name 
-                    </th>
-                    <th>
-                        Surname 
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Address
-                    </th>
-                    <th>
-                        Role
-                    </th>
-                    <th>
-                        Edit/Delete
-                    </th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Role</th>
+                    <th>Edit/Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +47,7 @@ export default function SystemAdmin(): JSX.Element{
                     <tr>
                         <HiddenTd hidden={!isOpen}>
                             <Modal isOpen={isOpen} toggle={toggle}>
-                                <EditUser user={editedUser}/>
+                                {option === 'edit' ? <EditUser user={editedUser}/>:<CreateUser/>}
                             </Modal>
                         </HiddenTd>
                         <td><p>{user.name}</p></td>
@@ -70,6 +59,7 @@ export default function SystemAdmin(): JSX.Element{
                             <button
                             onClick={() => {
                                 toggle();
+                                setOption('edit');
                                 setEditedUser(user);
                             }}
                             >
@@ -80,6 +70,15 @@ export default function SystemAdmin(): JSX.Element{
                 )}))}
             </tbody>
             </Table>
+            <button
+                onClick={() => {
+                    toggle();
+                    setOption('create');
+                    setEditedUser(user);
+                }}
+                >
+                    Create User
+            </button>
             <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus} data={usersPerPage}/>
         </DivTable> : <></>}
         </>

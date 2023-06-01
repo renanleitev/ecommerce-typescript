@@ -70,9 +70,10 @@ export default function Header(): JSX.Element {
             <Link to="/searching">
                 <FaSearch size={24}/>
             </Link>
+            {user.role === 'ROLE_ADMIN' ? 
             <Link to="/admin">
                 <FaKey size={24}/>
-            </Link>
+            </Link> : <></>}
             <Link to="/">
                 {isLoggedIn && <FaSignInAlt onClick={handleLogin} size={24}/>}
             </Link>

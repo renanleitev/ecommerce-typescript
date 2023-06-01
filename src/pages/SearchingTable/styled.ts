@@ -4,6 +4,12 @@ import * as colors from '../../config/colors';
 export const DivTable = styled.div`
     text-align: center;
     padding-bottom: 70px;
+    button {
+        margin-top: 10px;
+    }
+    button:hover{
+        background-color: ${colors.infoColor};
+    }
     input {
         margin-top: 20px;
         width: 500px;

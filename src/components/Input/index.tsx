@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import * as interfaces from '../../interfaces';
-import capitalizeString from '../../services/capitalizeString';
+import {startCase} from 'lodash';
 
 const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
     const [type, setType] = useState('text');
@@ -25,12 +25,12 @@ const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
     }, [props.data, props.keyName, props.setData]);
     return (
         <>
-            <label htmlFor={props.keyName}>{capitalizeString(props.keyName)}</label>
+            <label htmlFor={props.keyName}>{startCase(props.keyName)}</label>
             <input
             type={type}
             defaultValue={props.keyValue}
             onChange={handleInput}
-            placeholder={capitalizeString(props.keyName)}
+            placeholder={startCase(props.keyName)}
             />
         </>
     );

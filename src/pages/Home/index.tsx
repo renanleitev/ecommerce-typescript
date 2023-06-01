@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
 import * as interfaces from '../../interfaces';
-import { Container } from '../../styles/GlobalStyle';
-import { HomeContainer, ProductContainer } from './styled';
+import { HomeContainer, ProductContainer, Container } from './styled';
 import { AppThunkDispatch } from '../../store';
 import { showProductsPerPage } from '../../store/modules/products/reducer';
 

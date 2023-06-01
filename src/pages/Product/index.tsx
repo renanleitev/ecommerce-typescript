@@ -3,35 +3,30 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ItemContainer, CartButton } from './styled';
 import {ProductContainer} from '../Home/styled';
-import EditProduct from '../EditProduct';
 import {toast} from 'react-toastify';
 import * as interfaces from '../../interfaces';
 import {addProductCart, removeProductCart} from '../../store/modules/products/reducer';
 import { showProduct } from '../../store/modules/products/reducer';
-import Modal from '../../components/Modal';
-import useModal from "../../hooks/useModal";
 import { AppThunkDispatch } from '../../store';
 import Loading from '../../components/Loading';
 import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
+import EditProduct from '../EditProduct';
+import ModalDialog from '../../components/ModalDialog';
+import {FaEdit} from 'react-icons/fa';
 
 export default function Product(): JSX.Element {
+    // Actual code
     interface Url{id: string}
     const url: Url = useParams();
     const dispatch = useDispatch<AppThunkDispatch>();
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
-    const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const shoppingCart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
     const product = useSelector((state: interfaces.IRootState) => state.products.product);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
-    const { isOpen, toggle } = useModal();
     const [newProduct, setNewProduct] = useState<interfaces.Product>(
         {...product, quantity: 0, totalPrice: 0}
     );
-    const [isAdmin, setIsAdmin] = useState(false);
-    useEffect(() => {
-        if (user.role === 'ADMIN') setIsAdmin(true);
-    }, [user.name]);
     useMemo(() => {
         shoppingCart.forEach((element: interfaces.Product) => {
             if (element.id === newProduct.id) {
@@ -82,28 +77,28 @@ export default function Product(): JSX.Element {
     return (
         <ProductContainer>
             {isLoading === 'loading' ? <Loading/> : <>
-            <Modal isOpen={isOpen} toggle={toggle}>
-                <EditProduct product={newProduct}/>
-            </Modal>
             <ItemContainer>
                 <h1>{newProduct.name}</h1>
                 <img src={newProduct.image} alt=''/>
-                <ProductContainer>
-                    <p>Price: ${newProduct.price}</p>
-                    <p>Quantity: {newProduct.quantity}</p>
-                    <p>Total: ${newProduct.totalPrice.toFixed(2)}</p>
-                </ProductContainer>
+                <p>Price: ${newProduct.price}</p>
+                <p>Quantity: {newProduct.quantity}</p>
+                <p>Total: ${newProduct.totalPrice.toFixed(2)}</p>
+            </ItemContainer> 
+            <ItemContainer>
+                    <h1>Description</h1>
                     <p>Operational System: {newProduct.os}</p>
                     <p>Additional Features: {newProduct.additionalFeatures}</p>
                     <p>Description: {newProduct.description}</p>
-                <ProductContainer>
-                    <CartButton onClick={addProduct}>Add to cart</CartButton>
-                    <CartButton onClick={incrementQuantity}>+</CartButton>
-                    <CartButton onClick={decrementQuantity}>-</CartButton>
-                    <CartButton onClick={removeProduct}>Remove Product</CartButton>
-                    {isAdmin ? (<CartButton onClick={toggle}>Edit Product</CartButton>) : (<></>)}
-                </ProductContainer>
-            </ItemContainer> 
+                    <ProductContainer>
+                        <CartButton onClick={addProduct}>Buy</CartButton>
+                        <CartButton onClick={incrementQuantity}>+</CartButton>
+                        <CartButton onClick={decrementQuantity}>-</CartButton>
+                        <CartButton onClick={removeProduct}>Remove</CartButton>
+                        <ModalDialog iconToOpenModal={FaEdit}>
+                            <EditProduct product={newProduct}/>
+                        </ModalDialog>
+                    </ProductContainer>
+            </ItemContainer>
             </>}
         </ProductContainer>       
     )

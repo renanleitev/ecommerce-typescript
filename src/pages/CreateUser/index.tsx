@@ -1,0 +1,30 @@
+import React, { useCallback, useState } from 'react';
+import { Form } from '../EditProduct/styled';
+import Input from '../../components/Input';
+import * as interfaces from '../../interfaces';
+import {registerUser} from '../../store/modules/login/reducer';
+import { useDispatch } from 'react-redux';
+import { AppThunkDispatch } from '../../store';
+import { initialUser } from '../../store/modules/login/reducer';
+
+export default function CreateUser(): JSX.Element{
+    const dispatch = useDispatch<AppThunkDispatch>();
+    const [user, setUser] = useState<interfaces.User>(initialUser);
+    const handleSubmit = useCallback((event: React.FormEvent) => {
+        event.preventDefault();
+        dispatch(registerUser({...user}));
+    }, [dispatch, user]);
+    return (
+        <Form onSubmit={handleSubmit}>
+            <h1>Create User</h1> 
+            <Input data={user} setData={setUser} keyName='username' keyValue={''}/>
+            <Input data={user} setData={setUser} keyName='name' keyValue={''}/>
+            <Input data={user} setData={setUser} keyName='surname' keyValue={''}/>
+            <Input data={user} setData={setUser} keyName='address' keyValue={''}/>
+            <Input data={user} setData={setUser} keyName='email' keyValue={''}/>
+            <Input data={user} setData={setUser} keyName='role' keyValue={''}/>
+            <Input data={user} setData={setUser} keyName='password' keyValue={''}/>
+            <button type="submit">New User</button>
+        </Form>
+    )
+}

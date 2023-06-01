@@ -122,10 +122,11 @@ export const deleteUser = createAsyncThunk(
     async (user: interfaces.User) => {
         try {
             if (user.id !== undefined) {
-                await axiosInstance.delete(`/users/${user.id}`, {
+                const url = `/users/${user.id}`;
+                await axiosInstance.delete(url, {
                     headers: { Authorization: getAuthorizationHeader() }
                 });
-                toast.success('Delete successful!');
+                toast.success('Delete user successfully!');
             }
         }
         catch (error) { return error.message; }
@@ -150,7 +151,7 @@ export const userSlice = createSlice({
                 (state, action: PayloadAction<interfaces.User>) => {
                     state.status = 'succeeded';
                     state.isLoggedIn = true;
-                    state.user = action.payload;
+                    if (state.user.role !== 'ROLE_ADMIN') state.user = action.payload;
                 })
             .addCase(registerUser.pending, (state) => { state.status = 'loading'; })
             .addCase(registerUser.rejected, (state, action) => {
@@ -183,7 +184,7 @@ export const userSlice = createSlice({
             .addCase(
                 loginUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
-                    if (action.payload.name !== '') {
+                    if (action.payload.name) {
                         state.isLoggedIn = true;
                         state.user = action.payload;
                     } else {

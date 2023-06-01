@@ -3,9 +3,10 @@ import * as colors from '../../config/colors';
 
 export const ItemContainer = styled.div`
     max-width: 760px;
-    max-height: 700px;
+    max-height: 500px;
     background: white;
-    margin: 30px auto;
+    margin-bottom: 200px;
+    margin-right: 20px;
     padding: 30px;
     border-radius: 4px;
     box-shadow: 0 0 10px black;
