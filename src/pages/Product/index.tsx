@@ -11,12 +11,8 @@ import { AppThunkDispatch } from '../../store';
 import Loading from '../../components/Loading';
 import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
-import EditProduct from '../EditProduct';
-import ModalDialog from '../../components/ModalDialog';
-import {FaEdit} from 'react-icons/fa';
 
 export default function Product(): JSX.Element {
-    // Actual code
     interface Url{id: string}
     const url: Url = useParams();
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -94,9 +90,6 @@ export default function Product(): JSX.Element {
                         <CartButton onClick={incrementQuantity}>+</CartButton>
                         <CartButton onClick={decrementQuantity}>-</CartButton>
                         <CartButton onClick={removeProduct}>Remove</CartButton>
-                        <ModalDialog iconToOpenModal={FaEdit}>
-                            <EditProduct product={newProduct}/>
-                        </ModalDialog>
                     </ProductContainer>
             </ItemContainer>
             </>}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
     FaShoppingCart, 
     FaTrash,
@@ -16,44 +16,29 @@ import {
 } from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { DivCartButton } from "../../pages/Product/styled";
 import mapStockAddProduct from "../../services/mapStockAddProduct";
 import mapStockRemoveProduct from "../../services/mapStockRemoveProduct";
 import { toast } from "react-toastify";
-import useModal from "../../hooks/useModal";
-import Modal from '../../components/Modal';
 import EditProduct from '../../pages/EditProduct';
-import { HiddenTd } from "./styled";
+import ModalDialog from "../ModalDialog";
 import CreateProduct from "../../pages/CreateProduct";
+import { initialProduct } from "../../store/modules/products/reducer";
+import FontAwesomeButton from "../FontAwesomeButton";
+import { DivCartButton } from "./styled";
 
-const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) => {
+const TableBody: React.FC<interfaces.Table> = (props: interfaces.Table) => {
     const dispatch = useDispatch<AppThunkDispatch>();
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const shoppingCart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
-    const [editedProduct, setEditedProduct] = useState<interfaces.Product>();
-    const [option, setOption] = useState('');
-    useEffect(() => {
-        props.stock.map((product) => {
-            shoppingCart.map((productCart) => {
-                    if (productCart.id === product.id) {
-                        product.quantity = productCart.quantity;
-                        product.totalPrice = productCart.totalPrice;
-                    }
-                })
-            }
-        );
-    }, []);
-    const { isOpen, toggle } = useModal();
+    const [editedProduct, setEditedProduct] = useState<interfaces.Product>(initialProduct);
     const addProductQuantity = useCallback(
         (product: interfaces.Product) => {
             props.setStock(mapStockAddProduct(props.stock, product));
-            props.setOriginalStock(mapStockAddProduct(props.originalStock, product));
     }, [props.stock]);
     const removeProductQuantity = useCallback(
         (product: interfaces.Product) => {
             props.setStock(mapStockRemoveProduct(props.stock, product));
-            props.setOriginalStock(mapStockRemoveProduct(props.originalStock, product));
     }, [props.stock]);
     const removeProductFromCart = useCallback(
         (product: interfaces.Product) => {
@@ -80,14 +65,6 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
             {React.Children.toArray(props.stock.map((product: interfaces.Product) => {
                 return (
                         <tr className='product'> 
-                            <HiddenTd hidden={!isOpen}>
-                                <Modal isOpen={isOpen} toggle={toggle}>
-                                    {option === 'edit' ? 
-                                    <EditProduct product={editedProduct}/>:
-                                    <CreateProduct/>
-                                    }
-                                </Modal>
-                            </HiddenTd>
                             <td>
                                 <Link to={`products/${product.id}`}>
                                     {product.name}
@@ -106,48 +83,20 @@ const TableBody: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) 
                                             ...
                                         </button>
                                         <div className="dropdown-content">
-                                            <button 
-                                            onClick={() => addProductQuantity(product)}
-                                            className="hidden">
-                                                <FaPlus size={18}/>
-                                            </button>
-                                            <button 
-                                            onClick={() => removeProductQuantity(product)}
-                                            className="hidden">
-                                                <FaMinus size={18}/>
-                                            </button>
-                                            <button
-                                            onClick={() => addProductToCart(product)}
-                                            className="hidden">
-                                                <FaShoppingCart size={22}/>
-                                            </button>
+                                            <FontAwesomeButton icon={FaPlus} onClickFunction={() => addProductQuantity(product)}/>
+                                            <FontAwesomeButton icon={FaMinus} onClickFunction={() => removeProductQuantity(product)}/>
+                                            <FontAwesomeButton icon={FaShoppingCart} onClickFunction={() => addProductToCart(product)}/>
                                             {user.role === "ROLE_ADMIN" ? (
                                             <>
-                                                <button 
-                                                onClick={() => {
-                                                    toggle();
-                                                    setOption('edit');
-                                                    setEditedProduct(product);
-                                                }}
-                                                className="hidden">
-                                                    <FaEdit size={22}/>
-                                                </button>
-                                                <button 
-                                                onClick={() => {
-                                                    toggle();
-                                                    setOption('create');
-                                                    setEditedProduct(product);
-                                                }}
-                                                className="hidden">
-                                                    <FaDatabase size={22}/>
-                                                </button>
+                                                <ModalDialog iconToOpenModal={FaEdit} onClickFunction={() => setEditedProduct(product)}>
+                                                    <EditProduct product={product}/>
+                                                </ModalDialog>
+                                                <ModalDialog iconToOpenModal={FaDatabase} onClickFunction={() => setEditedProduct(editedProduct)}>
+                                                    <CreateProduct/>
+                                                </ModalDialog>
                                             </>
                                             ) : (<></>)}
-                                            <button 
-                                            onClick={() => removeProductFromCart(product)}
-                                            className="hidden">
-                                                <FaTrash size={22}/>
-                                            </button>
+                                            <FontAwesomeButton icon={FaTrash} onClickFunction={() => removeProductFromCart(product)}/>
                                         </div>
                                     </DivCartButton>
                                 </td>

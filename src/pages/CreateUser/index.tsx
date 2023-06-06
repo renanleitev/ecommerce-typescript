@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Form } from '../EditProduct/styled';
+import { Form } from '../../styles/GlobalStyle';
 import Input from '../../components/Input';
 import * as interfaces from '../../interfaces';
 import {registerUser} from '../../store/modules/login/reducer';
@@ -22,7 +22,6 @@ export default function CreateUser(): JSX.Element{
             <Input data={user} setData={setUser} keyName='surname' keyValue={''}/>
             <Input data={user} setData={setUser} keyName='address' keyValue={''}/>
             <Input data={user} setData={setUser} keyName='email' keyValue={''}/>
-            <Input data={user} setData={setUser} keyName='role' keyValue={''}/>
             <Input data={user} setData={setUser} keyName='password' keyValue={''}/>
             <button type="submit">New User</button>
         </Form>

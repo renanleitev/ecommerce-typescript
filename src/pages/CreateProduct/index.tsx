@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Form } from '../EditProduct/styled';
+import { Form } from '../../styles/GlobalStyle';
 import Input from '../../components/Input';
 import * as interfaces from '../../interfaces';
 import {createProduct} from '../../store/modules/products/reducer';

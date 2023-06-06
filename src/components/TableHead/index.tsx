@@ -3,7 +3,7 @@ import * as interfaces from '../../interfaces';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
-const TableHead: React.FC<interfaces.TableHead> = (props: interfaces.TableHead) => {
+const TableHead: React.FC<interfaces.Table> = (props: interfaces.Table) => {
     const [sorting, setSorting] = useState(true);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const applySorting = useCallback((key: string) => {

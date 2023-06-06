@@ -9,6 +9,7 @@ import { AppThunkDispatch } from '../../store';
 import { showProductsPerPage } from '../../store/modules/products/reducer';
 
 export default function Home(): JSX.Element {
+    const dispatch = useDispatch<AppThunkDispatch>();
     const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) 
     || { data: [], total_pages: 0, total_items: 0 };
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
@@ -16,7 +17,6 @@ export default function Home(): JSX.Element {
         currentPage: 0,
         itemsPerPage: 3
     });
-    const dispatch = useDispatch<AppThunkDispatch>();
     useEffect(() => {
         dispatch(showProductsPerPage(pageStatus));
     }, [pageStatus]);

@@ -1,26 +1,34 @@
 import React, {useCallback} from "react";
 import * as interfaces from '../../interfaces';
 import { debounce } from "lodash";
-// rxjs
+import { searchProductByName, showProductsPerPage } from "../../store/modules/products/reducer";
+import { useDispatch } from 'react-redux';
+import { AppThunkDispatch } from '../../store';
 
-const InputSearch: React.FC<interfaces.TableBody> = (props: interfaces.TableBody) => {
+const InputSearch: React.FC<interfaces.InputSearch> = (props: interfaces.InputSearch) => {
+    const dispatch = useDispatch<AppThunkDispatch>();
     const searchTable = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const searchTerm = e.currentTarget.value.toString().toLowerCase();
+        const inputSearch: interfaces.PageNumberStatus = {
+            searching: searchTerm,
+            currentPage: props.pageStatus.currentPage,
+            itemsPerPage: props.pageStatus.itemsPerPage
+        }
         // 1000 = 1 second
         const searchDelayTime = 1000;
         const searching = debounce((value) => {
-            value === '' ? 
-            props.setStock(props.originalStock) : 
-            props.setStock(props.stock.filter(
-                product =>
-                product.description.toLowerCase().indexOf(value) > -1,
-            ));
+            searchTerm === '' ? 
+            dispatch(showProductsPerPage(props.pageStatus)) : 
+            dispatch(searchProductByName(value));
         }, searchDelayTime);
-        searching(searchTerm);
-    }, [props.stock]);
+        searching(inputSearch);
+        props.setSearchTerm(searchTerm);
+    }, []);
     return (
         <input
-        onChange={searchTable}
+        onKeyUp={(event) => {
+                if (event.key === "Enter") searchTable(event);
+                }}
         placeholder={'Search for products...'}/>
     )
 }

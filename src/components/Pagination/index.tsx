@@ -3,7 +3,7 @@ import * as interfaces from '../../interfaces';
 import { PaginationContainer } from './styled';
 import { useDispatch } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
-import { showProductsPerPage } from '../../store/modules/products/reducer';
+import { searchProductByName, showProductsPerPage } from '../../store/modules/products/reducer';
 import { showUsersPerPage } from '../../store/modules/login/reducer';
 
 const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Pagination) => {
@@ -19,7 +19,11 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
     const paginationData = useCallback((numberOfPage: number) => {
         pageStatus.currentPage = numberOfPage;
         if (isProductDataType(props.data)){
-            dispatch(showProductsPerPage({ ...pageStatus }));
+            if (props.pageStatus.searching === '') {
+                dispatch(showProductsPerPage({ ...pageStatus }));
+            } else {
+                dispatch(searchProductByName({...pageStatus}));
+            }
         } else {
             dispatch(showUsersPerPage({ ...pageStatus }));
         }

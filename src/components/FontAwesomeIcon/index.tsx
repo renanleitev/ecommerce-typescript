@@ -7,8 +7,8 @@ interface FaIconProps {
   
 export const FontAwesomeIcon = ({ Icon }: FaIconProps): JSX.Element => {
     return (
-        <div>
+        <>
             <Icon/>
-        </div>
+        </>
     );
 };

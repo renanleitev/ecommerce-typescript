@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {FaShoppingCart} from 'react-icons/fa';
+import {
+    FaShoppingCart, 
+    FaTrash,
+    FaPlus,
+    FaMinus,
+} from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
     CartContainer, 
@@ -13,6 +18,7 @@ import {removeProductCart, saveShoppings} from '../../store/modules/products/red
 import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
 import { AppThunkDispatch } from '../../store';
+import FontAwesomeButton from '../../components/FontAwesomeButton';
 
 export default function Shopping(): JSX.Element{
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
@@ -70,9 +76,9 @@ export default function Shopping(): JSX.Element{
                             <p>Total: ${product.totalPrice.toFixed(2)}</p>
                         </ShoppingContainer>
                         <ButtonContainer>
-                                <button onClick={() => handleIncrement(product)}>+</button>
-                                <button onClick={() => handleDecrement(product)}>-</button>
-                                <button onClick={() => handleRemove(product)}>Remove product</button>
+                                <FontAwesomeButton icon={FaPlus} onClickFunction={() => handleIncrement(product)}/>
+                                <FontAwesomeButton icon={FaMinus} onClickFunction={() => handleDecrement(product)}/>
+                                <FontAwesomeButton icon={FaTrash} onClickFunction={() => handleRemove(product)}/>
                         </ButtonContainer>
                     </ItemContainer>
                 )))

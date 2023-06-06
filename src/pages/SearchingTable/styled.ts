@@ -4,9 +4,6 @@ import * as colors from '../../config/colors';
 export const DivTable = styled.div`
     text-align: center;
     padding-bottom: 70px;
-    button {
-        margin-top: 10px;
-    }
     button:hover{
         background-color: ${colors.infoColor};
     }
@@ -51,9 +48,6 @@ export const Table = styled.table`
     }
     th:hover {
         cursor: pointer;
-    }
-    .addCart{
-        width: 10px;
     }
     button:hover{
         background-color: ${colors.infoColor};

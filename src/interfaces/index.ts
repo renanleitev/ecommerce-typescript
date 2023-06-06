@@ -42,6 +42,7 @@ export interface Input {
     keyValue: string,
 }
 export interface PageNumberStatus {
+    searching?: string,
     currentPage: number,
     itemsPerPage: number
 }
@@ -72,13 +73,14 @@ export interface Pagination {
     setPageStatus: CallableFunction,
     data: ProductData | UserData
 }
-export interface TableHead {
+export interface Table {
     stock: Array<Product>,
     setStock: CallableFunction
 }
-export interface TableBody extends TableHead {
-    originalStock: Array<Product>,
-    setOriginalStock: CallableFunction
+export interface InputSearch {
+    pageStatus: PageNumberStatus,
+    searchTerm: string,
+    setSearchTerm: CallableFunction
 }
 export interface ShoppingCart {
     quantity: number,

@@ -51,7 +51,6 @@ export default createGlobalStyle`
 
 export const Container = styled.section`
     max-width: 360px;
-    height: 500px;
     background: white;
     margin: 30px auto;
     padding: 30px;
@@ -75,20 +74,34 @@ export const Container = styled.section`
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
-    h1{
+    justify-content: center;
+    h1, h2{
         text-align: center;
-    }
-    label{
-        margin: 10px 0px;
-    }
-    button{
-        margin-top: 10px;
     }
     .link{
         margin-top: 10px;
         font-size: 12px;
     }
     .link:hover{
-        color: blue;
+        color: ${colors.infoColor};
+    }
+    label {
+        margin: 10px 0px;
+        font-size: larger;
+        font-weight: bolder;
+        text-align: center;
+    }
+    input {
+        width: 100%;
+        padding: 20px;
+        border-radius: 20px;
+        border: 3px solid ${colors.primaryDarkColor};
+    }
+    button {
+        border-radius: 20px;
+        margin: 20px auto;
+    }
+    button:hover{
+        background-color: ${colors.infoColor};
     }
 `;

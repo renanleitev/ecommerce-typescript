@@ -8,7 +8,7 @@ import TableBody from '../../components/TableBody';
 import Pagination from '../../components/Pagination';
 import InputSearch from '../../components/InputSearch';
 import Loading from '../../components/Loading';
-import { showProductsPerPage } from '../../store/modules/products/reducer';
+import { searchProductByName, showProductsPerPage } from '../../store/modules/products/reducer';
 
 export default function SearchingTable(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -19,42 +19,35 @@ export default function SearchingTable(): JSX.Element {
         currentPage: 0,
         itemsPerPage: 3
     });
+    const [searchTerm, setSearchTerm] = useState('');
     const [stock, setStock] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
         return { ...product, quantity: 0, totalPrice: 0 };
     })]);
-    const [originalStock, setOriginalStock] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
-        return { ...product, quantity: 0, totalPrice: 0 };
-    })]);
     useEffect(() => {
-        dispatch(showProductsPerPage(pageStatus));
+        if (searchTerm === ''){
+            dispatch(showProductsPerPage(pageStatus));
+        } else {
+            dispatch(searchProductByName(pageStatus));
+        }
     }, [pageStatus]);
     useMemo(() => {
         setStock([...productsPerPage.data.map((product: interfaces.Product) => {
-            return { ...product, quantity: 0, totalPrice: 0 };
-        })]);
-        setOriginalStock([...productsPerPage.data.map((product: interfaces.Product) => {
             return { ...product, quantity: 0, totalPrice: 0 };
         })]);
     }, [productsPerPage]);
     return (
         <DivTable>
             {isLoading === 'loading' ? <Loading /> : <>
-                <InputSearch
-                    stock={stock}
-                    setStock={setStock}
-                    originalStock={originalStock}
-                    setOriginalStock={setOriginalStock} />
+                <InputSearch pageStatus={pageStatus} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
                 <Table>
                     <TableHead
                         stock={stock}
                         setStock={setStock} />
                     <TableBody
                         stock={stock}
-                        setStock={setStock}
-                        originalStock={originalStock}
-                        setOriginalStock={setOriginalStock} />
+                        setStock={setStock}/>
                 </Table>
-                <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus} data={productsPerPage}/>
+                <Pagination pageStatus={{...pageStatus, searching: searchTerm}} setPageStatus={setPageStatus} data={productsPerPage}/>
             </>}
         </DivTable>
     )

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
 import { toast } from 'react-toastify';
 import {axiosInstance, getAuthorizationHeader} from '../../../services/axios';
+import history from '../../../services/history';
 
 export const initialProduct: interfaces.Product = {
     id: '',
@@ -112,11 +113,30 @@ export const saveShoppings = createAsyncThunk(
             await axiosInstance.post(url, shoppingCart, {
                 headers: { Authorization: getAuthorizationHeader() }
             });
+            toast.success('Purchase products successfully.');
+            history.push('/');
             return shoppingCart;
         }
         catch (error) { return error.message; }
     }
 );
+
+export const searchProductByName = createAsyncThunk(
+    'products/searchProductByName',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/products?_name=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });
 
 export const inventorySlice = createSlice({
     name: 'products',
@@ -153,6 +173,16 @@ export const inventorySlice = createSlice({
     },
     extraReducers(builder) {
         builder
+            // searchProductByName asyncThunk
+            .addCase(searchProductByName.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
+                state.status = 'succeeded';
+                state.productsPerPage = action.payload;
+            })
+            .addCase(searchProductByName.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchProductByName.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
             // showShoppings asyncThunk
             .addCase(showShoppings.fulfilled, (state, action: PayloadAction<Array<interfaces.ShoppingList>>) => {
                 state.status = 'succeeded';
