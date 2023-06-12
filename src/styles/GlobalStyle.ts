@@ -8,7 +8,6 @@ export default createGlobalStyle`
     * {
         margin: 0;
         padding: 0;
-        outline: none;
         box-sizing: border-box;
     }
     body {
@@ -51,7 +50,7 @@ export default createGlobalStyle`
 
 export const Container = styled.section`
     max-width: 360px;
-    background: white;
+    background: ${colors.primaryWhiteColor};
     margin: 30px auto;
     padding: 30px;
     display: flex;
@@ -64,6 +63,7 @@ export const Container = styled.section`
     }
     img:hover{
         transform: scale(1.2);
+        transition: all 300ms;
     }
     p{
         position: absolute;
@@ -95,7 +95,7 @@ export const Form = styled.form`
         width: 100%;
         padding: 20px;
         border-radius: 20px;
-        border: 3px solid ${colors.primaryDarkColor};
+        border: 2px solid ${colors.primaryDarkColor};
     }
     button {
         border-radius: 20px;

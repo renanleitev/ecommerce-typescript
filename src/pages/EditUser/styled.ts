@@ -1,15 +1,14 @@
 import styled from "styled-components";
 import * as colors from '../../config/colors';
+import {Container} from "../../styles/GlobalStyle";
 
-export const ButtonContainer = styled.div`
-    display: flex;
+export const ButtonContainer = styled(Container)`
     flex-direction: row;
     align-self: center;
-    margin-bottom: 5%;
     button{
         margin-right: 10px;
         :hover{
-        background-color: ${colors.sucessColor};
+        background-color: ${colors.infoColor};
         }
     }
 `;

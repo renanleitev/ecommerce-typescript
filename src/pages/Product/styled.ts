@@ -1,48 +1,35 @@
 import styled from "styled-components";
 import * as colors from '../../config/colors';
+import {Container} from "../../styles/GlobalStyle";
 
-export const ItemContainer = styled.div`
-    max-width: 760px;
-    max-height: 500px;
-    background: white;
-    margin-bottom: 200px;
+export const ItemContainer = styled(Container)`
     margin-right: 20px;
-    padding: 30px;
     border-radius: 4px;
     box-shadow: 0 0 10px black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
     p {
+        position: relative;
+        margin: 0px auto;
         font-size: 20px;
         margin-bottom: 10px;
         text-align: center;
     }
     img{
-        width: 150px;
         margin-top: 50px;
         margin-bottom: 50px;
-    }
-    img:hover{
-        transform: scale(1.2);
-        transition: all 300ms;
+        :hover{
+            transform: scale(1.2);
+            transition: all 300ms;
+        }
     }
     h1{
         margin-bottom: 10px;
-    }
-    form{
-        width: 400px;
-        overflow-y: scroll;
-    }
-    form > button {
-        width: 360px;
     }
 `;
 
 export const CartButton = styled.button`
     margin-right: 10px;
     :hover{
-        background-color: ${colors.sucessColor};
+        background-color: ${colors.infoColor};
     }
 `;

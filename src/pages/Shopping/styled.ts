@@ -1,61 +1,56 @@
 import styled from "styled-components";
 import * as colors from '../../config/colors';
+import {Container} from "../../styles/GlobalStyle";
 
 export const CartContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Items per row */
+    padding: 40px calc((100% - (400px * 3)) / 2);
 `;
 
 export const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
-    align-self: center;
     margin-bottom: 5%;
     button{
         margin-right: 10px;
         :hover{
-        background-color: ${colors.sucessColor};
+        background-color: ${colors.infoColor};
         }
     }
 `;
 
-export const ItemContainer = styled.div`
+export const ItemContainer = styled(Container)`
     background-color: ${colors.primaryWhiteColor};
-    display: flex;
-    flex-direction: column;
-    align-self: center;
     width: 420px;
-    border-radius: 20px;
     margin-top: 1%;
     margin-bottom: 5%;
+    flex: 0 0 215px;
+    p{
+        position: relative;
+        margin-top: 0;
+    }
     h2{
         padding: 20px;
         text-align: center;
     }
 `;
 
-export const ShoppingContainer = styled.div`
-    background: ${colors.primaryWhiteColor};
-    margin: 30px auto;
-    padding: 30px;
-    border-radius: 4px;
+export const ShoppingContainer = styled(Container)`
+    height: 400px;
     box-shadow: 0 0 10px black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     p {
         font-size: 20px;
         margin-bottom: 10px;
         text-align: center;
     }
     img{
-        width: 150px;
+        height: 150px;
         margin-top: 50px;
         margin-bottom: 50px;
-    }
-    img:hover{
-        transform: scale(1.2);
-        transition: all 300ms;
     }
 `;
 
@@ -63,7 +58,6 @@ export const CheckoutContainer = styled.button`
     background-color: ${colors.infoColor};
     border-radius: 0;
     position: fixed;
-    align-self: flex-end;
     z-index: 2;
     :hover{
         background-color: ${colors.sucessColor};

@@ -58,16 +58,17 @@ export default function Shopping(): JSX.Element{
         dispatch(saveShoppings(shoppingCartList));
     }, [dispatch]);
     return (
+        <>
+        {isLoggedIn ? (
+        <CheckoutContainer onClick={() => checkoutCart(cart, user)}>
+            <FaShoppingCart size={30}/>
+        </CheckoutContainer>
+        ) : (<></>)}
         <CartContainer>
-            {isLoggedIn ? (
-                <CheckoutContainer onClick={() => checkoutCart(cart, user)}>
-                    <FaShoppingCart size={30}/>
-                </CheckoutContainer>
-                ) : (<></>)}
             {isLoggedIn && shoppingCart.length >= 1 ? 
                 React.Children.toArray(
                     shoppingCart.map((product: interfaces.Product) => (
-                    <ItemContainer>
+                        <ItemContainer>
                         <ShoppingContainer>
                             <Link to={`products/${product.id}`}>{product.name}</Link>
                             <img src={product.image} alt=''/>
@@ -82,11 +83,12 @@ export default function Shopping(): JSX.Element{
                         </ButtonContainer>
                     </ItemContainer>
                 )))
-             : (
-                <ItemContainer>
+                : (
+                    <ItemContainer>
                     <h2>No products in your cart.</h2>
                 </ItemContainer>
             )}
         </CartContainer> 
+        </>
     )
 }

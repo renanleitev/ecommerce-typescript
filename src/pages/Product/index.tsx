@@ -1,5 +1,9 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { 
+    FaArrowLeft,
+    FaArrowRight
+} from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { ItemContainer, CartButton } from './styled';
 import {ProductContainer} from '../Home/styled';
@@ -11,6 +15,7 @@ import { AppThunkDispatch } from '../../store';
 import Loading from '../../components/Loading';
 import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
+import { Link } from 'react-router-dom';
 
 export default function Product(): JSX.Element {
     interface Url{id: string}
@@ -33,7 +38,7 @@ export default function Product(): JSX.Element {
     }, [shoppingCart, newProduct]);
     useEffect(() => {
         dispatch(showProduct(url.id));  
-    }, []);
+    }, [url.id]);
     useMemo(() => {
         setNewProduct({...product, quantity: 0, totalPrice: 0});
     }, [product]);
@@ -71,16 +76,17 @@ export default function Product(): JSX.Element {
         if (!isLoggedIn || newProduct.quantity === 0) toast.error('Can not remove the product.');
     }, [addProductQuantity, isLoggedIn, newProduct]);
     return (
-        <ProductContainer>
-            {isLoading === 'loading' ? <Loading/> : <>
-            <ItemContainer>
-                <h1>{newProduct.name}</h1>
-                <img src={newProduct.image} alt=''/>
-                <p>Price: ${newProduct.price}</p>
-                <p>Quantity: {newProduct.quantity}</p>
-                <p>Total: ${newProduct.totalPrice.toFixed(2)}</p>
-            </ItemContainer> 
-            <ItemContainer>
+        <>
+        {isLoading === 'loading' ? <Loading/> : 
+            <ProductContainer>
+                <ItemContainer>
+                    <h1>{newProduct.name}</h1>
+                    <img src={newProduct.image} alt=''/>
+                    <p>Price: ${newProduct.price}</p>
+                    <p>Quantity: {newProduct.quantity}</p>
+                    <p>Total: ${newProduct.totalPrice.toFixed(2)}</p>
+                </ItemContainer> 
+                <ItemContainer>
                     <h1>Description</h1>
                     <p>Operational System: {newProduct.os}</p>
                     <p>Additional Features: {newProduct.additionalFeatures}</p>
@@ -91,8 +97,18 @@ export default function Product(): JSX.Element {
                         <CartButton onClick={decrementQuantity}>-</CartButton>
                         <CartButton onClick={removeProduct}>Remove</CartButton>
                     </ProductContainer>
-            </ItemContainer>
-            </>}
-        </ProductContainer>       
+                    <ProductContainer>
+                            {Number.parseInt(url.id) > 1 && 
+                            <Link to={`/products/${Number.parseInt(url.id)-1}`}>
+                                <FaArrowLeft size={30}/>
+                            </Link>}
+                            <Link to={`/products/${Number.parseInt(url.id)+1}`}>
+                                <FaArrowRight size={30}/>
+                            </Link>
+                    </ProductContainer>
+                </ItemContainer>
+            </ProductContainer>  
+        }
+        </>
     )
 }
