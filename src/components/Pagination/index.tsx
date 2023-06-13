@@ -1,15 +1,20 @@
 import React, { useCallback, useState } from 'react';
 import * as interfaces from '../../interfaces';
 import { PaginationContainer, NumberContainer, OptionContainer } from './styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
-import { searchProductByName, showProductsPerPage } from '../../store/modules/products/reducer';
 import { showUsersPerPage } from '../../store/modules/login/reducer';
 import {FaBackward, FaForward} from 'react-icons/fa';
+import { searchProductByName,
+    searchProductByAdditionalFeatures,
+    searchProductByDescription,
+    searchProductByOs, 
+    showProductsPerPage 
+} from '../../store/modules/products/reducer';
 
 const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Pagination) => {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const pageStatus = props.pageStatus;
+    const pageStatus = useSelector((state: interfaces.IRootState) => state.products.pageStatus);
     const pageNumbers: Array<number> = [];
     const [numberOfPage, setNumberOfPage] = useState(0);
     function isProductDataType(object: interfaces.ProductData | interfaces.UserData): object is interfaces.ProductData {
@@ -19,17 +24,32 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
         pageNumbers.push(i);        
     }
     const paginationData = useCallback((numberOfPage: number) => {
-        pageStatus.currentPage = numberOfPage;
+        const newPageStatus: interfaces.PageNumberStatus = {...pageStatus, currentPage: numberOfPage};
         if (isProductDataType(props.data)){
-            if (props.pageStatus.searching === '') {
-                dispatch(showProductsPerPage({ ...pageStatus }));
+            if (newPageStatus.searching === ''){
+                dispatch(showProductsPerPage(newPageStatus));
             } else {
-                dispatch(searchProductByName({...pageStatus}));
+                switch(newPageStatus.option){
+                    case 'Name':
+                        dispatch(searchProductByName({...newPageStatus}));
+                        break;
+                    case 'Description':
+                        dispatch(searchProductByDescription({...newPageStatus}));
+                        break;
+                    case 'Additional Features':
+                        dispatch(searchProductByAdditionalFeatures({...newPageStatus}));
+                        break;
+                    case 'Operational System':
+                        dispatch(searchProductByOs({...newPageStatus}));
+                        break;
+                    default:
+                        dispatch(showProductsPerPage({...newPageStatus}));
+                        break;
+                }
             }
         } else {
-            dispatch(showUsersPerPage({ ...pageStatus }));
+            dispatch(showUsersPerPage({ ...newPageStatus }));
         }
-        props.setPageStatus({ ...pageStatus });
     }, [pageStatus]);
     const handleChange = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
         setNumberOfPage(Number.parseInt(event.currentTarget.value));
@@ -50,11 +70,13 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
                 onClick={() => paginationData(numberOfPage)}>
                 {numberOfPage+1}
             </button>
+            {props.data.total_pages > 1 && 
             <button
-                key={numberOfPage+2}
-                onClick={() => paginationData(numberOfPage+1)}>
+            key={numberOfPage+2}
+            onClick={() => paginationData(numberOfPage+1)}>
                 {numberOfPage+2}
             </button>
+            }
             <button
                 onClick={() => {
                     if((numberOfPage+2) <= pageNumbers.at(-1)){
@@ -65,7 +87,7 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
             </button>
         </NumberContainer>
         <OptionContainer>
-            <p>Page Number</p>
+            <p>Page</p>
             <input
             onChange={(event) => {
                 if (event.currentTarget.value !== ''){
@@ -79,7 +101,7 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
             placeholder={'Page...'}/>
             <select onChange={handleChange} size={2}>
                 {pageNumbers.map(page => 
-                    <option value={page}>{page+1}</option>
+                    <option value={page} key={page}>{page+1}</option>
                     )}
             </select>
         </OptionContainer>

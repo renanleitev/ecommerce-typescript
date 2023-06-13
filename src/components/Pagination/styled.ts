@@ -34,7 +34,6 @@ export const OptionContainer = styled(PaginationContainer)`
     }
     select, input{
         height: inherit;
-        margin-top: 0;
         border: none;
         text-align: center;
         width: 150px;

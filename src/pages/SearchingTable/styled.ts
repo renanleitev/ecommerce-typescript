@@ -3,7 +3,6 @@ import * as colors from '../../config/colors';
 
 export const DivTable = styled.div`
     text-align: center;
-    padding-bottom: 70px;
     button:hover{
         background-color: ${colors.infoColor};
     }

@@ -16,10 +16,7 @@ export default function SystemAdmin(): JSX.Element{
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const usersPerPage = useSelector((state: interfaces.IRootState) => state.login.usersPerPage) || { data: [], total_pages: 0, total_items: 0 };
     const [editedUser, setEditedUser] = useState<interfaces.User>(initialUser);
-    const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
-        currentPage: 0,
-        itemsPerPage: 2
-    });
+    const pageStatus = useSelector((state: interfaces.IRootState) => state.products.pageStatus);
     useEffect(() => {
         dispatch(showUsersPerPage(pageStatus));
     }, [pageStatus]);
@@ -62,7 +59,7 @@ export default function SystemAdmin(): JSX.Element{
                 )}))}
             </tbody>
             </Table>
-            <Pagination pageStatus={pageStatus} setPageStatus={setPageStatus} data={usersPerPage}/>
+            <Pagination data={usersPerPage}/>
         </DivTable> : <></>}
         </>
     )

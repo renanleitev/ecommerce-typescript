@@ -43,6 +43,7 @@ export interface Input {
 }
 export interface PageNumberStatus {
     searching?: string,
+    option?: string,
     currentPage: number,
     itemsPerPage: number
 }
@@ -69,8 +70,6 @@ export interface IRootState {
 }
 
 export interface Pagination {
-    pageStatus: PageNumberStatus,
-    setPageStatus: CallableFunction,
     data: ProductData | UserData
 }
 export interface Table {
@@ -78,9 +77,7 @@ export interface Table {
     setStock: CallableFunction
 }
 export interface InputSearch {
-    pageStatus: PageNumberStatus,
-    searchTerm: string,
-    setSearchTerm: CallableFunction
+    option: string,
 }
 export interface ShoppingCart {
     quantity: number,

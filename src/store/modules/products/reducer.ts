@@ -138,6 +138,57 @@ export const searchProductByName = createAsyncThunk(
         catch (error) { return error.message; }
     });
 
+export const searchProductByOs = createAsyncThunk(
+    'products/searchProductByOs',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/products?_os=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });
+
+export const searchProductByDescription = createAsyncThunk(
+    'products/searchProductByDescription',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/products?_description=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });
+
+export const searchProductByAdditionalFeatures = createAsyncThunk(
+    'products/searchProductByAdditionalFeatures',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/products?_additionalFeatures=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+});
+
 export const inventorySlice = createSlice({
     name: 'products',
     initialState: initialState,
@@ -165,7 +216,7 @@ export const inventorySlice = createSlice({
             state.pageStatus = initialState.pageStatus;
         },
         changePageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
-            state.pageStatus = action.payload
+            state.pageStatus = action.payload;
         },
         resetShoppingList: (state) => {
             state.shoppingList = initialState.shoppingList;
@@ -173,6 +224,36 @@ export const inventorySlice = createSlice({
     },
     extraReducers(builder) {
         builder
+            // searchProductByAdditionalFeatures asyncThunk
+            .addCase(searchProductByAdditionalFeatures.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
+                state.status = 'succeeded';
+                state.productsPerPage = action.payload;
+            })
+            .addCase(searchProductByAdditionalFeatures.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchProductByAdditionalFeatures.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchProductByOs asyncThunk
+            .addCase(searchProductByOs.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
+                state.status = 'succeeded';
+                state.productsPerPage = action.payload;
+            })
+            .addCase(searchProductByOs.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchProductByOs.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchProductByDescription asyncThunk
+            .addCase(searchProductByDescription.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
+                state.status = 'succeeded';
+                state.productsPerPage = action.payload;
+            })
+            .addCase(searchProductByDescription.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchProductByDescription.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
             // searchProductByName asyncThunk
             .addCase(searchProductByName.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
                 state.status = 'succeeded';
