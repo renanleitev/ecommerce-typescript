@@ -20,36 +20,3 @@ export const NumberContainer = styled(PaginationContainer)`
         background-color: ${colors.infoColor};
     }
 `;
-
-export const OptionContainer = styled(PaginationContainer)`
-    flex-direction: row;
-    height: 50px;
-    p{
-        height: inherit;
-        color: ${colors.primaryWhiteColor};
-        background-color: ${colors.primaryColor};
-        padding: 20px;
-        margin-right: 10px;
-        border-radius: 4px;
-    }
-    select, input{
-        height: inherit;
-        border: none;
-        text-align: center;
-        width: 150px;
-        border-radius: 4px;
-        padding: 10px;
-        margin-right: 10px;
-        cursor: pointer;
-        ::-webkit-scrollbar {
-            width: 10px;
-            color: ${colors.primaryDarkColor};
-        }
-        ::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 5px grey;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: ${colors.primaryColor};
-        }
-    }
-`;

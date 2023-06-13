@@ -79,9 +79,7 @@ const TableBody: React.FC<interfaces.Table> = (props: interfaces.Table) => {
                                 <td><p>${product.totalPrice.toFixed(2)}</p></td>
                                 <td>
                                     <DivCartButton>
-                                        <button className="dropbtn">
-                                            ...
-                                        </button>
+                                        <button className="dropbtn">...</button>
                                         <div className="dropdown-content">
                                             <FontAwesomeButton icon={FaPlus} onClickFunction={() => addProductQuantity(product)}/>
                                             <FontAwesomeButton icon={FaMinus} onClickFunction={() => removeProductQuantity(product)}/>

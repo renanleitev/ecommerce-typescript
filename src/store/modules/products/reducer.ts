@@ -189,6 +189,23 @@ export const searchProductByAdditionalFeatures = createAsyncThunk(
         catch (error) { return error.message; }
 });
 
+export const searchProductByPrice = createAsyncThunk(
+    'products/searchProductByPrice',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/products?_price=${pageStatus.price}&_operator=${pageStatus.operator}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+});
+
 export const inventorySlice = createSlice({
     name: 'products',
     initialState: initialState,
@@ -224,6 +241,16 @@ export const inventorySlice = createSlice({
     },
     extraReducers(builder) {
         builder
+            // searchProductByPrice asyncThunk
+            .addCase(searchProductByPrice.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
+                state.status = 'succeeded';
+                state.productsPerPage = action.payload;
+            })
+            .addCase(searchProductByPrice.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchProductByPrice.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
             // searchProductByAdditionalFeatures asyncThunk
             .addCase(searchProductByAdditionalFeatures.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
                 state.status = 'succeeded';

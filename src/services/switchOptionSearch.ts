@@ -2,19 +2,19 @@ import { searchProductByName,
     searchProductByAdditionalFeatures,
     searchProductByDescription,
     searchProductByOs, 
-    showProductsPerPage 
+    showProductsPerPage, 
+    searchProductByPrice
 } from '../store/modules/products/reducer';
 import * as interfaces from '../interfaces';
 
 export default function switchOptionSearch(
     pageStatus: interfaces.PageNumberStatus,
     dispatch: CallableFunction,
-    option: string
 ): void {
-    if (pageStatus.searching === ''){
+    if (pageStatus.searching === '' && pageStatus.option !== 'Price'){
         dispatch(showProductsPerPage(pageStatus));
     } else {
-        switch(option){
+        switch(pageStatus.option){
             case 'Name':
                 dispatch(searchProductByName({...pageStatus}));
                 break;
@@ -24,8 +24,11 @@ export default function switchOptionSearch(
             case 'Additional Features':
                 dispatch(searchProductByAdditionalFeatures({...pageStatus}));
                 break;
-            case 'Os':
+            case 'Operational System':
                 dispatch(searchProductByOs({...pageStatus}));
+                break;
+            case 'Price':
+                dispatch(searchProductByPrice({...pageStatus}));
                 break;
             default:
                 dispatch(showProductsPerPage({...pageStatus}));

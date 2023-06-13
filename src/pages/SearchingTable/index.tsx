@@ -7,13 +7,10 @@ import TableBody from '../../components/TableBody';
 import Pagination from '../../components/Pagination';
 import Loading from '../../components/Loading';
 import { AppThunkDispatch } from '../../store';
-import { searchProductByName,
-    searchProductByAdditionalFeatures,
-    searchProductByDescription,
-    searchProductByOs, 
-    showProductsPerPage,
-    changePageStatus 
-} from '../../store/modules/products/reducer';
+import { changePageStatus } from '../../store/modules/products/reducer';
+import switchOptionSearch from '../../services/switchOptionSearch';
+import Select from '../../components/Select';
+import { debounce } from 'lodash';
 
 export default function SearchingTable(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -31,57 +28,50 @@ export default function SearchingTable(): JSX.Element {
     }, [productsPerPage]);
     let option = '';
     let search = '';
-    const handleOptions = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
+    let price = '';
+    let operator = '';
+    const handleDefaultOptions = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
         option = event.currentTarget.value;
     }, []);
-    const searchTable = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        search = e.currentTarget.value.toString().toLowerCase();
+    const handlePriceOptions = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
+        if (option.includes('Price')) operator = event.currentTarget.value;
+    }, []);
+    const handlePriceValue = useCallback((event: React.FormEvent<HTMLInputElement>) => {
+        price = event.currentTarget.value;
+    }, []);
+    const handleInputSearch = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        // 1000 = 1 second
+        const delayTime = 1000;
+        const searching = debounce((value) => {
+            search = value;
+        }, delayTime);
+        searching(e.currentTarget.value.toString().toLowerCase());        
+    }, []);
+    const handleButtonSearch = useCallback(() => {
         const newPageStatus: interfaces.PageNumberStatus = {
             ...pageStatus, 
             searching: search,
-            option: option
+            option: option,
+            price: price,
+            operator: operator
         }
         dispatch(changePageStatus(newPageStatus));
-        if (newPageStatus.searching === ''){
-            dispatch(showProductsPerPage(newPageStatus));
-        } else {
-            console.log('InputSearch', newPageStatus);
-            switch(newPageStatus.option){
-                case 'Name':
-                    dispatch(searchProductByName({...newPageStatus}));
-                    break;
-                case 'Description':
-                    dispatch(searchProductByDescription({...newPageStatus}));
-                    break;
-                case 'Additional Features':
-                    dispatch(searchProductByAdditionalFeatures({...newPageStatus}));
-                    break;
-                case 'Operational System':
-                    dispatch(searchProductByOs({...newPageStatus}));
-                    break;
-                default:
-                    dispatch(showProductsPerPage({...newPageStatus}));
-                    break;
-            }
-        }
-    }, []);
+        switchOptionSearch(newPageStatus, dispatch);
+    }, []); 
+    const defaultOptions = ['Name', 'Description', 'Additional Features', 'Operational System', 'Price'];
+    const priceOptions = ['LessThan', 'LessThanOrEqualTo', 'EqualTo', 'GreaterThan', 'GreaterThanOrEqualTo'];
     return (
         <>
         <DivTable>
             {isLoading === 'loading' ? <Loading /> : <>
-            <input
-            onKeyUp={(event) => {
-                if (event.key === "Enter") searchTable(event);
-            }}
-            placeholder={'Search for products...'}/>
-                <select 
-                onChange={handleOptions}>
-                    <option value='' key=''>-</option>
-                    <option value='Name' key='Name'>Name</option>
-                    <option value='Description' key='Description'>Description</option>
-                    <option value='Additional Features' key='Additional Features'>Additional Features</option>
-                    <option value='Operational System' key='Operational System'>Operational System</option>
-                </select>
+                <input
+                onChange={handleInputSearch}
+                placeholder={'Search for products...'}
+                className='search-bar'/>
+                <Select onChangeFunction={handleDefaultOptions} options={defaultOptions}/>
+                <Select onChangeFunction={handlePriceOptions} options={priceOptions}/>
+                <input type='number' step="0.01" onChange={handlePriceValue}/>
+                <button onClick={handleButtonSearch}>Search</button>
                 <Table>
                     <TableHead
                         stock={stock}

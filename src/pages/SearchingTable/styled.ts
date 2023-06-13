@@ -6,13 +6,20 @@ export const DivTable = styled.div`
     button:hover{
         background-color: ${colors.infoColor};
     }
-    input {
+    .search-bar{
         margin-top: 20px;
-        width: 500px;
+        width: 300px;
         height: 40px;
         border-radius: 20px;
         text-indent: 20px;
         border: none;
+    }
+    select, input {
+        height: 40px;
+        width: 150px;
+        border-radius: 20px;
+        text-align: center;
+        margin-right: 10px;
     }
 `;
 

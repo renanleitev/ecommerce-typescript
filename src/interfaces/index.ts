@@ -44,6 +44,8 @@ export interface Input {
 export interface PageNumberStatus {
     searching?: string,
     option?: string,
+    price?: string,
+    operator?: string,
     currentPage: number,
     itemsPerPage: number
 }
