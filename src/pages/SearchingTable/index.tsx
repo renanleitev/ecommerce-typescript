@@ -53,12 +53,13 @@ export default function SearchingTable(): JSX.Element {
             searching: search,
             option: option,
             price: price,
-            operator: operator
+            operator: operator,
+            type: 'product'
         }
         dispatch(changePageStatus(newPageStatus));
         switchOptionSearch(newPageStatus, dispatch);
     }, []); 
-    const defaultOptions = ['Name', 'Description', 'Additional Features', 'Operational System', 'Price'];
+    const defaultOptions = ['Name Product', 'Description', 'Additional Features', 'Operational System', 'Price'];
     const priceOptions = ['LessThan', 'LessThanOrEqualTo', 'EqualTo', 'GreaterThan', 'GreaterThanOrEqualTo'];
     return (
         <>
@@ -70,7 +71,7 @@ export default function SearchingTable(): JSX.Element {
                 className='search-bar'/>
                 <Select onChangeFunction={handleDefaultOptions} options={defaultOptions}/>
                 <Select onChangeFunction={handlePriceOptions} options={priceOptions}/>
-                <input type='number' step="0.01" onChange={handlePriceValue}/>
+                <input type='number' step="0.01" onChange={handlePriceValue} className='number'/>
                 <button onClick={handleButtonSearch}>Search</button>
                 <Table>
                     <TableHead
@@ -82,7 +83,7 @@ export default function SearchingTable(): JSX.Element {
                 </Table>
             </>}
         </DivTable>
-        <Pagination data={productsPerPage} type={'product'}/>
+        <Pagination data={productsPerPage}/>
         </>
     )
 }

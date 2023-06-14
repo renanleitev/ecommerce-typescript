@@ -50,6 +50,7 @@ export interface PageNumberStatus {
     price?: string,
     operator?: string,
     id?: string,
+    type?: string,
     currentPage: number,
     itemsPerPage: number
 }
@@ -77,7 +78,7 @@ export interface IRootState {
 
 export interface Pagination {
     data: ProductData | UserData | ShoppingListData,
-    type: string
+    type?: string
 }
 export interface Table {
     stock: Array<Product>,

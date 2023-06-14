@@ -99,7 +99,7 @@ export const Form = styled.form`
         outline: none;
         width: 250px;
         padding-top: 5px;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid ${colors.primaryDarkColor};
         border-radius: 0;
     }
     button {

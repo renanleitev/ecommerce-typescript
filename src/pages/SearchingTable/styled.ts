@@ -17,9 +17,14 @@ export const DivTable = styled.div`
     select, input {
         height: 40px;
         width: 150px;
-        border-radius: 20px;
         text-align: center;
         margin-right: 10px;
+    }
+    select {
+        border-radius: 20px;
+    }
+    .number{
+        border-radius: 20px;
     }
 `;
 

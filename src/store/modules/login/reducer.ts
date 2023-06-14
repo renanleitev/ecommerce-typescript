@@ -133,6 +133,108 @@ export const deleteUser = createAsyncThunk(
     }
 );
 
+export const searchUserByUsername = createAsyncThunk(
+    'login/searchUserByUsername',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users?_username=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });
+
+export const searchUserByName = createAsyncThunk(
+    'login/searchUserByName',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users?_name=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });
+
+export const searchUserByEmail = createAsyncThunk(
+    'login/searchUserByEmail',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users?_email=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });
+
+export const searchUserByAddress = createAsyncThunk(
+    'login/searchUserByAddress',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users?_address=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });
+
+export const searchUserBySurname = createAsyncThunk(
+    'login/searchUserBySurname',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users?_surname=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });    
+
+export const searchUserByRole = createAsyncThunk(
+    'login/searchUserByRole',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users?_role=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+    });    
+
 export const userSlice = createSlice({
     name: 'login',
     initialState: initialState,
@@ -212,6 +314,78 @@ export const userSlice = createSlice({
                 })
             .addCase(showUsersPerPage.pending, (state) => { state.status = 'loading'; })
             .addCase(showUsersPerPage.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchUserByEmail asyncThunk
+            .addCase(
+                searchUserByEmail.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
+                    state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
+                })
+            .addCase(searchUserByEmail.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchUserByEmail.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchUserByUsername asyncThunk
+            .addCase(
+                searchUserByUsername.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
+                    state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
+                })
+            .addCase(searchUserByUsername.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchUserByUsername.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchUserByName asyncThunk
+            .addCase(
+                searchUserByName.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
+                    state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
+                })
+            .addCase(searchUserByName.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchUserByName.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchUserBySurname asyncThunk
+            .addCase(
+                searchUserBySurname.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
+                    state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
+                })
+            .addCase(searchUserBySurname.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchUserBySurname.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchUserByAddress asyncThunk
+            .addCase(
+                searchUserByAddress.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
+                    state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
+                })
+            .addCase(searchUserByAddress.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchUserByAddress.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
+            // searchUserByRole asyncThunk
+            .addCase(
+                searchUserByRole.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
+                    state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
+                })
+            .addCase(searchUserByRole.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchUserByRole.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })

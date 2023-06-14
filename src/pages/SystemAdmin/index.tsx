@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {FaDatabase, FaEdit} from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { showUsersPerPage } from '../../store/modules/login/reducer';
@@ -10,6 +10,10 @@ import EditUser from '../EditUser';
 import CreateUser from '../CreateUser';
 import ModalDialog from '../../components/ModalDialog';
 import { initialUser } from '../../store/modules/login/reducer';
+import Select from '../../components/Select';
+import { debounce } from 'lodash';
+import { changePageStatus } from '../../store/modules/products/reducer';
+import switchOptionSearch from '../../services/switchOptionSearch';
 
 export default function SystemAdmin(): JSX.Element{
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -23,10 +27,40 @@ export default function SystemAdmin(): JSX.Element{
     useEffect(() => {
         dispatch(showUsersPerPage(pageStatus));
     }, []);
+    let option = '';
+    let search = '';
+    const handleDefaultOptions = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
+        option = event.currentTarget.value;
+    }, []);
+    const handleInputSearch = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        // 1000 = 1 second
+        const delayTime = 1000;
+        const searching = debounce((value) => {
+            search = value;
+        }, delayTime);
+        searching(e.currentTarget.value.toString().toLowerCase());        
+    }, []);
+    const handleButtonSearch = useCallback(() => {
+        const newPageStatus: interfaces.PageNumberStatus = {
+            ...pageStatus, 
+            searching: search,
+            option: option,
+            type: 'user'
+        }
+        dispatch(changePageStatus(newPageStatus));
+        switchOptionSearch(newPageStatus, dispatch);
+    }, []); 
+    const defaultOptions = ['Username', 'Name User', 'Surname', 'Address', 'Email', 'Role'];
     return ( 
         <>
         {user.role === "ROLE_ADMIN" ?
         <DivTable>
+            <input
+            onChange={handleInputSearch}
+            placeholder={'Search for users...'}
+            className='search-bar'/>
+            <Select onChangeFunction={handleDefaultOptions} options={defaultOptions}/>
+            <button onClick={handleButtonSearch}>Search</button>
             <Table>
             <thead>
                 <tr>
@@ -62,7 +96,7 @@ export default function SystemAdmin(): JSX.Element{
                 )}))}
             </tbody>
             </Table>
-            <Pagination data={usersPerPage} type={'user'}/>
+            <Pagination data={usersPerPage}/>
         </DivTable> : <></>}
         </>
     )
