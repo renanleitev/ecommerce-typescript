@@ -16,10 +16,13 @@ export default function SystemAdmin(): JSX.Element{
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const usersPerPage = useSelector((state: interfaces.IRootState) => state.login.usersPerPage) || { data: [], total_pages: 0, total_items: 0 };
     const [editedUser, setEditedUser] = useState<interfaces.User>(initialUser);
-    const pageStatus = useSelector((state: interfaces.IRootState) => state.products.pageStatus);
+    const pageStatus: interfaces.PageNumberStatus = {
+        currentPage: 0,
+        itemsPerPage: 3
+    };
     useEffect(() => {
         dispatch(showUsersPerPage(pageStatus));
-    }, [pageStatus]);
+    }, []);
     return ( 
         <>
         {user.role === "ROLE_ADMIN" ?
@@ -59,7 +62,7 @@ export default function SystemAdmin(): JSX.Element{
                 )}))}
             </tbody>
             </Table>
-            <Pagination data={usersPerPage}/>
+            <Pagination data={usersPerPage} type={'user'}/>
         </DivTable> : <></>}
         </>
     )

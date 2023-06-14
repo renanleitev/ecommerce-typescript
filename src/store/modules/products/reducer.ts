@@ -30,7 +30,11 @@ export const initialState: interfaces.InitialStateProduct = {
     },
     product: initialProduct,
     shoppingCart: [],
-    shoppingList: []
+    shoppingList: {
+        data: [],
+        total_pages: 1,
+        total_items: 1
+    }
 };
 
 export const showProductsPerPage = createAsyncThunk(
@@ -94,13 +98,17 @@ export const createProduct = createAsyncThunk(
 
 export const showShoppings = createAsyncThunk(
     'products/showShoppings',
-    async (id: string) => {
+    async (pageStatus: interfaces.PageNumberStatus) => {
         try {
-            const url = `/shoppings/${id}`;
+            const url = `/shoppings/${pageStatus.id}?_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
             const response = await axiosInstance.get(url, {
                 headers: { Authorization: getAuthorizationHeader() }
             });
-            return response.data;
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
         }
         catch (error) { return error.message; }
     });
@@ -292,7 +300,7 @@ export const inventorySlice = createSlice({
                 state.error = action.error.message || "Something went wrong";
             })
             // showShoppings asyncThunk
-            .addCase(showShoppings.fulfilled, (state, action: PayloadAction<Array<interfaces.ShoppingList>>) => {
+            .addCase(showShoppings.fulfilled, (state, action: PayloadAction<interfaces.ShoppingListData>) => {
                 state.status = 'succeeded';
                 state.shoppingList = action.payload;
             })

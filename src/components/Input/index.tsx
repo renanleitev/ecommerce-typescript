@@ -1,6 +1,7 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import * as interfaces from '../../interfaces';
 import {startCase} from 'lodash';
+import { InputContainer } from './styled';
 
 const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
     const [type, setType] = useState('text');
@@ -24,7 +25,7 @@ const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
         });
     }, [props.data, props.keyName, props.setData]);
     return (
-        <>
+        <InputContainer>
             <label htmlFor={props.keyName}>{startCase(props.keyName)}</label>
             <input
             type={type}
@@ -32,7 +33,7 @@ const Input: React.FC<interfaces.Input> = (props: interfaces.Input) => {
             onChange={handleInput}
             placeholder={startCase(props.keyName)}
             />
-        </>
+        </InputContainer>
     );
 }
 

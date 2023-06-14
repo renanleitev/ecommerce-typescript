@@ -75,6 +75,7 @@ export const Form = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 100%;
     h1, h2{
         text-align: center;
     }
@@ -86,16 +87,20 @@ export const Form = styled.form`
         color: ${colors.infoColor};
     }
     label {
-        margin: 10px 0px;
         font-size: larger;
         font-weight: bolder;
         text-align: center;
+        margin-right: 10px;
+        margin-top: 15px;
+        width: 250px;
     }
     input {
-        width: 100%;
-        padding: 20px;
-        border-radius: 20px;
-        border: 2px solid ${colors.primaryDarkColor};
+        border: none;
+        outline: none;
+        width: 250px;
+        padding-top: 5px;
+        border-bottom: 1px solid black;
+        border-radius: 0;
     }
     button {
         border-radius: 20px;

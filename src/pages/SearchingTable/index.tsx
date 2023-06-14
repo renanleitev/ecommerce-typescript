@@ -82,7 +82,7 @@ export default function SearchingTable(): JSX.Element {
                 </Table>
             </>}
         </DivTable>
-        <Pagination data={productsPerPage}/>
+        <Pagination data={productsPerPage} type={'product'}/>
         </>
     )
 }

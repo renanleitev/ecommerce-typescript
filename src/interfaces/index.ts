@@ -18,6 +18,9 @@ interface BaseData {
 export interface ProductData extends BaseData {
     data: Array<Product>
 }
+export interface ShoppingListData extends BaseData {
+    data: Array<ShoppingList>
+}
 export interface EditProduct {
     product: Product,
 }
@@ -46,6 +49,7 @@ export interface PageNumberStatus {
     option?: string,
     price?: string,
     operator?: string,
+    id?: string,
     currentPage: number,
     itemsPerPage: number
 }
@@ -58,7 +62,7 @@ export interface InitialStateProduct extends BaseInitialState {
     productsPerPage: ProductData,
     pageStatus: PageNumberStatus,
     shoppingCart: Array<Product>,
-    shoppingList: Array<ShoppingList>
+    shoppingList: ShoppingListData
 }
 export interface InitialStateLogin extends BaseInitialState {
     isLoggedIn: boolean,
@@ -72,7 +76,8 @@ export interface IRootState {
 }
 
 export interface Pagination {
-    data: ProductData | UserData
+    data: ProductData | UserData | ShoppingListData,
+    type: string
 }
 export interface Table {
     stock: Array<Product>,

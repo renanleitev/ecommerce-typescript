@@ -6,7 +6,7 @@ export const ButtonContainer = styled(Container)`
     flex-direction: row;
     align-self: center;
     button{
-        margin-right: 10px;
+        margin-right: 15px;
         :hover{
         background-color: ${colors.infoColor};
         }

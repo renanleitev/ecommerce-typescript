@@ -37,7 +37,7 @@ export default function Home(): JSX.Element {
                             )
                         }))}
                 </ProductContainer>}
-            <Pagination data={productsPerPage}/>
+            <Pagination data={productsPerPage} type={'product'}/>
         </HomeContainer>
     )
 }

@@ -4,26 +4,37 @@ import * as interfaces from '../../interfaces';
 import { DivTable, Table } from '../SearchingTable/styled';
 import Loading from '../../components/Loading';
 import { AppThunkDispatch } from '../../store';
-import { showShoppings } from '../../store/modules/products/reducer';
+import { changePageStatus, showShoppings } from '../../store/modules/products/reducer';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import Pagination from '../../components/Pagination';
 
 export default function ShoppingTable(): JSX.Element{
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
-    const shoppingList = useSelector((state: interfaces.IRootState) => state.products.shoppingList);
+    const shoppingListPerPage = useSelector((state: interfaces.IRootState) => state.products.shoppingList);
     const [sorting, setSorting] = useState(true);
     const [firstLoad, setFirstLoad] = useState(true);
-    const [finalShoppingList, setFinalShoppingList] = useState([...shoppingList]);
     const dispatch = useDispatch<AppThunkDispatch>();
+    const pageStatus: interfaces.PageNumberStatus = {
+        id: user.id,
+        currentPage: 0,
+        itemsPerPage: 3
+    };
     useEffect(() => {
-        dispatch(showShoppings(user.id));
+        dispatch(changePageStatus(pageStatus));
+        dispatch(showShoppings(pageStatus));
     }, []);
+    const [shoppingList, setShoppingList] = useState([...shoppingListPerPage.data.map((shoppingListItem: interfaces.ShoppingList) => {
+        return { ...shoppingListItem };
+    })]);
     useMemo(() => {
-        setFinalShoppingList([...shoppingList]);
-    }, [shoppingList]);
+        setShoppingList([...shoppingListPerPage.data.map((shoppingListItem: interfaces.ShoppingList) => {
+            return { ...shoppingListItem };
+        })]);
+    }, [shoppingListPerPage]);
     const applySorting = useCallback((key: string) => {
         if (!firstLoad){
-            const sortedStock = finalShoppingList.sort(
+            const sortedStock = shoppingList.sort(
                 (previousItem: interfaces.ShoppingList, nextItem: interfaces.ShoppingList) => {
                 switch (key) {
                     case 'userName':
@@ -40,7 +51,7 @@ export default function ShoppingTable(): JSX.Element{
                         break;
                 }
             });
-            setFinalShoppingList(sorting ? [...sortedStock] : [...sortedStock.reverse()]);        
+            setShoppingList(sorting ? [...sortedStock] : [...sortedStock.reverse()]);        
             sorting ? setSorting(false) : setSorting(true);
         }
         setFirstLoad(false);
@@ -69,7 +80,7 @@ export default function ShoppingTable(): JSX.Element{
                 </tr>
             </thead>
             <tbody>
-            {React.Children.toArray(finalShoppingList.map((item: interfaces.ShoppingList) => {
+            {React.Children.toArray(shoppingList.map((item: interfaces.ShoppingList) => {
                 return (
                     <tr>
                         <td><p>{item.userName}</p></td>
@@ -82,6 +93,7 @@ export default function ShoppingTable(): JSX.Element{
             </tbody>
             </Table>
             </>}
+            <Pagination data={shoppingListPerPage} type={'shopping'}/>
         </DivTable>
     );
 }

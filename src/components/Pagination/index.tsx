@@ -4,9 +4,9 @@ import { PaginationContainer, NumberContainer } from './styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
 import { showUsersPerPage } from '../../store/modules/login/reducer';
+import { showShoppings } from '../../store/modules/products/reducer';
 import {FaBackward, FaForward} from 'react-icons/fa';
 import switchOptionSearch from '../../services/switchOptionSearch';
-import isProductDataType from '../../services/isProductDataType';
 
 const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Pagination) => {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -18,10 +18,18 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
     }
     const paginationData = useCallback((numberOfPage: number) => {
         const newPageStatus: interfaces.PageNumberStatus = {...pageStatus, currentPage: numberOfPage};
-        if (isProductDataType(props.data)){
-            switchOptionSearch(newPageStatus, dispatch);
-        } else {
-            dispatch(showUsersPerPage({ ...newPageStatus }));
+        switch(props.type){
+            case 'product':
+                switchOptionSearch(newPageStatus, dispatch);
+                break;
+            case 'user':
+                dispatch(showUsersPerPage({ ...newPageStatus }));
+                break;
+            case 'shopping':
+                dispatch(showShoppings({ ...newPageStatus }));
+                break;
+            default:
+                break;
         }
     }, [pageStatus]);
     return (
