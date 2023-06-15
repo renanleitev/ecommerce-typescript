@@ -25,8 +25,13 @@ export const initialState: interfaces.InitialStateProduct = {
         total_items: 1
     },
     pageStatus: {
-        currentPage: 1,
-        itemsPerPage: 3
+        currentPage: 0,
+        itemsPerPage: 3,
+        searching: '',
+        price: '',
+        operator: '',
+        option: '',
+        type: 'product'
     },
     product: initialProduct,
     shoppingCart: [],
@@ -237,10 +242,10 @@ export const inventorySlice = createSlice({
         removeAllProductsCart: (state) => {
             state.shoppingCart = initialState.shoppingCart;
         },
-        resetPageStatus: (state) => {
+        resetProductsPageStatus: (state) => {
             state.pageStatus = initialState.pageStatus;
         },
-        changePageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
+        changeProductsPageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
             state.pageStatus = action.payload;
         },
         resetShoppingList: (state) => {
@@ -378,8 +383,8 @@ export const {
     changeProductQuantityCart,
     removeProductCart,
     removeAllProductsCart,
-    resetPageStatus,
-    changePageStatus,
+    resetProductsPageStatus,
+    changeProductsPageStatus,
     resetShoppingList,
 } = inventorySlice.actions;
 

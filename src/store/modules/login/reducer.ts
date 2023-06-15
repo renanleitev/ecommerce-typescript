@@ -26,8 +26,11 @@ export const initialState: (interfaces.InitialStateLogin) = {
         total_items: 1
     },
     pageStatus: {
-        currentPage: 1,
-        itemsPerPage: 3
+        currentPage: 0,
+        itemsPerPage: 3,
+        searching: '',
+        option: '',
+        type: 'user'
     },
 };
 
@@ -244,6 +247,12 @@ export const userSlice = createSlice({
             state.user = initialState.user;
             localStorage.removeItem('token');
         },
+        resetUsersPageStatus: (state) => {
+            state.pageStatus = initialState.pageStatus;
+        },
+        changeUsersPageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
+            state.pageStatus = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -394,6 +403,8 @@ export const userSlice = createSlice({
 
 export const {
     logoutSuccess,
+    resetUsersPageStatus,
+    changeUsersPageStatus
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

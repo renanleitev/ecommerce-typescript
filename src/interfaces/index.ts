@@ -1,3 +1,5 @@
+import React from "react"
+
 interface Base {
     id: string,
     name: string,
@@ -49,8 +51,8 @@ export interface PageNumberStatus {
     option?: string,
     price?: string,
     operator?: string,
-    id?: string,
-    type?: string,
+    id?: string | null,
+    type?: string | null,
     currentPage: number,
     itemsPerPage: number
 }
@@ -78,11 +80,15 @@ export interface IRootState {
 
 export interface Pagination {
     data: ProductData | UserData | ShoppingListData,
-    type?: string
+    type: string
 }
-export interface Table {
-    stock: Array<Product>,
-    setStock: CallableFunction
+export interface TableProduct {
+    data: Array<Product>,
+    setData: CallableFunction
+}
+export interface TableUser {
+    data: Array<User>,
+    setData: CallableFunction
 }
 export interface InputSearch {
     option: string,
