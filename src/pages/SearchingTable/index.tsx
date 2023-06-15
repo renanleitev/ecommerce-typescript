@@ -1,36 +1,23 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { DivTable, Table } from './styled';
 import { useSelector, useDispatch } from 'react-redux';
 import * as interfaces from '../../interfaces';
-import TableHead from './TableHead';
-import TableBody from './TableBody';
+import TableHead from '../../components/TableHead';
+import TableBody from '../../components/TableBody';
 import Pagination from '../../components/Pagination';
 import Loading from '../../components/Loading';
 import { AppThunkDispatch } from '../../store';
-import { changeProductsPageStatus, showProductsPerPage } from '../../store/modules/products/reducer';
-import Select from '../../components/Select';
+import { changePageStatus } from '../../store/modules/products/reducer';
 import switchOptionSearch from '../../services/switchOptionSearch';
+import Select from '../../components/Select';
+import { debounce } from 'lodash';
 
 export default function SearchingTable(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) || { data: [], total_pages: 0, total_items: 0 };
+    const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) || 
+    { data: [], total_pages: 0, total_items: 0 };
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
-    const searchingRef = useRef<HTMLInputElement>(null);
-    const optionRef = useRef<HTMLSelectElement>(null);
-    const operatorRef = useRef<HTMLSelectElement>(null);
-    const priceValueRef = useRef<HTMLInputElement>(null);
-    const [pageStatus, setPageStatus] = useState<interfaces.PageNumberStatus>({
-        currentPage: 0,
-        itemsPerPage: 3,
-        searching: '',
-        price: '',
-        operator: '',
-        option: '',
-        type: 'product'
-    });
-    useEffect(() => {
-        dispatch(showProductsPerPage(pageStatus));
-    }, []);
+    const pageStatus = useSelector((state: interfaces.IRootState) => state.products.pageStatus);
     const [stock, setStock] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
         return { ...product, quantity: 0, totalPrice: 0 };
     })]);
@@ -39,17 +26,39 @@ export default function SearchingTable(): JSX.Element {
             return { ...product, quantity: 0, totalPrice: 0 };
         })]);
     }, [productsPerPage]);
-    const handleButtonSearch = useCallback(() => {
-        const newPageStatus = {
-            ...pageStatus, 
-            searching: searchingRef.current.value, 
-            option: optionRef.current.value,
-            operator: operatorRef.current.value,
-            price: priceValueRef.current.value
-        };
-        setPageStatus(newPageStatus);
-        switchOptionSearch('product', dispatch);
+    let option = '';
+    let search = '';
+    let price = '';
+    let operator = '';
+    const handleDefaultOptions = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
+        option = event.currentTarget.value;
     }, []);
+    const handlePriceOptions = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
+        if (option.includes('Price')) operator = event.currentTarget.value;
+    }, []);
+    const handlePriceValue = useCallback((event: React.FormEvent<HTMLInputElement>) => {
+        price = event.currentTarget.value;
+    }, []);
+    const handleInputSearch = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        // 1000 = 1 second
+        const delayTime = 1000;
+        const searching = debounce((value) => {
+            search = value;
+        }, delayTime);
+        searching(e.currentTarget.value.toString().toLowerCase());        
+    }, []);
+    const handleButtonSearch = useCallback(() => {
+        const newPageStatus: interfaces.PageNumberStatus = {
+            ...pageStatus, 
+            searching: search,
+            option: option,
+            price: price,
+            operator: operator,
+            type: 'product'
+        }
+        dispatch(changePageStatus(newPageStatus));
+        switchOptionSearch(newPageStatus, dispatch);
+    }, []); 
     const defaultOptions = ['Name Product', 'Description', 'Additional Features', 'Operational System', 'Price'];
     const priceOptions = ['LessThan', 'LessThanOrEqualTo', 'EqualTo', 'GreaterThan', 'GreaterThanOrEqualTo'];
     return (
@@ -57,24 +66,24 @@ export default function SearchingTable(): JSX.Element {
         <DivTable>
             {isLoading === 'loading' ? <Loading /> : <>
                 <input
-                ref={searchingRef}
+                onChange={handleInputSearch}
                 placeholder={'Search for products...'}
                 className='search-bar'/>
-                <Select inputRef={optionRef} options={defaultOptions}/>
-                <Select inputRef={operatorRef} options={priceOptions}/>
-                <input type='number' step="0.01" ref={priceValueRef} className='number'/>
+                <Select onChangeFunction={handleDefaultOptions} options={defaultOptions}/>
+                <Select onChangeFunction={handlePriceOptions} options={priceOptions}/>
+                <input type='number' step="0.01" onChange={handlePriceValue} className='number'/>
                 <button onClick={handleButtonSearch}>Search</button>
                 <Table>
                     <TableHead
-                        data={stock}
-                        setData={setStock} />
+                        stock={stock}
+                        setStock={setStock} />
                     <TableBody
-                        data={stock}
-                        setData={setStock}/>
+                        stock={stock}
+                        setStock={setStock}/>
                 </Table>
             </>}
         </DivTable>
-        <Pagination data={productsPerPage} type={'product'}/>
+        <Pagination data={productsPerPage}/>
         </>
     )
 }

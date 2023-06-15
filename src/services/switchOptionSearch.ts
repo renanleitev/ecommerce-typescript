@@ -2,8 +2,8 @@ import { searchProductByName,
     searchProductByAdditionalFeatures,
     searchProductByDescription,
     searchProductByOs, 
-    searchProductByPrice,
-    showProductsPerPage,
+    showProductsPerPage, 
+    searchProductByPrice
 } from '../store/modules/products/reducer';
 import { searchUserByAddress,
     searchUserByEmail,
@@ -14,72 +14,56 @@ import { searchUserByAddress,
     showUsersPerPage
 } from '../store/modules/login/reducer';
 import * as interfaces from '../interfaces';
-import { useSelector } from 'react-redux';
 
 export default function switchOptionSearch(
-    type: string,
+    pageStatus: interfaces.PageNumberStatus,
     dispatch: CallableFunction,
 ): void {
-    const productsPageStatus = useSelector((state: interfaces.IRootState) => state.products.pageStatus);
-    const usersPageStatus = useSelector((state: interfaces.IRootState) => state.login.pageStatus);
-    switch(type){
-        case 'user':
-            switch(usersPageStatus.option){
-                // searchUserBy
-                case 'Username':
-                    dispatch(searchUserByUsername({...usersPageStatus}));
-                    break;
-                case 'Name User':
-                    dispatch(searchUserByName({...usersPageStatus}));
-                    break;
-                case 'Surname':
-                    dispatch(searchUserBySurname({...usersPageStatus}));
-                    break;
-                case 'Address':
-                    dispatch(searchUserByAddress({...usersPageStatus}));
-                    break;
-                case 'Email':
-                    dispatch(searchUserByEmail({...usersPageStatus}));
-                    break;
-                case 'Role':
-                    dispatch(searchUserByRole({...usersPageStatus}));
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 'product':
-            switch(productsPageStatus.option){
-                // Initial Page Home
-                case 'Initial Page Home':
-                    dispatch(showProductsPerPage({...productsPageStatus}));
-                    break;
-                // Initial Page SystemAdmin
-                case 'Initial Page SystemAdmin':
-                    dispatch(showUsersPerPage({...productsPageStatus}));
-                    break;
-                // searchProductBy
-                case 'Name Product':
-                    dispatch(searchProductByName({...productsPageStatus}));
-                    break;
-                case 'Description':
-                    dispatch(searchProductByDescription({...productsPageStatus}));
-                    break;
-                case 'Additional Features':
-                    dispatch(searchProductByAdditionalFeatures({...productsPageStatus}));
-                    break;
-                case 'Operational System':
-                    dispatch(searchProductByOs({...productsPageStatus}));
-                    break;
-                case 'Price':
-                    dispatch(searchProductByPrice({...productsPageStatus}));
-                    break;
-                case '':
-                    dispatch(showProductsPerPage({...productsPageStatus}));
-                    break;
-            }
-            break;
-        default:
-            break;
+    if (pageStatus.searching === '' && pageStatus.option !== 'Price' && pageStatus.type === 'product'){
+        dispatch(showProductsPerPage(pageStatus));
+    } else if (pageStatus.searching === '' && pageStatus.type === 'user') {
+        dispatch(showUsersPerPage(pageStatus));
+    }
+    else {
+        switch(pageStatus.option){
+            // searchProductBy
+            case 'Name Product':
+                dispatch(searchProductByName({...pageStatus}));
+                break;
+            case 'Description':
+                dispatch(searchProductByDescription({...pageStatus}));
+                break;
+            case 'Additional Features':
+                dispatch(searchProductByAdditionalFeatures({...pageStatus}));
+                break;
+            case 'Operational System':
+                dispatch(searchProductByOs({...pageStatus}));
+                break;
+            case 'Price':
+                dispatch(searchProductByPrice({...pageStatus}));
+                break;
+            // searchUserBy
+            case 'Username':
+                dispatch(searchUserByUsername({...pageStatus}));
+                break;
+            case 'Name User':
+                dispatch(searchUserByName({...pageStatus}));
+                break;
+            case 'Surname':
+                dispatch(searchUserBySurname({...pageStatus}));
+                break;
+            case 'Address':
+                dispatch(searchUserByAddress({...pageStatus}));
+                break;
+            case 'Email':
+                dispatch(searchUserByEmail({...pageStatus}));
+                break;
+            case 'Role':
+                dispatch(searchUserByRole({...pageStatus}));
+                break;
+            default:
+                dispatch(showProductsPerPage({...pageStatus}));
+                break;
+        }
     }
 }

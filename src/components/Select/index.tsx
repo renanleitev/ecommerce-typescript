@@ -1,20 +1,22 @@
-import React from 'react'; 
+import React, {useCallback} from "react";
 
-type SelectProps = { 
-    options: Array<string>; 
-    defaultValue?: string; 
-    inputRef?: React.MutableRefObject<HTMLSelectElement>; 
-}; 
+interface Select {
+    onChangeFunction: CallableFunction;
+    options: Array<string>
+}
 
-const Select: React.FC<SelectProps> = ({ options, defaultValue, inputRef, }) => 
-{ return ( 
-        <select defaultValue={defaultValue} ref={inputRef} > 
-            <option key='None' value='-'>-</option>
-            {options.map((option) => ( 
-                <option key={option} value={option}> 
-                    {option} 
-                </option> ))} 
-        </select> 
-)}; 
+const Select: React.FC<Select> = ({onChangeFunction, options}) => {
+    const handleChange = useCallback((e: React.FormEvent<HTMLSelectElement>) => {
+        onChangeFunction(e);
+    }, []);
+    return(    
+        <select onChange={(e) => handleChange(e)}>
+            <option value='None' key='None'>-</option>
+            {options.map((option) => 
+                <option value={option} key={option}>{option}</option>
+            )}
+        </select>
+    )
+}
 
 export default Select;

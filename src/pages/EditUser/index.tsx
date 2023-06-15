@@ -11,23 +11,23 @@ import { AppThunkDispatch } from '../../store';
 
 export default function EditUser(props: interfaces.EditUser): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const [editedUser, setEditedUser] = useState<interfaces.User>(props.user);
+    const [editedUser, setEditedUser] = useState<interfaces.User>({...props.user});
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const formErrors = validationUser({...editedUser});
+        const formErrors = validationUser(editedUser);
         if(formErrors){
             toast.error('Form data error. Please, try again.');
         } else {
-            dispatch(editUser({...editedUser}));
+            dispatch(editUser(editedUser));
         }
     }, [editedUser, dispatch]);
     const handleDelete = useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        dispatch(deleteUser({...editedUser}));
+        dispatch(deleteUser(editedUser));
     }, [dispatch, editedUser]);
     return (
             <Form onSubmit={handleSubmit}>
-                <h2>Edit/Delete User</h2>
+                <h2>Edit User</h2>
                 <Input data={editedUser} setData={setEditedUser} keyName='username' keyValue={props.user.username}/>
                 <Input data={editedUser} setData={setEditedUser} keyName='name' keyValue={props.user.name}/>
                 <Input data={editedUser} setData={setEditedUser} keyName='surname' keyValue={props.user.surname}/>

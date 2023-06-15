@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
@@ -6,18 +6,19 @@ import Pagination from '../../components/Pagination';
 import * as interfaces from '../../interfaces';
 import { HomeContainer, ProductContainer, ItemContainer } from './styled';
 import { AppThunkDispatch } from '../../store';
-import { showProductsPerPage } from '../../store/modules/products/reducer';
+import { changePageStatus, showProductsPerPage } from '../../store/modules/products/reducer';
 
 export default function Home(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) || { data: [], total_pages: 0, total_items: 0 };    const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
+    const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) 
+    || { data: [], total_pages: 0, total_items: 0 };
+    const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const pageStatus: interfaces.PageNumberStatus = {
         currentPage: 0,
-        itemsPerPage: 3,
-        option: 'Initial Page Home',
-        type: 'product'
+        itemsPerPage: 3
     };
     useEffect(() => {
+        dispatch(changePageStatus(pageStatus));
         dispatch(showProductsPerPage(pageStatus));
     }, []);
     return (

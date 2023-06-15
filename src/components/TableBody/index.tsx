@@ -7,26 +7,26 @@ import {
     FaMinus,
     FaDatabase
 } from 'react-icons/fa';
-import * as interfaces from '../../../interfaces';
-import { AppThunkDispatch } from '../../../store';
+import * as interfaces from '../../interfaces';
+import { AppThunkDispatch } from '../../store';
 import {
     addProductCart, 
     removeProductCart,
     changeProductQuantityCart,
-} from '../../../store/modules/products/reducer';
+} from '../../store/modules/products/reducer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import mapStockAddProduct from "../../../services/mapStockAddProduct";
-import mapStockRemoveProduct from "../../../services/mapStockRemoveProduct";
+import mapStockAddProduct from "../../services/mapStockAddProduct";
+import mapStockRemoveProduct from "../../services/mapStockRemoveProduct";
 import { toast } from "react-toastify";
-import EditProduct from '../../EditProduct';
-import ModalDialog from "../../../components/ModalDialog";
-import CreateProduct from "../../CreateProduct";
-import { initialProduct } from "../../../store/modules/products/reducer";
-import FontAwesomeButton from "../../../components/FontAwesomeButton";
+import EditProduct from '../../pages/EditProduct';
+import ModalDialog from "../ModalDialog";
+import CreateProduct from "../../pages/CreateProduct";
+import { initialProduct } from "../../store/modules/products/reducer";
+import FontAwesomeButton from "../FontAwesomeButton";
 import { DivCartButton } from "./styled";
 
-const TableBody: React.FC<interfaces.TableProduct> = (props: interfaces.TableProduct) => {
+const TableBody: React.FC<interfaces.Table> = (props: interfaces.Table) => {
     const dispatch = useDispatch<AppThunkDispatch>();
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const shoppingCart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
@@ -34,12 +34,12 @@ const TableBody: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
     const [editedProduct, setEditedProduct] = useState<interfaces.Product>(initialProduct);
     const addProductQuantity = useCallback(
         (product: interfaces.Product) => {
-            props.setData(mapStockAddProduct(props.data, product));
-    }, [props.data]);
+            props.setStock(mapStockAddProduct(props.stock, product));
+    }, [props.stock]);
     const removeProductQuantity = useCallback(
         (product: interfaces.Product) => {
-            props.setData(mapStockRemoveProduct(props.data, product));
-    }, [props.data]);
+            props.setStock(mapStockRemoveProduct(props.stock, product));
+    }, [props.stock]);
     const removeProductFromCart = useCallback(
         (product: interfaces.Product) => {
             if (product.quantity > 0) {
@@ -50,7 +50,7 @@ const TableBody: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
             } else {
                 toast.error('Product is not in the cart.');
             }
-    }, [props.data]);
+    }, [props.stock]);
     const addProductToCart = useCallback((product: interfaces.Product) => {
         if (!shoppingCart.some(({id}) => id === product.id) && product.quantity > 0) {
             dispatch(addProductCart(product));
@@ -62,7 +62,7 @@ const TableBody: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
     }, [shoppingCart]);
     return (
         <tbody>
-            {React.Children.toArray(props.data.map((product: interfaces.Product) => {
+            {React.Children.toArray(props.stock.map((product: interfaces.Product) => {
                 return (
                         <tr className='product'> 
                             <td>

@@ -4,7 +4,7 @@ import * as interfaces from '../../interfaces';
 import { DivTable, Table } from '../SearchingTable/styled';
 import Loading from '../../components/Loading';
 import { AppThunkDispatch } from '../../store';
-import { changeProductsPageStatus, showShoppings } from '../../store/modules/products/reducer';
+import { changePageStatus, showShoppings } from '../../store/modules/products/reducer';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import Pagination from '../../components/Pagination';
 
@@ -18,11 +18,10 @@ export default function ShoppingTable(): JSX.Element{
     const pageStatus: interfaces.PageNumberStatus = {
         id: user.id,
         currentPage: 0,
-        itemsPerPage: 3,
-        type: 'shopping'
+        itemsPerPage: 3
     };
     useEffect(() => {
-        dispatch(changeProductsPageStatus(pageStatus));
+        dispatch(changePageStatus(pageStatus));
         dispatch(showShoppings(pageStatus));
     }, []);
     const [shoppingList, setShoppingList] = useState([...shoppingListPerPage.data.map((shoppingListItem: interfaces.ShoppingList) => {
@@ -94,7 +93,7 @@ export default function ShoppingTable(): JSX.Element{
             </tbody>
             </Table>
             </>}
-            <Pagination data={shoppingListPerPage} type={'product'}/>
+            <Pagination data={shoppingListPerPage} type={'shopping'}/>
         </DivTable>
     );
 }

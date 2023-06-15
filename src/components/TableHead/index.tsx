@@ -1,13 +1,13 @@
 import React, {useCallback, useState} from "react";
-import * as interfaces from '../../../interfaces';
+import * as interfaces from '../../interfaces';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
-const TableHead: React.FC<interfaces.TableProduct> = (props: interfaces.TableProduct) => {
+const TableHead: React.FC<interfaces.Table> = (props: interfaces.Table) => {
     const [sorting, setSorting] = useState(true);
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const applySorting = useCallback((key: string) => {
-        const sortedData = props.data.sort(
+        const sortedStock = props.stock.sort(
             (previousProduct: interfaces.Product, nextProduct: interfaces.Product) => {
             switch (key) {
                 case 'name':
@@ -26,7 +26,7 @@ const TableHead: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
                     break;
             }
         });
-        props.setData(sorting ? [...sortedData] : [...sortedData.reverse()]);        
+        props.setStock(sorting ? [...sortedStock] : [...sortedStock.reverse()]);        
         sorting ? setSorting(false) : setSorting(true);
     }, [sorting]);
     return (
