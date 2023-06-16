@@ -1,29 +1,29 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import {FaDatabase, FaEdit} from 'react-icons/fa';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { showUsersPerPage } from '../../store/modules/login/reducer';
+import { showUsersPerPage, changeUserPageStatus } from '../../store/modules/login/reducer';
 import { AppThunkDispatch } from '../../store';
 import * as interfaces from '../../interfaces';
 import Pagination from '../../components/Pagination';
 import { DivTable, Table } from '../SearchingTable/styled';
-import EditUser from '../EditUser';
-import CreateUser from '../CreateUser';
-import ModalDialog from '../../components/ModalDialog';
-import { initialUser } from '../../store/modules/login/reducer';
 import Select from '../../components/Select';
 import { debounce } from 'lodash';
-import { changePageStatus } from '../../store/modules/products/reducer';
 import switchOptionSearch from '../../services/switchOptionSearch';
+import TableBody from './TableBody';
+import TableHead from './TableHead';
 
 export default function SystemAdmin(): JSX.Element{
     const dispatch = useDispatch<AppThunkDispatch>();
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const usersPerPage = useSelector((state: interfaces.IRootState) => state.login.usersPerPage) || { data: [], total_pages: 0, total_items: 0 };
-    const [editedUser, setEditedUser] = useState<interfaces.User>(initialUser);
-    const pageStatus: interfaces.PageNumberStatus = {
-        currentPage: 0,
-        itemsPerPage: 3
-    };
+    const pageStatus = useSelector((state: interfaces.IRootState) => state.login.pageStatus);
+    const [data, setData] = useState([...usersPerPage.data.map((user: interfaces.User) => {
+        return { ...user};
+    })]);
+    useMemo(() => {
+        setData([...usersPerPage.data.map((user: interfaces.User) => {
+            return { ...user};
+        })]);
+    }, [usersPerPage]);
     useEffect(() => {
         dispatch(showUsersPerPage(pageStatus));
     }, []);
@@ -47,8 +47,8 @@ export default function SystemAdmin(): JSX.Element{
             option: option,
             type: 'user'
         }
-        dispatch(changePageStatus(newPageStatus));
-        switchOptionSearch(newPageStatus, dispatch);
+        dispatch(changeUserPageStatus({...newPageStatus}));
+        switchOptionSearch({...newPageStatus}, dispatch);
     }, []); 
     const defaultOptions = ['Username', 'Name User', 'Surname', 'Address', 'Email', 'Role'];
     return ( 
@@ -62,41 +62,10 @@ export default function SystemAdmin(): JSX.Element{
             <Select onChangeFunction={handleDefaultOptions} options={defaultOptions}/>
             <button onClick={handleButtonSearch}>Search</button>
             <Table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Role</th>
-                    <th>Edit User</th>
-                    <th>Create User</th>
-                </tr>
-            </thead>
-            <tbody>
-            {React.Children.toArray(usersPerPage.data.map((user: interfaces.User) => {
-                return (
-                    <tr>
-                        <td><p>{user.name}</p></td>
-                        <td><p>{user.surname}</p></td>
-                        <td><p>{user.email}</p></td>
-                        <td><p>{user.address}</p></td>
-                        <td><p>{user.role}</p></td>
-                        <td>      
-                            <ModalDialog iconToOpenModal={FaEdit} onClickFunction={() => setEditedUser(user)}>
-                                <EditUser user={user}/>
-                            </ModalDialog>
-                        </td>
-                        <td>
-                            <ModalDialog iconToOpenModal={FaDatabase} onClickFunction={() => setEditedUser(editedUser)}>
-                                <CreateUser/>
-                            </ModalDialog>
-                        </td>
-                    </tr>
-                )}))}
-            </tbody>
+                <TableHead data={data} setData={setData}/>
+                <TableBody data={data} setData={setData}/>
             </Table>
-            <Pagination data={usersPerPage}/>
+            <Pagination data={usersPerPage} type='user'/>
         </DivTable> : <></>}
         </>
     )

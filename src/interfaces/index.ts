@@ -80,9 +80,17 @@ export interface Pagination {
     data: ProductData | UserData | ShoppingListData,
     type?: string
 }
-export interface Table {
-    stock: Array<Product>,
-    setStock: CallableFunction
+export interface TableProduct {
+    data: Array<Product>,
+    setData: CallableFunction
+}
+export interface TableUser {
+    data: Array<User>,
+    setData: CallableFunction
+}
+export interface TableShopping {
+    data: Array<ShoppingList>,
+    setData: CallableFunction
 }
 export interface InputSearch {
     option: string,

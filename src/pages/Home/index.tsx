@@ -6,7 +6,7 @@ import Pagination from '../../components/Pagination';
 import * as interfaces from '../../interfaces';
 import { HomeContainer, ProductContainer, ItemContainer } from './styled';
 import { AppThunkDispatch } from '../../store';
-import { changePageStatus, showProductsPerPage } from '../../store/modules/products/reducer';
+import { changeProductPageStatus, showProductsPerPage } from '../../store/modules/products/reducer';
 
 export default function Home(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -18,7 +18,7 @@ export default function Home(): JSX.Element {
         itemsPerPage: 3
     };
     useEffect(() => {
-        dispatch(changePageStatus(pageStatus));
+        dispatch(changeProductPageStatus(pageStatus));
         dispatch(showProductsPerPage(pageStatus));
     }, []);
     return (

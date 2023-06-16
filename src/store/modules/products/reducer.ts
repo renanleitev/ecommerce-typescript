@@ -237,10 +237,10 @@ export const inventorySlice = createSlice({
         removeAllProductsCart: (state) => {
             state.shoppingCart = initialState.shoppingCart;
         },
-        resetPageStatus: (state) => {
+        resetProductPageStatus: (state) => {
             state.pageStatus = initialState.pageStatus;
         },
-        changePageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
+        changeProductPageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
             state.pageStatus = action.payload;
         },
         resetShoppingList: (state) => {
@@ -378,8 +378,8 @@ export const {
     changeProductQuantityCart,
     removeProductCart,
     removeAllProductsCart,
-    resetPageStatus,
-    changePageStatus,
+    resetProductPageStatus,
+    changeProductPageStatus,
     resetShoppingList,
 } = inventorySlice.actions;
 

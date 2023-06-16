@@ -244,6 +244,12 @@ export const userSlice = createSlice({
             state.user = initialState.user;
             localStorage.removeItem('token');
         },
+        resetUserPageStatus: (state) => {
+            state.pageStatus = initialState.pageStatus;
+        },
+        changeUserPageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
+            state.pageStatus = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -394,6 +400,8 @@ export const userSlice = createSlice({
 
 export const {
     logoutSuccess,
+    resetUserPageStatus,
+    changeUserPageStatus
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

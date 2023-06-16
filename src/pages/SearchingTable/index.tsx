@@ -1,13 +1,13 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { DivTable, Table } from './styled';
 import { useSelector, useDispatch } from 'react-redux';
 import * as interfaces from '../../interfaces';
-import TableHead from '../../components/TableHead';
-import TableBody from '../../components/TableBody';
+import TableHead from './TableHead';
+import TableBody from './TableBody';
 import Pagination from '../../components/Pagination';
 import Loading from '../../components/Loading';
 import { AppThunkDispatch } from '../../store';
-import { changePageStatus } from '../../store/modules/products/reducer';
+import { changeProductPageStatus, showProductsPerPage } from '../../store/modules/products/reducer';
 import switchOptionSearch from '../../services/switchOptionSearch';
 import Select from '../../components/Select';
 import { debounce } from 'lodash';
@@ -18,11 +18,15 @@ export default function SearchingTable(): JSX.Element {
     { data: [], total_pages: 0, total_items: 0 };
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const pageStatus = useSelector((state: interfaces.IRootState) => state.products.pageStatus);
-    const [stock, setStock] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
+    useEffect(() => {
+        dispatch(changeProductPageStatus(pageStatus));
+        dispatch(showProductsPerPage(pageStatus));
+    }, []);
+    const [data, setData] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
         return { ...product, quantity: 0, totalPrice: 0 };
     })]);
     useMemo(() => {
-        setStock([...productsPerPage.data.map((product: interfaces.Product) => {
+        setData([...productsPerPage.data.map((product: interfaces.Product) => {
             return { ...product, quantity: 0, totalPrice: 0 };
         })]);
     }, [productsPerPage]);
@@ -56,7 +60,7 @@ export default function SearchingTable(): JSX.Element {
             operator: operator,
             type: 'product'
         }
-        dispatch(changePageStatus(newPageStatus));
+        dispatch(changeProductPageStatus(newPageStatus));
         switchOptionSearch(newPageStatus, dispatch);
     }, []); 
     const defaultOptions = ['Name Product', 'Description', 'Additional Features', 'Operational System', 'Price'];
@@ -75,15 +79,15 @@ export default function SearchingTable(): JSX.Element {
                 <button onClick={handleButtonSearch}>Search</button>
                 <Table>
                     <TableHead
-                        stock={stock}
-                        setStock={setStock} />
+                        data={data}
+                        setData={setData} />
                     <TableBody
-                        stock={stock}
-                        setStock={setStock}/>
+                        data={data}
+                        setData={setData}/>
                 </Table>
             </>}
         </DivTable>
-        <Pagination data={productsPerPage}/>
+        <Pagination data={productsPerPage} type='product'/>
         </>
     )
 }
