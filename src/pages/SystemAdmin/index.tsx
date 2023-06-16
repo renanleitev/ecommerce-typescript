@@ -15,7 +15,12 @@ export default function SystemAdmin(): JSX.Element{
     const dispatch = useDispatch<AppThunkDispatch>();
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
     const usersPerPage = useSelector((state: interfaces.IRootState) => state.login.usersPerPage) || { data: [], total_pages: 0, total_items: 0 };
-    const pageStatus = useSelector((state: interfaces.IRootState) => state.login.pageStatus);
+    const pageStatus: interfaces.PageNumberStatus = {
+        currentPage: 0,
+        itemsPerPage: 3,
+        searching: localStorage.getItem('searchingUser'),
+        option: localStorage.getItem('optionUser')
+    };
     const [data, setData] = useState([...usersPerPage.data.map((user: interfaces.User) => {
         return { ...user};
     })]);
@@ -24,9 +29,6 @@ export default function SystemAdmin(): JSX.Element{
             return { ...user};
         })]);
     }, [usersPerPage]);
-    useEffect(() => {
-        dispatch(showUsersPerPage(pageStatus));
-    }, []);
     let option = '';
     let search = '';
     const handleDefaultOptions = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
@@ -47,7 +49,8 @@ export default function SystemAdmin(): JSX.Element{
             option: option,
             type: 'user'
         }
-        dispatch(changeUserPageStatus({...newPageStatus}));
+        localStorage.setItem('optionUser', option);
+        localStorage.setItem('searchingUser', search);
         switchOptionSearch({...newPageStatus}, dispatch);
     }, []); 
     const defaultOptions = ['Username', 'Name User', 'Surname', 'Address', 'Email', 'Role'];
@@ -65,7 +68,7 @@ export default function SystemAdmin(): JSX.Element{
                 <TableHead data={data} setData={setData}/>
                 <TableBody data={data} setData={setData}/>
             </Table>
-            <Pagination data={usersPerPage} type='user'/>
+            <Pagination data={usersPerPage} pageStatus={{...pageStatus}} type='user'/>
         </DivTable> : <></>}
         </>
     )

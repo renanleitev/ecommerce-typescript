@@ -17,11 +17,14 @@ export default function SearchingTable(): JSX.Element {
     const productsPerPage = useSelector((state: interfaces.IRootState) => state.products.productsPerPage) || 
     { data: [], total_pages: 0, total_items: 0 };
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
-    const pageStatus = useSelector((state: interfaces.IRootState) => state.products.pageStatus);
-    useEffect(() => {
-        dispatch(changeProductPageStatus(pageStatus));
-        dispatch(showProductsPerPage(pageStatus));
-    }, []);
+    const pageStatus: interfaces.PageNumberStatus = {
+        currentPage: 0,
+        itemsPerPage: 3,
+        searching: localStorage.getItem('searchingProduct'),
+        option: localStorage.getItem('optionProduct'),
+        operator: localStorage.getItem('operatorProduct'),
+        price: localStorage.getItem('priceProduct')
+    };
     const [data, setData] = useState([...productsPerPage.data.map((product: interfaces.Product) => {
         return { ...product, quantity: 0, totalPrice: 0 };
     })]);
@@ -59,9 +62,12 @@ export default function SearchingTable(): JSX.Element {
             price: price,
             operator: operator,
             type: 'product'
-        }
-        dispatch(changeProductPageStatus(newPageStatus));
-        switchOptionSearch(newPageStatus, dispatch);
+        };
+        localStorage.setItem('optionProduct', option);
+        localStorage.setItem('priceProduct', price);
+        localStorage.setItem('operatorProduct', operator);
+        localStorage.setItem('searchingProduct', search);
+        switchOptionSearch({...newPageStatus}, dispatch);
     }, []); 
     const defaultOptions = ['Name Product', 'Description', 'Additional Features', 'Operational System', 'Price'];
     const priceOptions = ['LessThan', 'LessThanOrEqualTo', 'EqualTo', 'GreaterThan', 'GreaterThanOrEqualTo'];
@@ -87,7 +93,7 @@ export default function SearchingTable(): JSX.Element {
                 </Table>
             </>}
         </DivTable>
-        <Pagination data={productsPerPage} type='product'/>
+        <Pagination data={productsPerPage} type={'product'} pageStatus={{...pageStatus}}/>
         </>
     )
 }

@@ -25,9 +25,10 @@ export const initialState: (interfaces.InitialStateLogin) = {
         total_pages: 1,
         total_items: 1
     },
-    pageStatus: {
+    pageUserStatus: {
         currentPage: 1,
-        itemsPerPage: 3
+        itemsPerPage: 3,
+        type: 'user'
     },
 };
 
@@ -245,10 +246,10 @@ export const userSlice = createSlice({
             localStorage.removeItem('token');
         },
         resetUserPageStatus: (state) => {
-            state.pageStatus = initialState.pageStatus;
+            state.pageUserStatus = initialState.pageUserStatus;
         },
         changeUserPageStatus: (state, action: PayloadAction<interfaces.PageNumberStatus>) => {
-            state.pageStatus = action.payload;
+            state.pageUserStatus = action.payload;
         },
     },
     extraReducers(builder) {

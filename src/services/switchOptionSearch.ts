@@ -21,7 +21,7 @@ export default function switchOptionSearch(
     dispatch: CallableFunction,
 ): void {
     console.log(pageStatus);
-    
+    console.log(localStorage.getItem('option'));
     switch(pageStatus.type){
         case 'shopping':
             dispatch(showShoppings({...pageStatus}));

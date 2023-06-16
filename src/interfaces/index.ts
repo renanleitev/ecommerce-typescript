@@ -61,7 +61,7 @@ interface BaseInitialState {
 export interface InitialStateProduct extends BaseInitialState {
     product: Product,
     productsPerPage: ProductData,
-    pageStatus: PageNumberStatus,
+    pageProductStatus: PageNumberStatus,
     shoppingCart: Array<Product>,
     shoppingList: ShoppingListData
 }
@@ -69,7 +69,7 @@ export interface InitialStateLogin extends BaseInitialState {
     isLoggedIn: boolean,
     user: User,
     usersPerPage: UserData,
-    pageStatus: PageNumberStatus
+    pageUserStatus: PageNumberStatus
 }
 export interface IRootState {
     login: InitialStateLogin,
@@ -78,6 +78,7 @@ export interface IRootState {
 
 export interface Pagination {
     data: ProductData | UserData | ShoppingListData,
+    pageStatus: PageNumberStatus,
     type?: string
 }
 export interface TableProduct {

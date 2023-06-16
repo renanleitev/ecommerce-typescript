@@ -39,7 +39,7 @@ export default function ShoppingTable(): JSX.Element{
             <TableBody data={shoppingList} setData={setShoppingList}/>
             </Table>
             </>}
-            <Pagination data={shoppingListPerPage} type='shopping'/>
+            <Pagination data={shoppingListPerPage} pageStatus={{...pageStatus}} type='shopping'/>
         </DivTable>
     );
 }
