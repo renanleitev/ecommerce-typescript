@@ -15,8 +15,39 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
         pageNumbers.push(i);        
     }
     const paginationData = useCallback((numberOfPage: number) => {
-        const newPageStatus: interfaces.PageNumberStatus = {...props.pageStatus, type:props.type, currentPage: numberOfPage};
-        switchOptionSearch(newPageStatus, dispatch);
+        if (props.type === 'product'){
+            const newPageStatus: interfaces.PageNumberStatus = {
+                ...props.pageStatus, 
+                searching: localStorage.getItem('searchingProduct'),
+                option: localStorage.getItem('optionProduct'),
+                operator: localStorage.getItem('operatorProduct'),
+                price: localStorage.getItem('priceProduct'),
+                currentPage: numberOfPage};
+                switchOptionSearch(newPageStatus, dispatch);
+            } else if (props.type === 'home'){
+                const newPageStatus: interfaces.PageNumberStatus = {
+                    ...props.pageStatus, 
+                    searching: '',
+                    option: '',
+                    operator: '',
+                    price: '', 
+                    currentPage: numberOfPage};
+                    switchOptionSearch(newPageStatus, dispatch);
+            } else if (props.type === 'user'){
+                const newPageStatus: interfaces.PageNumberStatus = {
+                    ...props.pageStatus, 
+                    searching: localStorage.getItem('searchingUser'),
+                    option: localStorage.getItem('optionUser'),
+                    type: props.type,
+                    currentPage: numberOfPage};
+                    switchOptionSearch(newPageStatus, dispatch);
+            } else if (props.type === 'shopping'){
+                const newPageStatus: interfaces.PageNumberStatus = {
+                    ...props.pageStatus, 
+                    type: props.type,
+                    currentPage: numberOfPage};
+                    switchOptionSearch(newPageStatus, dispatch);
+            }
     }, []);
     return (
         <PaginationContainer>

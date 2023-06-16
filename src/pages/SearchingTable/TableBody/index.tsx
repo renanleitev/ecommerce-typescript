@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import {
     FaShoppingCart, 
     FaTrash,
@@ -22,7 +22,6 @@ import { toast } from "react-toastify";
 import EditProduct from '../../../pages/EditProduct';
 import ModalDialog from "../../../components/ModalDialog";
 import CreateProduct from "../../../pages/CreateProduct";
-import { initialProduct } from "../../../store/modules/products/reducer";
 import FontAwesomeButton from "../../../components/FontAwesomeButton";
 import { DivCartButton } from "./styled";
 
@@ -31,7 +30,6 @@ const TableBody: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
     const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
     const shoppingCart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
     const user = useSelector((state: interfaces.IRootState) => state.login.user);
-    const [editedProduct, setEditedProduct] = useState<interfaces.Product>(initialProduct);
     const addProductQuantity = useCallback(
         (product: interfaces.Product) => {
             props.setData(mapStockAddProduct(props.data, product));
@@ -86,10 +84,10 @@ const TableBody: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
                                             <FontAwesomeButton icon={FaShoppingCart} onClickFunction={() => addProductToCart(product)}/>
                                             {user.role === "ROLE_ADMIN" ? (
                                             <>
-                                                <ModalDialog iconToOpenModal={FaEdit} onClickFunction={() => setEditedProduct(product)}>
+                                                <ModalDialog iconToOpenModal={FaEdit} onClickFunction={() => 'null'}>
                                                     <EditProduct product={product}/>
                                                 </ModalDialog>
-                                                <ModalDialog iconToOpenModal={FaDatabase} onClickFunction={() => setEditedProduct(editedProduct)}>
+                                                <ModalDialog iconToOpenModal={FaDatabase} onClickFunction={() => 'null'}>
                                                     <CreateProduct/>
                                                 </ModalDialog>
                                             </>

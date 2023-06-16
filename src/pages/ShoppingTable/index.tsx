@@ -4,7 +4,7 @@ import * as interfaces from '../../interfaces';
 import { DivTable, Table } from '../SearchingTable/styled';
 import Loading from '../../components/Loading';
 import { AppThunkDispatch } from '../../store';
-import { showShoppings } from '../../store/modules/products/reducer';
+import { changeProductPageStatus, showShoppings } from '../../store/modules/products/reducer';
 import Pagination from '../../components/Pagination';
 import TableBody from './TableBody';
 import TableHead from './TableHead';
@@ -21,6 +21,7 @@ export default function ShoppingTable(): JSX.Element{
         type: 'shopping'
     };
     useEffect(() => {
+        dispatch(changeProductPageStatus(pageStatus));
         dispatch(showShoppings(pageStatus));
     }, []);
     const [shoppingList, setShoppingList] = useState([...shoppingListPerPage.data.map((shoppingListItem: interfaces.ShoppingList) => {
@@ -35,7 +36,7 @@ export default function ShoppingTable(): JSX.Element{
             <DivTable>
             {isLoading === 'loading' ? <Loading /> : <>
             <Table>
-            <TableHead data={shoppingList} setData={setShoppingList}/>
+            <TableHead/>
             <TableBody data={shoppingList} setData={setShoppingList}/>
             </Table>
             </>}

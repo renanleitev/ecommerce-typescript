@@ -6,7 +6,7 @@ import Pagination from '../../components/Pagination';
 import * as interfaces from '../../interfaces';
 import { HomeContainer, ProductContainer, ItemContainer } from './styled';
 import { AppThunkDispatch } from '../../store';
-import { changeProductPageStatus, showProductsPerPage } from '../../store/modules/products/reducer';
+import { showProductsPerPage } from '../../store/modules/products/reducer';
 
 export default function Home(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -15,10 +15,14 @@ export default function Home(): JSX.Element {
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const pageStatus: interfaces.PageNumberStatus = {
         currentPage: 0,
-        itemsPerPage: 3
+        itemsPerPage: 3,
+        searching: '',
+        option: '',
+        price: '',
+        operator: '',
+        type: 'product'
     };
     useEffect(() => {
-        dispatch(changeProductPageStatus(pageStatus));
         dispatch(showProductsPerPage(pageStatus));
     }, []);
     return (
@@ -37,7 +41,7 @@ export default function Home(): JSX.Element {
                             )
                         }))}
                 </ProductContainer>}
-            <Pagination data={productsPerPage} pageStatus={{...pageStatus}} type={'product'}/>
+            <Pagination data={productsPerPage} pageStatus={{...pageStatus}} type={'home'}/>
         </HomeContainer>
     )
 }
