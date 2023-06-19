@@ -5,6 +5,7 @@ import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
 import * as interfaces from '../../interfaces';
 import { HomeContainer, ProductContainer, ItemContainer } from './styled';
+import { Container } from '../../styles/GlobalStyle';
 import { AppThunkDispatch } from '../../store';
 import { showProductsPerPage } from '../../store/modules/products/reducer';
 
@@ -26,6 +27,11 @@ export default function Home(): JSX.Element {
         dispatch(showProductsPerPage(pageStatus));
     }, []);
     return (
+        <>
+        {productsPerPage.data === undefined || productsPerPage.total_pages === 0 ? 
+        <Container>
+            <h1>No products</h1>
+        </Container> :
         <HomeContainer>
             {isLoading === 'loading' ?
                 <Loading /> :
@@ -42,6 +48,7 @@ export default function Home(): JSX.Element {
                         }))}
                 </ProductContainer>}
             <Pagination data={productsPerPage} pageStatus={{...pageStatus}} type={'home'}/>
-        </HomeContainer>
+        </HomeContainer>}
+        </>
     )
 }

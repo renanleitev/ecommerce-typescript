@@ -20,8 +20,7 @@ export default function Login(): JSX.Element {
     return (
         <Container>
             {(!isLoggedIn && 
-                (
-                <Form onSubmit={handleSubmit}>
+                (<Form onSubmit={handleSubmit}>
                     <h2>Login</h2>
                     <InputProduct data={loggedUser} setData={setLoggedUser} keyName='username' keyValue=''/>
                     <InputProduct data={loggedUser} setData={setLoggedUser} keyName='password' keyValue=''/>
@@ -29,11 +28,9 @@ export default function Login(): JSX.Element {
                         Don't have an account? Click here to make a new one!
                     </Link>
                     <button type="submit">Login</button>
-                </Form>
-                ))
+                </Form>))
                 ||
-                (<EditUser user={{...user}}/>)
-            }
+                (<EditUser user={{...user}}/>)}
         </Container>
     );
 }

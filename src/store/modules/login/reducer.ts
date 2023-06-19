@@ -243,6 +243,8 @@ export const userSlice = createSlice({
         logoutSuccess: (state) => {
             state.isLoggedIn = false;
             state.user = initialState.user;
+            state.usersPerPage = initialState.usersPerPage;
+            state.pageUserStatus = initialState.pageUserStatus;
             localStorage.removeItem('token');
         },
         resetUserPageStatus: (state) => {
@@ -296,6 +298,7 @@ export const userSlice = createSlice({
                     if (action.payload.name) {
                         state.isLoggedIn = true;
                         state.user = action.payload;
+                        state.status = 'succeeded';
                     } else {
                         toast.error('Email/password invalid.');
                     }

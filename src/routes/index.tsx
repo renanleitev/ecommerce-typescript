@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from "../interfaces";
 import ShoppingTable from "../pages/ShoppingTable";
 import SystemAdmin from "../pages/SystemAdmin";
+import CreateProduct from "../pages/CreateProduct";
 
 export default function Routes(){
     const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
@@ -21,6 +22,7 @@ export default function Routes(){
             {isLoggedIn ? 
             (<Route exact path='/auth/edit' component={Login}/>) : 
             (<Route exact path='/auth/login' component={Login}/>)}
+            <Route exact path='/createProduct' component={CreateProduct}/>
             <Route exact path='/shoppingCart' component={Shopping}/>
             <Route exact path='/searching' component={SearchingTable}/>
             <Route exact path='/products/:id' component={Product}/>
