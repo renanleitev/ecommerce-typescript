@@ -40,7 +40,7 @@ export const loginUser = createAsyncThunk(
             const response = await axiosInstance.post(url, userLogin, {
                 headers: { Authorization: getAuthorizationHeader() }
             });
-            if (response.status === 200) {
+            if (response.data != userLogin) {
                 toast.success('Login successfully.');
                 history.push('/');
                 const userLoggedIn = { ...response.data };
