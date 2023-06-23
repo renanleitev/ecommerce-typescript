@@ -9,12 +9,13 @@ import switchOptionSearch from '../../services/switchOptionSearch';
 import TableBody from './TableBody';
 import TableHead from './TableHead';
 import Loading from '../../components/Loading';
+import { initialUser } from '../../store/modules/users/reducer';
 
 export default function SystemAdmin(): JSX.Element{
     const dispatch = useDispatch<AppThunkDispatch>();
-    const user = useSelector((state: interfaces.IRootState) => state.login.user);
-    const usersPerPage = useSelector((state: interfaces.IRootState) => state.login.usersPerPage) || { data: [], total_pages: 0, total_items: 0 };
-    const isLoading = useSelector((state: interfaces.IRootState) => state.login.status);
+    const user = useSelector((state: interfaces.IRootState) => state.users.user) || initialUser;
+    const usersPerPage = useSelector((state: interfaces.IRootState) => state.users.usersPerPage) || { data: [], total_pages: 0, total_items: 0 };
+    const isLoading = useSelector((state: interfaces.IRootState) => state.users.status) || 'idle';
     const pageStatus: interfaces.PageNumberStatus = {
         currentPage: 0,
         itemsPerPage: 3
@@ -59,7 +60,7 @@ export default function SystemAdmin(): JSX.Element{
             <Select inputRef={option} options={defaultOptions}/>
             <button onClick={handleButtonSearch}>Search</button>
             <Table>
-                <TableHead/>
+                <TableHead pageStatus={{...pageStatus}}/>
                 <TableBody data={data} setData={setData}/>
             </Table>
             <Pagination data={usersPerPage} pageStatus={{...pageStatus}} type='user'/>

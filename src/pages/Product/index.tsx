@@ -16,6 +16,7 @@ import Loading from '../../components/Loading';
 import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
 import { Link } from 'react-router-dom';
+import { initialProduct } from '../../store/modules/products/reducer';
 
 export default function Product(): JSX.Element {
     interface Url{id: string}
@@ -23,8 +24,8 @@ export default function Product(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
     const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
     const shoppingCart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
-    const product = useSelector((state: interfaces.IRootState) => state.products.product);
-    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
+    const product = useSelector((state: interfaces.IRootState) => state.products.product) || initialProduct;
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.users.isLoggedIn) || false;
     const [newProduct, setNewProduct] = useState<interfaces.Product>(
         {...product, quantity: 0, totalPrice: 0}
     );

@@ -51,6 +51,8 @@ export interface PageNumberStatus {
     operator?: string,
     id?: string,
     type?: string,
+    order?: string,
+    column?: string,
     currentPage: number,
     itemsPerPage: number
 }
@@ -72,7 +74,7 @@ export interface InitialStateLogin extends BaseInitialState {
     pageUserStatus: PageNumberStatus
 }
 export interface IRootState {
-    login: InitialStateLogin,
+    users: InitialStateLogin,
     products: InitialStateProduct,
 }
 
@@ -82,8 +84,9 @@ export interface Pagination {
     type?: string
 }
 export interface TableProduct {
-    data: Array<Product>,
-    setData: CallableFunction
+    data?: Array<Product>,
+    setData?: CallableFunction,
+    pageStatus?: PageNumberStatus
 }
 export interface TableUser {
     data: Array<User>,

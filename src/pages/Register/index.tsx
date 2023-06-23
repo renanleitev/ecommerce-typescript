@@ -2,7 +2,7 @@ import React, {useState, useCallback } from 'react';
 import { Container, Form } from '../../styles/GlobalStyle';
 import { useDispatch } from 'react-redux';
 import Input from '../../components/Input';
-import {registerUser} from '../../store/modules/login/reducer';
+import {registerUser} from '../../store/modules/users/reducer';
 import * as interfaces from '../../interfaces';
 import validationUser from '../../services/validationUser';
 import { AppThunkDispatch } from '../../store';

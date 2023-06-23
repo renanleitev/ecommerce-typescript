@@ -14,7 +14,7 @@ import SystemAdmin from "../pages/SystemAdmin";
 import CreateProduct from "../pages/CreateProduct";
 
 export default function Routes(){
-    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
+    const isLoggedIn = useSelector((state: IRootState) => state.users.isLoggedIn) || false;
     return (
         <Switch>
             <Route exact path='/' component={Home}/>

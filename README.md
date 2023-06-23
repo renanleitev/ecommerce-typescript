@@ -65,3 +65,10 @@ Depois, no terminal, insira o comando:
         npm start
 
 Acesse [http://localhost:3000](http://localhost:3000) ou [http://localhost:3001](http://localhost:3001) para visualizar no browser.
+
+## Conta de Administrador e de Manager
+
+Modificar no arquivo application.properties, no repositório: https://github.com/renanleitev/ecommerce-spring-boot 
+
+    ADMIN_EMAIL=adminroot@email.com
+    MANAGER_EMAIL=manager@email.com

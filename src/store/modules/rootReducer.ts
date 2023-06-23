@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import {userReducer} from './login/reducer';
-import {inventoryReducer} from "./products/reducer";
+import {usersReducer} from './users/reducer';
+import {productsReducer} from "./products/reducer";
 
 const rootReducer = combineReducers({
-    login: userReducer,
-    products: inventoryReducer,
+    users: usersReducer,
+    products: productsReducer,
 });
 
 export type IRootReducer = typeof rootReducer;

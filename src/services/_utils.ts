@@ -1,6 +1,6 @@
 import { ThunkDispatch, AnyAction } from '@reduxjs/toolkit';
 import * as products from '../store/modules/products/reducer';
-import * as login from '../store/modules/login/reducer';
+import * as users from '../store/modules/users/reducer';
 import * as interfaces from '../interfaces';
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from "redux";
@@ -29,11 +29,11 @@ export const mockUser: interfaces.User = {
 };
 
 export const storeProduct = configureStore({
-    reducer: products.inventoryReducer,
+    reducer: products.productsReducer,
 });
 
 export const storeLogin = configureStore({
-    reducer: login.userReducer,
+    reducer: users.usersReducer,
 });
 
 export const mockProductStateCart = {
@@ -53,35 +53,35 @@ export const mockProductStateStock = {
 };
 
 export const mockUserState = {
-    ...login.initialState,
+    ...users.initialState,
     user: { ...mockUser },
     isLoggedIn: true,
 };
 export const mockStore = configureStore({
     reducer: combineReducers({
-        login: login.userReducer,
-        products: products.inventoryReducer,
+        users: users.usersReducer,
+        products: products.productsReducer,
     })
 });
 
 export const mockStoreUserLoggedIn = configureStore({
     reducer: combineReducers({
-        login: login.userReducer,
-        products: products.inventoryReducer,
+        users: users.usersReducer,
+        products: products.productsReducer,
     }),
     preloadedState: {
-        login: mockUserState,
+        users: mockUserState,
         products: mockProductStateCart,
     },
 });
 
 export const mockStoreProductCart = configureStore({
     reducer: combineReducers({
-        login: login.userReducer,
-        products: products.inventoryReducer,
+        users: users.usersReducer,
+        products: products.productsReducer,
     }),
     preloadedState: {
-        login: mockUserState,
+        users: mockUserState,
         products: mockProductStateStock,
     },
 });

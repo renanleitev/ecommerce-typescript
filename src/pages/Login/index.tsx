@@ -5,13 +5,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputProduct from '../../components/Input';
 import EditUser from '../EditUser';
 import { IRootState } from '../../interfaces';
-import {loginUser} from '../../store/modules/login/reducer';
+import {loginUser} from '../../store/modules/users/reducer';
 import { AppThunkDispatch } from '../../store';
+import { initialUser } from '../../store/modules/users/reducer';
 
 export default function Login(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
-    const user = useSelector((state: IRootState) => state.login.user);
+    const isLoggedIn = useSelector((state: IRootState) => state.users.isLoggedIn) || false;
+    const user = useSelector((state: IRootState) => state.users.user) || initialUser;
     const [loggedUser, setLoggedUser] = useState(user);
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();

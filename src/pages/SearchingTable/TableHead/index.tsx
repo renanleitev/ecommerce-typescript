@@ -1,16 +1,30 @@
 import React from "react";
 import * as interfaces from '../../../interfaces';
-import { useSelector } from 'react-redux';
+import {FaArrowUp, FaArrowDown} from 'react-icons/fa';
+import { AppThunkDispatch } from '../../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { showProductsPerPage } from "../../../store/modules/products/reducer";
+import searchByColumnAndOrder from "../../../services/searchByColumnAndOrder";
+import { startCase } from "lodash";
 
-export default function TableHead(): JSX.Element {
-    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
+const TableHead: React.FC<interfaces.TableProduct> = (props: interfaces.TableProduct) => {
+    const dispatch = useDispatch<AppThunkDispatch>();
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.users.isLoggedIn) || false;
+    const columns = ['name', 'image', 'description', 'price'];
     return (
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Description</th>
-                <th>Price</th>
+                {React.Children.toArray(columns.map((column) => {
+                    return (
+                        <th>
+                            <span onClick={() => dispatch(showProductsPerPage({...props.pageStatus}))}>
+                                {startCase(column)}
+                            </span>
+                            <FaArrowUp onClick={() => searchByColumnAndOrder(column, 'ASC', 'product', dispatch)}/> 
+                            <FaArrowDown onClick={() => searchByColumnAndOrder(column, 'DESC', 'product', dispatch)}/>
+                        </th>
+                    )
+                }))}
                 {isLoggedIn ? (
                 <>
                     <th>Quantity</th>
@@ -22,3 +36,5 @@ export default function TableHead(): JSX.Element {
         </thead>
     )
 }
+
+export default TableHead;

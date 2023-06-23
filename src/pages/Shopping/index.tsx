@@ -19,11 +19,12 @@ import { addProductQuantity } from '../../services/addProductQuantity';
 import { removeProductQuantity } from '../../services/removeProductQuantity';
 import { AppThunkDispatch } from '../../store';
 import FontAwesomeButton from '../../components/FontAwesomeButton';
+import { initialUser } from '../../store/modules/users/reducer';
 
 export default function Shopping(): JSX.Element{
-    const user = useSelector((state: interfaces.IRootState) => state.login.user);
+    const user = useSelector((state: interfaces.IRootState) => state.users.user) || initialUser;
     const cart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
-    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.users.isLoggedIn) || false;
     const dispatch = useDispatch<AppThunkDispatch>();
     const [shoppingCart, setShoppingCart] = useState([...cart]);
     useEffect(() => {

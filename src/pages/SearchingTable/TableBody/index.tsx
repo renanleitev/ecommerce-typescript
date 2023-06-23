@@ -27,9 +27,9 @@ import { DivCartButton } from "./styled";
 
 const TableBody: React.FC<interfaces.TableProduct> = (props: interfaces.TableProduct) => {
     const dispatch = useDispatch<AppThunkDispatch>();
-    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.login.isLoggedIn);
+    const isLoggedIn = useSelector((state: interfaces.IRootState) => state.users.isLoggedIn) || false;
     const shoppingCart = useSelector((state: interfaces.IRootState) => state.products.shoppingCart);
-    const user = useSelector((state: interfaces.IRootState) => state.login.user);
+    const user = useSelector((state: interfaces.IRootState) => state.users.user);
     const addProductQuantity = useCallback(
         (product: interfaces.Product) => {
             props.setData(mapStockAddProduct(props.data, product));

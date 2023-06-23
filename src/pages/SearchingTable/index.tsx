@@ -72,7 +72,7 @@ export default function SearchingTable(): JSX.Element {
                 <input type='number' step="0.01" ref={price} className='number'/>
                 <button onClick={handleButtonSearch}>Search</button>
                 <Table>
-                    <TableHead/>
+                    <TableHead pageStatus={{...pageStatus}}/>
                     <TableBody
                         data={data}
                         setData={setData}/>

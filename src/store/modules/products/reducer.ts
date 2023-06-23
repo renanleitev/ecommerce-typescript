@@ -129,6 +129,23 @@ export const saveShoppings = createAsyncThunk(
     }
 );
 
+export const searchProductByOrder = createAsyncThunk(
+    'products/searchProductByOrder',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/products?_column=${pageStatus.column}&_order=${pageStatus.order}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+});  
+
 export const searchProductByName = createAsyncThunk(
     'products/searchProductByName',
     async (pageStatus: interfaces.PageNumberStatus) => {
@@ -144,7 +161,7 @@ export const searchProductByName = createAsyncThunk(
             };
         }
         catch (error) { return error.message; }
-    });
+    });  
 
 export const searchProductByOs = createAsyncThunk(
     'products/searchProductByOs',
@@ -214,7 +231,7 @@ export const searchProductByPrice = createAsyncThunk(
         catch (error) { return error.message; }
 });
 
-export const inventorySlice = createSlice({
+export const productsSlice = createSlice({
     name: 'products',
     initialState: initialState,
     reducers: {
@@ -299,6 +316,16 @@ export const inventorySlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })
+            // searchProductByOrderasyncThunk
+            .addCase(searchProductByOrder.fulfilled, (state, action: PayloadAction<interfaces.ProductData>) => {
+                state.status = 'succeeded';
+                state.productsPerPage = action.payload;
+            })
+            .addCase(searchProductByOrder.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchProductByOrder.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
             // showShoppings asyncThunk
             .addCase(showShoppings.fulfilled, (state, action: PayloadAction<interfaces.ShoppingListData>) => {
                 state.status = 'succeeded';
@@ -371,7 +398,7 @@ export const inventorySlice = createSlice({
                 state.error = action.error.message || "Something went wrong";
             })
     }
-})
+});
 
 export const {
     addProductCart,
@@ -381,6 +408,6 @@ export const {
     resetProductPageStatus,
     changeProductPageStatus,
     resetShoppingList,
-} = inventorySlice.actions;
+} = productsSlice.actions;
 
-export const inventoryReducer = inventorySlice.reducer;
+export const productsReducer = productsSlice.reducer;

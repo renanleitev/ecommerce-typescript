@@ -17,12 +17,13 @@ import { Nav, Cart } from './styled';
 import history from '../../services/history';
 import {toast} from 'react-toastify';
 import { IRootState } from '../../interfaces';
-import {logoutSuccess} from '../../store/modules/login/reducer';
+import {logoutSuccess} from '../../store/modules/users/reducer';
 import {removeAllProductsCart, resetShoppingList} from '../../store/modules/products/reducer';
+import { initialUser } from '../../store/modules/users/reducer';
 
 export default function Header(): JSX.Element {
-    const isLoggedIn = useSelector((state: IRootState) => state.login.isLoggedIn);
-    const user = useSelector((state: IRootState) => state.login.user);
+    const isLoggedIn = useSelector((state: IRootState) => state.users.isLoggedIn) || false;
+    const user = useSelector((state: IRootState) => state.users.user) || initialUser;
     const shoppingCart = useSelector((state: IRootState) => state.products.shoppingCart) || [];
     const dispatch = useDispatch();
     const handleLogin = useCallback(() => {

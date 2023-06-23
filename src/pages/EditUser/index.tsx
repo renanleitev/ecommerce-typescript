@@ -3,7 +3,7 @@ import { Form } from '../../styles/GlobalStyle';
 import { useDispatch } from 'react-redux';
 import Input from '../../components/Input';
 import { toast } from 'react-toastify';
-import {editUser, deleteUser} from '../../store/modules/login/reducer';
+import {editUser, deleteUser} from '../../store/modules/users/reducer';
 import * as interfaces from '../../interfaces';
 import validationUser from '../../services/validationUser';
 import { ButtonContainer } from './styled';

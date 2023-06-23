@@ -6,7 +6,7 @@ import {
     registerUser,
     editUser,
     deleteUser,
-} from "../store/modules/login/reducer";
+} from "../store/modules/users/reducer";
 import { 
     dispatchLoginEx,
     mockUser, 

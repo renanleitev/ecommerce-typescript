@@ -8,10 +8,11 @@ import { changeProductPageStatus, showShoppings } from '../../store/modules/prod
 import Pagination from '../../components/Pagination';
 import TableBody from './TableBody';
 import TableHead from './TableHead';
+import { initialUser } from '../../store/modules/users/reducer';
 
 export default function ShoppingTable(): JSX.Element{
-    const user = useSelector((state: interfaces.IRootState) => state.login.user);
-    const isLoading = useSelector((state: interfaces.IRootState) => state.products.status);
+    const user = useSelector((state: interfaces.IRootState) => state.users.user) || initialUser;
+    const isLoading = useSelector((state: interfaces.IRootState) => state.products.status) || false;
     const shoppingListPerPage = useSelector((state: interfaces.IRootState) => state.products.shoppingList);
     const dispatch = useDispatch<AppThunkDispatch>();
     const pageStatus: interfaces.PageNumberStatus = {

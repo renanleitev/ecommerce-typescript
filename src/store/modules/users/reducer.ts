@@ -33,7 +33,7 @@ export const initialState: (interfaces.InitialStateLogin) = {
 };
 
 export const loginUser = createAsyncThunk(
-    'login/loginUser',
+    'users/loginUser',
     async (userLogin: interfaces.User) => {
         try {
             const url = '/auth/login';
@@ -55,7 +55,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const registerUser = createAsyncThunk(
-    'login/registerUser',
+    'users/registerUser',
     async (user: interfaces.User) => {
         try {
             const url = '/auth/register';
@@ -72,7 +72,7 @@ export const registerUser = createAsyncThunk(
 );
 
 export const editUser = createAsyncThunk(
-    'login/editUser',
+    'users/editUser',
     async (user: interfaces.User) => {
         try {
             const url = '/auth/edit';
@@ -87,7 +87,7 @@ export const editUser = createAsyncThunk(
 );
 
 export const showUsers = createAsyncThunk(
-    'login/showUsers',
+    'users/showUsers',
     async () => {
         try {
             const url = '/users';
@@ -101,7 +101,7 @@ export const showUsers = createAsyncThunk(
 );
 
 export const showUsersPerPage = createAsyncThunk(
-    'login/showUsersPerPage',
+    'users/showUsersPerPage',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/users/pagination?_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
@@ -119,7 +119,7 @@ export const showUsersPerPage = createAsyncThunk(
 );
 
 export const deleteUser = createAsyncThunk(
-    'login/deleteUser',
+    'users/deleteUser',
     async (user: interfaces.User) => {
         try {
             if (user.id !== undefined) {
@@ -135,7 +135,7 @@ export const deleteUser = createAsyncThunk(
 );
 
 export const searchUserByUsername = createAsyncThunk(
-    'login/searchUserByUsername',
+    'users/searchUserByUsername',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/users?_username=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
@@ -151,8 +151,25 @@ export const searchUserByUsername = createAsyncThunk(
         catch (error) { return error.message; }
     });
 
+export const searchUserByOrder = createAsyncThunk(
+    'users/searchUserByOrder',
+    async (pageStatus: interfaces.PageNumberStatus) => {
+        try {
+            const url = `/users?_column=${pageStatus.column}&_order=${pageStatus.order}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
+            const response = await axiosInstance.get(url, {
+                headers: { Authorization: getAuthorizationHeader() }
+            });
+            return {
+                data: response.data,
+                total_pages: Number(response.headers['x-total-pages']),
+                total_items: Number(response.headers['x-total-count'])
+            };
+        }
+        catch (error) { return error.message; }
+});  
+
 export const searchUserByName = createAsyncThunk(
-    'login/searchUserByName',
+    'users/searchUserByName',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/users?_name=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
@@ -169,7 +186,7 @@ export const searchUserByName = createAsyncThunk(
     });
 
 export const searchUserByEmail = createAsyncThunk(
-    'login/searchUserByEmail',
+    'users/searchUserByEmail',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/users?_email=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
@@ -186,7 +203,7 @@ export const searchUserByEmail = createAsyncThunk(
     });
 
 export const searchUserByAddress = createAsyncThunk(
-    'login/searchUserByAddress',
+    'users/searchUserByAddress',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/users?_address=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
@@ -203,7 +220,7 @@ export const searchUserByAddress = createAsyncThunk(
     });
 
 export const searchUserBySurname = createAsyncThunk(
-    'login/searchUserBySurname',
+    'users/searchUserBySurname',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/users?_surname=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
@@ -220,7 +237,7 @@ export const searchUserBySurname = createAsyncThunk(
     });    
 
 export const searchUserByRole = createAsyncThunk(
-    'login/searchUserByRole',
+    'users/searchUserByRole',
     async (pageStatus: interfaces.PageNumberStatus) => {
         try {
             const url = `/users?_role=${pageStatus.searching}&_page=${pageStatus.currentPage}&_limit=${pageStatus.itemsPerPage}`;
@@ -236,8 +253,8 @@ export const searchUserByRole = createAsyncThunk(
         catch (error) { return error.message; }
     });    
 
-export const userSlice = createSlice({
-    name: 'login',
+export const usersSlice = createSlice({
+    name: 'users',
     initialState: initialState,
     reducers: {
         logoutSuccess: (state) => {
@@ -327,6 +344,18 @@ export const userSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || "Something went wrong";
             })
+            // searchUserByOrder asyncThunk
+            .addCase(
+                searchUserByOrder.fulfilled,
+                (state, action: PayloadAction<interfaces.UserData>) => {
+                    state.status = 'succeeded';
+                    state.usersPerPage = action.payload;
+                })
+            .addCase(searchUserByOrder.pending, (state) => { state.status = 'loading'; })
+            .addCase(searchUserByOrder.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || "Something went wrong";
+            })
             // searchUserByEmail asyncThunk
             .addCase(
                 searchUserByEmail.fulfilled,
@@ -400,12 +429,12 @@ export const userSlice = createSlice({
                 state.error = action.error.message || "Something went wrong";
             })
     }
-})
+});
 
 export const {
     logoutSuccess,
     resetUserPageStatus,
     changeUserPageStatus
-} = userSlice.actions;
+} = usersSlice.actions;
 
-export const userReducer = userSlice.reducer;
+export const usersReducer = usersSlice.reducer;

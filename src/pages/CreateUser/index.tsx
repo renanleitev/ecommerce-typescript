@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { Form } from '../../styles/GlobalStyle';
 import Input from '../../components/Input';
 import * as interfaces from '../../interfaces';
-import {registerUser} from '../../store/modules/login/reducer';
+import {registerUser} from '../../store/modules/users/reducer';
 import { useDispatch } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
-import { initialUser } from '../../store/modules/login/reducer';
+import { initialUser } from '../../store/modules/users/reducer';
 
 export default function CreateUser(): JSX.Element{
     const dispatch = useDispatch<AppThunkDispatch>();

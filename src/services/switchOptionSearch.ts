@@ -1,4 +1,5 @@
-import { searchProductByName,
+import { searchProductByOrder,
+    searchProductByName,
     searchProductByAdditionalFeatures,
     searchProductByDescription,
     searchProductByOs, 
@@ -6,14 +7,15 @@ import { searchProductByName,
     searchProductByPrice,
     showShoppings
 } from '../store/modules/products/reducer';
-import { searchUserByAddress,
+import { searchUserByOrder,
+    searchUserByAddress,
     searchUserByEmail,
     searchUserByName,
     searchUserByRole,
     searchUserByUsername,
     searchUserBySurname,
     showUsersPerPage
-} from '../store/modules/login/reducer';
+} from '../store/modules/users/reducer';
 import * as interfaces from '../interfaces';
 
 export default function switchOptionSearch(
@@ -42,6 +44,9 @@ export default function switchOptionSearch(
                 case 'Price':
                     dispatch(searchProductByPrice({...pageStatus}));
                     break;
+                case 'Order':
+                    dispatch(searchProductByOrder({...pageStatus}));
+                    break;
                 default:
                     dispatch(showProductsPerPage({...pageStatus}));
                     break;
@@ -67,6 +72,9 @@ export default function switchOptionSearch(
                     break;
                 case 'Role':
                     dispatch(searchUserByRole({...pageStatus}));
+                    break;
+                case 'Order':    
+                    dispatch(searchUserByOrder({...pageStatus}));
                     break;
                 default:
                     dispatch(showUsersPerPage({...pageStatus}));
