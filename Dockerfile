@@ -1,39 +1,27 @@
 #### Stage 1: Build the react application
 FROM node:18.16-alpine as build
 
-# Configure the main working directory inside the docker image. 
-# This is the base directory used in any further RUN, COPY, and ENTRYPOINT 
-# commands.
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copy the package.json as well as the package-lock.json and install 
-# the dependencies. This is a separate step so the dependencies 
-# will be cached unless changes to one of those two files 
-# are made.
-COPY package.json package-lock.json ./
-RUN npm install
+COPY package*.json ./
+
+RUN --mount=type=cache,target=/usr/src/app/.npm \
+  npm set cache /usr/src/app/.npm && \
+  npm install
 
 # Copy the main application
-COPY . ./
-
-# Arguments
-ARG REACT_APP_API_BASE_URL
-ENV REACT_APP_API_BASE_URL='http://localhost:8080'
+COPY . .
 
 # Build the application
 RUN npm run build
 
 #### Stage 2: Serve the React application from Nginx 
-FROM nginx
+FROM nginxinc/nginx-unprivileged:1.23-alpine-perl
 
-# Copy the react build from Stage 1
-COPY --from=build /app/build /var/www
+# Use COPY --link to avoid breaking cache if we change the second stage base image
+COPY --link nginx.conf /etc/nginx/conf.d/default.conf
+COPY --link --from=build usr/src/app/dist/ /usr/share/nginx/html
 
-# Copy our custom nginx config
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80 to the Docker host, so we can access it 
-# from the outside.
 EXPOSE 80
 
 ENTRYPOINT ["nginx","-g","daemon off;"]
