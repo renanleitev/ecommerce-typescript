@@ -8,14 +8,17 @@ RUN npm install
 # Build the app
 RUN npm run build
 
-# Bundle static assets with nginx
-FROM nginx:1.21.0-alpine as production
-ENV NODE_ENV production
-# Copy built assets from `builder` image
-COPY --from=builder /app/build /usr/share/nginx/html
-# Add your nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-# Expose port
+#### Stage 2: Serve the React application from Nginx 
+FROM nginx:1.21.0-alpine
+
+# Copy the react build from Stage 1
+COPY --from=build /app/build /var/www
+
+# Copy our custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose port 80 to the Docker host, so we can access it 
+# from the outside.
 EXPOSE 80
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+
+ENTRYPOINT ["nginx","-g","daemon off;"]
