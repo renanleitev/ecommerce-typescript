@@ -18,6 +18,7 @@ export default function EditUser(props: interfaces.EditUser): JSX.Element {
         if(formErrors){
             toast.error('Form data error. Please, try again.');
         } else {
+            toast.success('Edit user successfully.');
             dispatch(editUser(editedUser));
         }
     }, [editedUser, dispatch]);

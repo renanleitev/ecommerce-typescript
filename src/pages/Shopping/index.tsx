@@ -20,6 +20,7 @@ import { removeProductQuantity } from '../../services/removeProductQuantity';
 import { AppThunkDispatch } from '../../store';
 import FontAwesomeButton from '../../components/FontAwesomeButton';
 import { initialUser } from '../../store/modules/users/reducer';
+import * as text from '../../services/variablesText';
 
 export default function Shopping(): JSX.Element{
     const user = useSelector((state: interfaces.IRootState) => state.users.user) || initialUser;
@@ -73,9 +74,9 @@ export default function Shopping(): JSX.Element{
                         <ShoppingContainer>
                             <Link to={`products/${product.id}`}>{product.name}</Link>
                             <img src={product.image} alt=''/>
-                            <p>Price: ${product.price}</p>
-                            <p>Quantity: {product.quantity}</p>
-                            <p>Total: ${product.totalPrice.toFixed(2)}</p>
+                            <p>{text.price}{product.price}</p>
+                            <p>{text.quantity}{product.quantity}</p>
+                            <p>{text.totalPrice}{product.totalPrice.toFixed(2)}</p>
                         </ShoppingContainer>
                         <ButtonContainer>
                                 <FontAwesomeButton icon={FaPlus} onClickFunction={() => handleIncrement(product)}/>
@@ -86,7 +87,7 @@ export default function Shopping(): JSX.Element{
                 )))
                 : (
                     <ItemContainer>
-                    <h2>No products in your cart.</h2>
+                    <h2>{text.noProductsInCart}</h2>
                 </ItemContainer>
             )}
         </CartContainer> 

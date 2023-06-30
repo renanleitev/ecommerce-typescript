@@ -68,6 +68,16 @@ Acesse [http://localhost:3000](http://localhost:3000) ou [http://localhost:3001]
 
 ## Conta de Administrador e de Manager
 
+Conta de Administrador:
+
+        username: admin
+        senha: adminroot
+
+Conta de Manager:
+
+        username: manager
+        senha: manager
+
 Modificar no arquivo application.properties, no repositório: https://github.com/renanleitev/ecommerce-spring-boot 
 
     ADMIN_EMAIL=adminroot@email.com

@@ -9,7 +9,7 @@ import switchOptionSearch from '../../services/switchOptionSearch';
 import TableBody from './TableBody';
 import TableHead from './TableHead';
 import Loading from '../../components/Loading';
-import { initialUser } from '../../store/modules/users/reducer';
+import { initialUser, showUsersPerPage } from '../../store/modules/users/reducer';
 
 export default function SystemAdmin(): JSX.Element{
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -18,14 +18,18 @@ export default function SystemAdmin(): JSX.Element{
     const isLoading = useSelector((state: interfaces.IRootState) => state.users.status) || 'idle';
     const pageStatus: interfaces.PageNumberStatus = {
         currentPage: 0,
-        itemsPerPage: 3
+        itemsPerPage: 3,
+        type: 'user'
     };
+    useEffect(() => {
+        dispatch(showUsersPerPage({...pageStatus}));
+    }, []);
     useEffect(() => {
         localStorage.setItem('optionUser', '');
         localStorage.setItem('searchingUser', '');
     }, []);
     const option = useRef<HTMLSelectElement>();
-    const search = useRef<HTMLInputElement>();
+    const searching = useRef<HTMLInputElement>();
     const [data, setData] = useState([...usersPerPage.data.map((user: interfaces.User) => {
         return { ...user};
     })]);
@@ -35,18 +39,18 @@ export default function SystemAdmin(): JSX.Element{
         })]);
     }, [usersPerPage]);
     const handleButtonSearch = useCallback(() => {
-        const newPageStatus: interfaces.PageNumberStatus = {
-            ...pageStatus, 
-            searching: search.current.value,
-            option: option.current.value,
-            type: 'user'
-        }
         localStorage.setItem('optionUser', option.current.value);
-        localStorage.setItem('searchingUser', search.current.value);
-        switchOptionSearch({...newPageStatus}, dispatch);
-        option.current.value = '';
-        search.current.value = '';
+        localStorage.setItem('searchingUser', searching.current.value);
+        switchOptionSearch({...pageStatus,
+            searching: searching.current.value,
+            option: option.current.value,
+        }, dispatch);
     }, []); 
+    const handleResetSearch = useCallback(() => {
+        localStorage.setItem('optionUser', '');
+        localStorage.setItem('searchingUser', '');
+        dispatch(showUsersPerPage({...pageStatus}));
+    }, []);
     const defaultOptions = ['Username', 'Name User', 'Surname', 'Address', 'Email', 'Role'];
     return ( 
         <>
@@ -54,16 +58,17 @@ export default function SystemAdmin(): JSX.Element{
         <DivTable>
             {isLoading === 'loading' ? <Loading /> : <>
             <input
-            ref={search}
+            ref={searching}
             placeholder={'Search for users...'}
-            className='search-bar'/>
+            className='searching-bar'/>
             <Select inputRef={option} options={defaultOptions}/>
             <button onClick={handleButtonSearch}>Search</button>
+            <button onClick={handleResetSearch} className='reset'>Reset</button>
             <Table>
                 <TableHead pageStatus={{...pageStatus}}/>
                 <TableBody data={data} setData={setData}/>
             </Table>
-            <Pagination data={usersPerPage} pageStatus={{...pageStatus}} type='user'/>
+            <Pagination data={usersPerPage} pageStatus={{...pageStatus}}/>
             </>}
         </DivTable> : <></>}
         </>

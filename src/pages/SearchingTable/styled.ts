@@ -6,9 +6,9 @@ export const DivTable = styled.div`
     button:hover{
         background-color: ${colors.infoColor};
     }
-    .search-bar{
+    .searching-bar{
         margin-top: 20px;
-        width: 300px;
+        width: 200px;
         height: 40px;
         border-radius: 20px;
         text-indent: 20px;
@@ -25,6 +25,9 @@ export const DivTable = styled.div`
     }
     .number{
         border-radius: 20px;
+    }
+    .reset{
+        margin-left: 10px;
     }
 `;
 

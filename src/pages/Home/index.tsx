@@ -5,9 +5,9 @@ import Loading from '../../components/Loading';
 import Pagination from '../../components/Pagination';
 import * as interfaces from '../../interfaces';
 import { HomeContainer, ProductContainer, ItemContainer } from './styled';
-import { Container } from '../../styles/GlobalStyle';
 import { AppThunkDispatch } from '../../store';
 import { showProductsPerPage } from '../../store/modules/products/reducer';
+import DataNotAvailable from '../DataNotAvailable';
 
 export default function Home(): JSX.Element {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -17,21 +17,20 @@ export default function Home(): JSX.Element {
     const pageStatus: interfaces.PageNumberStatus = {
         currentPage: 0,
         itemsPerPage: 3,
-        searching: '',
-        option: '',
-        price: '',
-        operator: '',
         type: 'product'
     };
     useEffect(() => {
+        // Set default search options
+        localStorage.setItem('optionProduct', '');
+        localStorage.setItem('priceProduct', '');
+        localStorage.setItem('operatorProduct', '');
+        localStorage.setItem('searchingProduct', '');
         dispatch(showProductsPerPage(pageStatus));
     }, []);
     return (
         <>
         {productsPerPage.data === undefined || productsPerPage.total_pages === 0 ? 
-        <Container>
-            <h1>No products</h1>
-        </Container> :
+        <DataNotAvailable/> :
         <HomeContainer>
             {isLoading === 'loading' ?
                 <Loading /> :
@@ -47,7 +46,7 @@ export default function Home(): JSX.Element {
                             )
                         }))}
                 </ProductContainer>}
-            <Pagination data={productsPerPage} pageStatus={{...pageStatus}} type={'home'}/>
+            <Pagination data={productsPerPage} pageStatus={{...pageStatus}}/>
         </HomeContainer>}
         </>
     )

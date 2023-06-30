@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as interfaces from '../../../interfaces';
-import { toast } from 'react-toastify';
 import {axiosInstance, getAuthorizationHeader} from '../../../services/axios';
-import history from '../../../services/history';
 
 export const initialUser: (interfaces.User) = {
     id: '',
@@ -40,15 +38,10 @@ export const loginUser = createAsyncThunk(
             const response = await axiosInstance.post(url, userLogin, {
                 headers: { Authorization: getAuthorizationHeader() }
             });
-            if (response.data != userLogin) {
-                toast.success('Login successfully.');
-                history.push('/');
-                const userLoggedIn = { ...response.data };
-                const token = String(response.headers['authorization']);           
-                localStorage.setItem('token', token);
-                return userLoggedIn;
-            }
-            return initialState.user;
+            const userLoggedIn = { ...response.data };
+            const token = String(response.headers['authorization']);           
+            localStorage.setItem('token', token);
+            return userLoggedIn;
         }
         catch (error) { return error.message; }
     }
@@ -63,8 +56,6 @@ export const registerUser = createAsyncThunk(
                 headers: { Authorization: getAuthorizationHeader() }
             });
             const userId = Number(response.headers['Id']);
-            toast.success('Register user successfully.');
-            history.push('/');
             return {id: userId, ...user};
         }
         catch (error) { return error.message; }
@@ -79,7 +70,6 @@ export const editUser = createAsyncThunk(
             await axiosInstance.put(url, user, {
                 headers: { Authorization: getAuthorizationHeader() }
             });
-            toast.success('Edit user successfully.');
             return user;
         }
         catch (error) { return error.message; }
@@ -127,7 +117,6 @@ export const deleteUser = createAsyncThunk(
                 await axiosInstance.delete(url, {
                     headers: { Authorization: getAuthorizationHeader() }
                 });
-                toast.success('Delete user successfully!');
             }
         }
         catch (error) { return error.message; }
@@ -312,13 +301,9 @@ export const usersSlice = createSlice({
             .addCase(
                 loginUser.fulfilled,
                 (state, action: PayloadAction<interfaces.User>) => {
-                    if (action.payload.name) {
-                        state.isLoggedIn = true;
-                        state.user = action.payload;
-                        state.status = 'succeeded';
-                    } else {
-                        toast.error('Email/password invalid.');
-                    }
+                    state.isLoggedIn = true;
+                    state.user = action.payload;
+                    state.status = 'succeeded';
                 })
             .addCase(loginUser.pending, (state) => { state.status = 'loading'; })
             .addCase(loginUser.rejected, (state, action) => {

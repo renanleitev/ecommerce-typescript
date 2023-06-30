@@ -3,9 +3,9 @@ import * as interfaces from '../../../interfaces';
 import {FaArrowUp, FaArrowDown} from 'react-icons/fa';
 import { AppThunkDispatch } from '../../../store';
 import { useSelector, useDispatch } from 'react-redux';
-import { showProductsPerPage } from "../../../store/modules/products/reducer";
 import searchByColumnAndOrder from "../../../services/searchByColumnAndOrder";
 import { startCase } from "lodash";
+import * as text from '../../../services/variablesText';
 
 const TableHead: React.FC<interfaces.TableProduct> = (props: interfaces.TableProduct) => {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -17,9 +17,7 @@ const TableHead: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
                 {React.Children.toArray(columns.map((column) => {
                     return (
                         <th>
-                            <span onClick={() => dispatch(showProductsPerPage({...props.pageStatus}))}>
-                                {startCase(column)}
-                            </span>
+                            {startCase(column)}
                             <FaArrowUp onClick={() => searchByColumnAndOrder(column, 'ASC', 'product', dispatch)}/> 
                             <FaArrowDown onClick={() => searchByColumnAndOrder(column, 'DESC', 'product', dispatch)}/>
                         </th>
@@ -27,9 +25,9 @@ const TableHead: React.FC<interfaces.TableProduct> = (props: interfaces.TablePro
                 }))}
                 {isLoggedIn ? (
                 <>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
-                    <th>Options</th>
+                    <th>{text.quantity}</th>
+                    <th>{text.totalPrice}</th>
+                    <th>{text.options}</th>
                 </>
                 ) : (<></>)}
             </tr>

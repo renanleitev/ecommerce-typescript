@@ -8,14 +8,13 @@ import switchOptionSearch from '../../services/switchOptionSearch';
 
 const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Pagination) => {
     const dispatch = useDispatch<AppThunkDispatch>();
-    // TODO
     const pageNumbers: Array<number> = [];
     const [numberOfPage, setNumberOfPage] = useState(0);
     for (let i = 0; i < props.data.total_pages; i++) {
         pageNumbers.push(i);        
     }
     const paginationData = useCallback((numberOfPage: number) => {
-        switch(props.type){
+        switch(props.pageStatus.type){
             case 'product': {
                 const newProductPageStatus: interfaces.PageNumberStatus = {
                     ...props.pageStatus, 
@@ -25,22 +24,9 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
                     price: localStorage.getItem('priceProduct'),
                     column: localStorage.getItem('columnProduct'),
                     order: localStorage.getItem('orderProduct'),
-                    type: props.type,
                     currentPage: numberOfPage
                 };
-                switchOptionSearch(newProductPageStatus, dispatch);
-                break;
-            }
-            case 'home': {
-                const newHomePageStatus: interfaces.PageNumberStatus = {
-                    ...props.pageStatus, 
-                    searching: '',
-                    option: '',
-                    operator: '',
-                    price: '', 
-                    currentPage: numberOfPage
-                };
-                switchOptionSearch(newHomePageStatus, dispatch);
+                switchOptionSearch({...newProductPageStatus}, dispatch);
                 break;
             }
             case 'user': {
@@ -50,7 +36,6 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
                     option: localStorage.getItem('optionUser'),
                     column: localStorage.getItem('columnUser'),
                     order: localStorage.getItem('orderUser'),
-                    type: props.type,
                     currentPage: numberOfPage
                 };
                 switchOptionSearch(newUserPageStatus, dispatch);
@@ -58,8 +43,7 @@ const Pagination: React.FC<interfaces.Pagination> = (props: interfaces.Paginatio
             }
             case 'shopping': {
                 const newShoppingPageStatus: interfaces.PageNumberStatus = {
-                    ...props.pageStatus, 
-                    type: props.type,
+                    ...props.pageStatus,
                     currentPage: numberOfPage
                 };
                 switchOptionSearch(newShoppingPageStatus, dispatch);

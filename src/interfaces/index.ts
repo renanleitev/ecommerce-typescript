@@ -80,8 +80,7 @@ export interface IRootState {
 
 export interface Pagination {
     data: ProductData | UserData | ShoppingListData,
-    pageStatus: PageNumberStatus,
-    type?: string
+    pageStatus: PageNumberStatus
 }
 export interface TableProduct {
     data?: Array<Product>,

@@ -5,6 +5,7 @@ import * as interfaces from '../../interfaces';
 import {editProduct} from '../../store/modules/products/reducer';
 import { useDispatch } from 'react-redux';
 import { AppThunkDispatch } from '../../store';
+import * as text from '../../services/variablesText';
 
 const EditProduct: React.FC<interfaces.EditProduct> = (props: interfaces.EditProduct) => {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -15,14 +16,14 @@ const EditProduct: React.FC<interfaces.EditProduct> = (props: interfaces.EditPro
     }, [dispatch, product]);
     return (
         <Form onSubmit={handleSubmit}>
-            <h1>Edit Product</h1> 
+            <h1>{text.editProduct}</h1> 
             <Input data={product} setData={setProduct} keyName='name' keyValue={props.product.name}/>
             <Input data={product} setData={setProduct} keyName='price' keyValue={props.product.price}/>
             <Input data={product} setData={setProduct} keyName='image' keyValue={props.product.image}/>
             <Input data={product} setData={setProduct} keyName='os' keyValue={props.product.os}/>
             <Input data={product} setData={setProduct} keyName='additionalFeatures' keyValue={props.product.additionalFeatures}/>
             <Input data={product} setData={setProduct} keyName='description' keyValue={props.product.description}/>
-            <button type="submit">Edit Product</button>
+            <button type="submit">{text.editProduct}</button>
         </Form>
     )
 }
